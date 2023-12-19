@@ -9,7 +9,7 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://192.168.1.10:3000/signin', {
+    fetch('http://192.168.1.6:3000/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
           Alert.alert('Error', data.error);
         } else {
           Alert.alert('Éxito', 'Inicio de sesión exitoso');
-          navigation.navigate('Home'); 
+          navigation.navigate('logged'); //Pantalla si el inicio de sesión es exitoso
         }
       })
       .catch(error => {
@@ -82,6 +82,7 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
       {/* Nuevos botones */}
       <View style={styles.bottomButtonsContainer}>
         <TouchableOpacity
+          activeOpacity={1} // Agregado
           style={styles.bottomButton}
           onPress={() => {
             navigation.navigate('info');
@@ -90,6 +91,7 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
         </TouchableOpacity>
 
         <TouchableOpacity
+          activeOpacity={1} // Agregado
           style={styles.bottomButton}
           onPress={() => {
             navigation.navigate('brigadista');
