@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, View, BackHandler, StyleSheet } from 'react-native';
 import MapView from 'react-native-maps';
 
-const Home = ({ navigation }) => {
+const Logged = ({ navigation }) => {
   useEffect(() => {
     const backAction = () => {
       return true; // Esto previene la navegación hacia atrás
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Logged;

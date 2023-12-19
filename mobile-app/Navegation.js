@@ -7,7 +7,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import login from "./pantallas/login";
 import info from "./pantallas/info";
 import brigadista from "./pantallas/brigadista";
-import Home from "./pantallas/home";
+import Logged from './pantallas/logged';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator(); // Crear StackNavigator
@@ -18,7 +19,7 @@ function LoginStack() {
     return (
         <Stack.Navigator initialRouteName="login">
             <Stack.Screen name="login" component={login} options={{ headerShown: false }} />
-            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Stack.Screen name="logged" component={Logged} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }
