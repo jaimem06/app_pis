@@ -6,6 +6,7 @@ import Info_Brigadista from '../logged_pantallas/info_brigadista';
 import Info_Contingencia from '../logged_pantallas/info_contingencia';
 import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
+import About_App from '../logged_pantallas/about_app';
 
 
 const Drawer = createDrawerNavigator();
@@ -19,6 +20,7 @@ export function DrawerNavigation() {
       <Drawer.Screen name="Nuevo Usuario" component={Registrar} />
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
+      <Drawer.Screen name = "Informacion" component={About_App} />
     </Drawer.Navigator>
   );
 }
@@ -29,10 +31,14 @@ const MenuItems = ({ navigation }) => {
     <DrawerContentScrollView
       style={styles.container}
     >
-      <Text style={styles.title}>Bienvenido</Text>
+      <Text style={styles.title}>MENU FREDUNL</Text>
       <MenuButtonItem
         text="Mapa"
         onPress={() => navigation.navigate('Mapa')} iconName="map-search"
+      />
+      <MenuButtonItem
+        text="About App"
+        onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
       />
 
       <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}} >ADMINISTRACION:</Text>
