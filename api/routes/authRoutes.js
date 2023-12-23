@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 // 
 require('dotenv').config();
 // 
@@ -100,5 +101,38 @@ router.post('/signin', async (req, res) => {
         console.log(err);
     }
 })
+
+router.get('/get', (req, res) => {
+        User
+        .find()
+        .then((data) => res.json(data))
+        .catch((err) => res.json({ message: err }));
+    
+});
+
+router.put("/:id", (req, res) => {
+    const {id} = req.params;
+    const { name, email, password, dob} = req.body;
+    User
+    .updateOne({_id:id},{$set:{name: name, email: email, password: password, dob: dob}},req.body)
+    .then((data) => res.json(data))
+    .catch((err) => res.json({ message: err }));
+});
+
+router.get('/name/:name', (req, res) => {
+    const name = req.params.facultad;
+    Usert
+    .find({name:name})
+    .then((data) => res.json(data))
+    .catch((err) => res.json({ message: err }));
+});
+//borrar user
+router.delete("/:id", (req, res) => {
+    const {id} = req.params;
+    User
+    .deleteOne({_id:id})
+    .then((data) => res.json(data))
+    .catch((err) => res.json({ message: err }));
+});
 
 module.exports = router;
