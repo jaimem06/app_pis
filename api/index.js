@@ -12,7 +12,6 @@ const authRoutes = require('./routes/authRoutes');
 const requireToken = require('./Middlewares/AuthTokenRequired');
 //
 
-
 app.use(bodyParser.json());
 app.use(authRoutes);
 

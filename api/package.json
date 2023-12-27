@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "api": "nodemon index.js"
   },
   "author": "jaime",
   "license": "ISC",
@@ -15,8 +15,9 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
-    "mongoose": "^8.0.3",
-    "nodemailer": "^6.9.7",
+    "mongoose": "^8.0.3"
+  },
+  "devDependencies": {
     "nodemon": "^3.0.2"
   }
 }

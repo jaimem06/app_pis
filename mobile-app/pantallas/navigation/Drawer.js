@@ -7,6 +7,7 @@ import Info_Contingencia from '../logged_pantallas/info_contingencia';
 import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
+import Add_nodo from '../logged_pantallas/add_nodo';
 
 
 const Drawer = createDrawerNavigator();
@@ -21,6 +22,7 @@ export function DrawerNavigation() {
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
       <Drawer.Screen name = "Informacion" component={About_App} />
+      <Drawer.Screen name = "Nuevo Nodo" component={Add_nodo} />
     </Drawer.Navigator>
   );
 }
@@ -33,11 +35,11 @@ const MenuItems = ({ navigation }) => {
     >
       <Text style={styles.title}>MENU FREDUNL</Text>
       <MenuButtonItem
-        text="Mapa"
-        onPress={() => navigation.navigate('Mapa')} iconName="map-search"
+        text="Ruta de Evacuación"
+        onPress={() => navigation.navigate('Mapa')} iconName="map-marker"
       />
       <MenuButtonItem
-        text="About App"
+        text="Acerca de"
         onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
       />
 
@@ -55,6 +57,11 @@ const MenuItems = ({ navigation }) => {
       <MenuButtonItem
         text="Plan Contingencia"
         onPress={() => navigation.navigate('Plan Contingencia')} iconName={"alarm-light"}
+      />
+
+      <MenuButtonItem
+        text="Nuevo Nodo"
+        onPress={() => navigation.navigate('Informacion')} iconName="chart-bubble"
       />
        <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}}>BOTONES:</Text>
       <MenuButtonItem
