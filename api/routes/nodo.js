@@ -75,29 +75,29 @@ router.post('/agregar-conexion', async (req, res) => {
     }
 });
 
-router.delete('/eliminar-conexion', async (req, res) => {
-    const { nodo1, nodo2 } = req.body;
+router.post('/eliminar-conexion', async (req, res) => {
+    const { conexionId } = req.body;
 
     try {
-        const nodoA = await nodoSchema.findOne({ nombre: nodo1 });
-        const nodoB = await nodoSchema.findOne({ nombre: nodo2 });
+        // Buscar el nodo que contiene la conexión
+        const nodo = await nodoSchema.findOne({ 'conexiones._id': conexionId });
 
-        if (!nodoA || !nodoB) {
-            return res.status(404).send('Nodo no encontrado');
+        if (!nodo) {
+            return res.status(404).send('Conexión no encontrada');
         }
 
-        // Elimina la conexión del nodo A
-        nodoA.conexiones = nodoA.conexiones.filter(conexion => conexion.nodo.toString() !== nodoB._id.toString());
+        // Elimina la conexión
+        nodo.conexiones.id(conexionId).remove();
 
-        // Elimina la conexión del nodo B
-        nodoB.conexiones = nodoB.conexiones.filter(conexion => conexion.nodo.toString() !== nodoA._id.toString());
-
-        await nodoA.save();
-        await nodoB.save();
+        await nodo.save();
 
         res.status(200).send('Conexión eliminada con éxito');
     } catch (error) {
-        res.status(500).send(error.message);
+        if (error.name === 'CastError') {
+            res.status(400).send('El valor proporcionado no es un ObjectId válido');
+        } else {
+            res.status(500).send(error.message);
+        }
     }
 });
 
@@ -105,8 +105,8 @@ router.put('/actualizar-conexion', async (req, res) => {
     const { nodo1, nodo2, nuevaDistancia } = req.body;
 
     try {
-        const nodoA = await Nodo.findOne({ nombre: nodo1 });
-        const nodoB = await Nodo.findOne({ nombre: nodo2 });
+        const nodoA = await nodoSchema.findOne({ nombre: nodo1 });
+        const nodoB = await nodoSchema.findOne({ nombre: nodo2 });
 
         if (!nodoA || !nodoB) {
             return res.status(404).send('Nodo no encontrado');
@@ -137,7 +137,7 @@ router.get('/conexiones/:nodo', async (req, res) => {
     const { nodo } = req.params;
 
     try {
-        const nodoBuscado = await Nodo.findOne({ nombre: nodo }).populate('conexiones.nodo');
+        const nodoBuscado = await nodoSchema.findOne({ nombre: nodo }).populate('conexiones.nodo');
 
         if (!nodoBuscado) {
             return res.status(404).send('Nodo no encontrado');
