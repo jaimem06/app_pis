@@ -26,6 +26,15 @@ const nodoSchema =  mongoose.Schema({
         type: String,
         required: true
     },
+    conexiones: [{
+        nodo: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Nodo'
+        },
+        distancia: {
+            type: Number,
+        }
+    }]
     // Otros campos relevantes para tu aplicación
 });
 

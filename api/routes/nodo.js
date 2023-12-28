@@ -1,6 +1,7 @@
 const express = require('express');
 const nodoSchema = require('../models/Nodo.js');
 const router = express.Router();
+const calcularDistancia = require('../routes/calcularDistancia.js');
 
 router.post('/', (req, res) => {    
     const nodo =nodoSchema(req.body);
@@ -43,16 +44,16 @@ router.delete("/:id", (req, res) => {
 });
 
 router.post('/agregar-conexion', async (req, res) => {
-    const { nodo1, nodo2, distancia } = req.body;
+    const { nodo1, nodo2 } = req.body;
 
     try {
-        const nodoA = await Nodo.find({ nombre: nodo1 });
-        const nodoB = await Nodo.find({ nombre: nodo2 });
+        const nodoA = await nodoSchema.findOne({ nombre: nodo1 });
+        const nodoB = await nodoSchema.findOne({ nombre: nodo2 });
 
         if (!nodoA || !nodoB) {
             return res.status(404).send('Nodo no encontrado');
         }
-
+        const distancia = await calcularDistancia(nodoA, nodoB);
         // Agrega la conexión al nodo A
         nodoA.conexiones.push({
             nodo: nodoB._id,
@@ -78,8 +79,8 @@ router.delete('/eliminar-conexion', async (req, res) => {
     const { nodo1, nodo2 } = req.body;
 
     try {
-        const nodoA = await Nodo.findOne({ nombre: nodo1 });
-        const nodoB = await Nodo.findOne({ nombre: nodo2 });
+        const nodoA = await nodoSchema.findOne({ nombre: nodo1 });
+        const nodoB = await nodoSchema.findOne({ nombre: nodo2 });
 
         if (!nodoA || !nodoB) {
             return res.status(404).send('Nodo no encontrado');
