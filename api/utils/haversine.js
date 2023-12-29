@@ -1,4 +1,4 @@
-const Nodo = require('../models/nodo_modelV2');
+const Nodo = require('../models/nodo');
 // Radio de la Tierra en kilómetros
 const R = 6378.1;
 

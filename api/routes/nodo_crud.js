@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Nodo = require('../models/nodo_modelV2');
+const Nodo = require('../models/nodo');
 const Haversine = require('../utils/haversine');
 
 
@@ -47,7 +47,7 @@ router.delete('/delete_nodo', async (req, res) => {
 
 // Agregar una conexión a un nodo
 
-router.post('/addConexion', async (req, res) => {
+router.post('/create_conexion', async (req, res) => {
   const { nombreNodoA, nombreNodoB } = req.body;
 
   // Buscar los nodos en la base de datos por nombre

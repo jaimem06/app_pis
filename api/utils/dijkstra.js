@@ -1,4 +1,4 @@
-const ColaPrioridad = require('./colaprioridad.js');
+const ColaPrioridad = require('./cola_prioridad.js');
 
 function dijkstra(graph, startNode, endNode) {
     let distances = {};

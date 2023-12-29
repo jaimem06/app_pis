@@ -1,7 +1,7 @@
-const nodoSchema = require('../models/nodo_modelV2.js');
+const nodoSchema = require('../models/nodo.js');
 const dijkstra = require('./dijkstra.js');
 
-async function createGrafoV2 () {
+async function crearGrafo () {
     // Obtén todos los nodos de la base de datos
     const nodos = await nodoSchema.find();
 
@@ -38,7 +38,7 @@ async function createGrafoV2 () {
 async function rutaMasCorta(inicio, fin) {
     try {
         // Crea el grafo
-        const grafo = await createGrafoV2();
+        const grafo = await crearGrafo();
         console.log('Grafo creado con éxito');
 
         // Usa el algoritmo de Dijkstra para encontrar la ruta más corta
@@ -59,5 +59,5 @@ async function rutaMasCorta(inicio, fin) {
     }
 }
 
-exports.createGrafoV2 = createGrafoV2;
+exports.crearGrafo = crearGrafo;
 exports.rutaMasCorta = rutaMasCorta;

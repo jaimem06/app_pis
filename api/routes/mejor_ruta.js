@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const grafo = require('../utils/grafoV2');
+const grafo = require('../utils/crear_grafo');
 
 router.use(express.json()); // Para poder parsear el cuerpo de las solicitudes POST
 
