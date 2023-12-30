@@ -11,14 +11,14 @@ require('dotenv').config();
 // 
 
 
-router.post('/signup', async (req, res) => {
+router.post('/register', async (req, res) => {
     console.log('Enviado por el cliente - ', req.body);
     const { name, email, password, dob  } = req.body;
 
     // Comprobar si ya existe un usuario con este correo electrónico
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-        return res.status(400).json({ error: "Ya existe un usuario con este correo electrónico" });
+        return res.status(400).json(["Ya existe un usuario con este correo electrónico" ]);
     }
 
     const user = new User({
@@ -73,7 +73,7 @@ router.post('/verify', (req, res) => {
 })
 
 //Evaluar inicio de Sesion
-router.post('/signin', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(422).json({ error: "Añadir correo electrónico o contraseña" });
@@ -81,7 +81,7 @@ router.post('/signin', async (req, res) => {
     const savedUser = await User.findOne({ email: email })
 
     if (!savedUser) {
-        return res.status(422).json({ error: "Credenciales no válidas" });
+        return res.status(422).json({message:"Credenciales no válidas"} );
     }
 
     try {
@@ -93,7 +93,7 @@ router.post('/signin', async (req, res) => {
             }
             else {
                 console.log('La contraseña no coincide');
-                return res.status(422).json({ error: "Credenciales no válidas" });
+                return res.status(422).json( {message:"Credenciales no válidas"});
             }
         })
     }
