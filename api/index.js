@@ -2,6 +2,7 @@ const express = require('express');
 const port = 3000;
 const app = express();
 const bodyParser = require('body-parser');
+const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
 const mejorRuta = require('./routes/mejor_ruta');
 const cors = require('cors');
 // 
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use(authRoutes);
 
 app.use(express.json());
+app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2
 //
 

@@ -61,7 +61,7 @@ const MenuItems = ({ navigation }) => {
 
       <MenuButtonItem
         text="Nuevo Nodo"
-        onPress={() => navigation.navigate('Informacion')} iconName="chart-bubble"
+        onPress={() => navigation.navigate('Nuevo Nodo')} iconName="chart-bubble"
       />
        <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}}>BOTONES:</Text>
       <MenuButtonItem
