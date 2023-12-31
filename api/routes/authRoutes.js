@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const TOKEN_SECRET = 'secret-token';
 
 // 
 require('dotenv').config();
@@ -31,7 +32,9 @@ router.post('/register', async (req, res) => {
     try {
         await user.save();
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-        res.send({ message: "Usuario registrado correctamente", token });
+        res.cookie('token', token);
+        res.json({ token, user: { _id: user._id, name: user.name, email: user.email } });
+        //res.send({ message: "Usuario registrado correctamente", token });
     }
     catch (err) {
         console.log(err);
@@ -89,7 +92,9 @@ router.post('/login', async (req, res) => {
             if (result) {
                 console.log("Contraseña correcta");
                 const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
-                res.send({ token });
+                res.cookie('token', token);
+                res.json({ token, user: { _id: savedUser._id, name: savedUser.name, email: savedUser.email } });
+                //res.send({ token });
             }
             else {
                 console.log('La contraseña no coincide');
@@ -135,4 +140,23 @@ router.delete("/:id", (req, res) => {
     .catch((err) => res.json({ message: err }));
 });
 
+router.get('/verifyToken', (req, res) => {
+    const {token} = req.cookies;
+    if (!token) {
+        return res.json({ error: "No se ha iniciado sesión" });
+    }
+    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+        if (err) {    
+            return res.json({ error: "No se ha iniciado sesión" });
+        }
+        const userFound = await User.findById(user.id);
+        if (!userFound) {
+            return res.status(401).json({ error: "No se ha iniciado sesión" });
+        }
+        return  res.json({ user: { _id: userFound._id, name: userFound.name, email: userFound.email } });
+
+    })
+     
+
+} )
 module.exports = router;

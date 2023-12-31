@@ -1,11 +1,16 @@
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexto/authcontext';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 function PaginaLogin() {
     const { register,
         handleSubmit,
         formState: { errors },
     } = useForm();
+ 
+
     
 const {signin,errors:signinErrors} =  useAuth();
 const onSubmit = handleSubmit((data) => { 
@@ -17,7 +22,7 @@ const onSubmit = handleSubmit((data) => {
             <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
             {
             signinErrors.map((error,i) => (
-                <div className="bg-red-500 p-2 text-white text-center" key={i}>
+                <div className="bg-red-500 p-2 text-white text-center m-2" key={i}>
                     {error}
                 </div>  
             ))

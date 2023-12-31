@@ -8,15 +8,16 @@ function PaginaRegistro() {
         formState:{errors},
     } = useForm();
     const {signup,isAuthenticated,errors:RegisterErrors} = useAuth();
-    const navigate = useNavigate();
+   /*  const navigate = useNavigate();
     useEffect(() => {
-        if(isAuthenticated)navigate("/login");// la ruta a la que se redirige
-    }, [isAuthenticated])
+        if(isAuthenticated)navigate("/");// la ruta a la que se redirige
+    }, [isAuthenticated]) */
+
     const onSubmit = handleSubmit(async(values) =>{ 
     signup(values);
     });    
     return (
-        <div className="bg-zinc-800 max-w-md p-10 rounded-md">
+        <div className="bg-zinc-800 max-w-md h-screen justify-items-center p-10 rounded-md">
            {
             RegisterErrors.map((error,i) => (
                 <div className="bg-red-500 p-2 text-white" key={i}>
