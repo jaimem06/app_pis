@@ -10,9 +10,13 @@ function PaginaLogin() {
         formState: { errors },
     } = useForm();
  
-
+   
     
-const {signin,errors:signinErrors} =  useAuth();
+const {signin,errors:signinErrors,isAuthenticated} =  useAuth();
+const navigate = useNavigate();
+useEffect(() => {
+    if(isAuthenticated)navigate("/homepage");// la ruta a la que se redirige
+}, [isAuthenticated]) 
 const onSubmit = handleSubmit((data) => { 
         signin(data) })
 
