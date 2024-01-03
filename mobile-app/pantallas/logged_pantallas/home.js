@@ -8,7 +8,7 @@ const Home = () => {
   const [markers, setMarkers] = useState([]);
 
   const buscar = () => {
-    fetch('http://192.168.1.3:3000/camino_minimo', {
+    fetch('http://192.168.1.9:3000/camino_minimo', { // ip Jaime
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
