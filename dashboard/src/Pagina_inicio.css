@@ -1,0 +1,15 @@
+/* Pagina_inicio.css */
+.menu-button {
+    font-size: 2em;
+}
+
+.nav {
+    list-style-type: 'none';
+    padding: 0;
+}
+
+.nav-item {
+    margin: 10px 0;
+    border: 1px solid black;
+    padding: 10px;
+}

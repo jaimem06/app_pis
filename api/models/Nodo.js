@@ -1,34 +1,31 @@
-// models/Nodo.js
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const nodoSchema =  mongoose.Schema({
-    nombre: {
-        type: String,
-        required: true
+const NodoSchema = new Schema({
+    type: { type: String, default: 'Feature' },
+    properties: {
+        nombre: String,
+        facultad: String,
+        tipo: String,
+        conexiones: [{
+            nodo: {
+                type: Schema.Types.ObjectId,
+                ref: 'Nodo'
+            },
+            distancia: Number
+        }]
     },
-    latitud: {
-        type: Number,
-        required: true
-    },
-    longitud: {
-        type: Number,
-        required: true
-    },
-    informacion: {
-        type: String,
-        required: true
-    },
-    facultad: {
-        type: String,
-        required: true
-    },
-    tipo: {
-        type: String,
-        required: true
-    },
-    // Otros campos relevantes para tu aplicación
-});
+    geometry: {
+        type: {
+            type: String,
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    }
+    //Nombre de la collection
+}, { collection: 'nodos' });
 
-const Nodo = mongoose.model("Nodo", nodoSchema);
-
-module.exports = Nodo;
+module.exports = mongoose.model('Nodo', NodoSchema);

@@ -1,23 +1,35 @@
 const express = require('express');
 const port = 3000;
-
 const app = express();
 const bodyParser = require('body-parser');
-const nodoRoutes = require('./routes/nodo');
+const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
+const mejorRuta = require('./routes/mejor_ruta');
+const cookieParser = require('cookie-parser'); // Para manejar cookies del login WEB
+
+const cors = require('cors');
 // 
 require('./db');
 require('./models/User');
 //
-const authRoutes = require('./routes/authRoutes');
+const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el login MOBILE
+const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
 const requireToken = require('./Middlewares/AuthTokenRequired');
-//
+
+/////// Parte del login WEB ////////
+app.use(cookieParser());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+///////////////////////////////////
 
 app.use(bodyParser.json());
-app.use(authRoutes);
+app.use(auth_login_mobile);
+app.use(auth_login_web);
 
 app.use(express.json());
-app.use('/api/nodos',nodoRoutes);
-
+app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
+app.use(mejorRuta); //Version 2
 //
 
 app.get('/', requireToken, (req, res) => {
