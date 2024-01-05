@@ -14,8 +14,7 @@ router.post('/camino_minimo', async (req, res) => {
 
     try {
         const ruta = await grafo.rutaMasCorta(inicio, fin);
-        const coordenadas = ruta.map(nodo => ({nombre: nodo, coordenadas: nodo.coordenadas}));
-        res.json(coordenadas);
+        res.json(ruta);
     } catch (error) {
         res.status(500).send('Hubo un error al calcular la ruta más corta');
     }
