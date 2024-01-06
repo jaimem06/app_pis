@@ -1,18 +1,39 @@
 import React, { useState } from 'react';
-import GestionUsuarios from './Pagina_UpdateUser'; // Asegúrate de importar tu componente de gestión de usuarios
-import GestionNodos from './Pagina_registro'; // Asegúrate de importar tu componente de gestión de nodos
 import '../Pagina_inicio.css';
+import { ThemeContext } from '../App'; 
+import {Sidebar} from '../componentes/Sidebar'; 
+import {ThemeProvider} from 'styled-components';
+import {Light, Dark} from '../styles/Themes';
+import  styled  from 'styled-components';
 
-import {Sidebar} from '../componentes/Sidebar'; // Asegúrate de que la ruta al componente Sidebar sea correcta
-
-function Pagina_inicio(themeStyle) {
+function Pagina_inicio() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
+    const [theme, setTheme] = useState("light");
+    const themeStyle = theme === "light" ? Light : Dark;
     return (
-        <div style={themeStyle}>
+        
+    <ThemeContext.Provider value={{ setTheme, theme }}>
+      <ThemeProvider theme={themeStyle}>
+      <Container className={sidebarOpen ? "sidebarState active" : ''}>
             <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}  />
-        </div>
+            </Container>
+    </ThemeProvider>
+    </ThemeContext.Provider>
+       
     );
+
 }
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 90px auto;
+  background: ${({ theme }) => theme.bgtotal};
+  transition:all 0.3s ;
+  &.active {
+    grid-template-columns: 300px auto;
+  }
+  height:100vh;
+  `
+;
+
 export default Pagina_inicio;
 
