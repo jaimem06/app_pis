@@ -45,8 +45,8 @@ router.delete('/delete_nodo', async (req, res) => {
   res.send(nodo);
 });
 
-// Agregar una conexión a un nodo
 
+// Agregar una conexión a un nodo
 router.post('/create_conexion', async (req, res) => {
   const { nombreNodoA, nombreNodoB } = req.body;
 

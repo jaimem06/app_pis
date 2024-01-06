@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import logo from "../assets/react.svg";
+import logo from "../assets/fred_blue.png";
 import { v } from "../styles/Variables";
 import {
   AiOutlineLeft,
   AiOutlineHome,
   AiOutlineApartment,
   AiOutlineSetting,
+  AiOutlineNodeIndex,
 } from "react-icons/ai";
 import { MdOutlineAnalytics, MdLogout } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -27,9 +28,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
       </button>
       <div className="Logocontent">
         <div className="imgcontent">
-          <img src={logo} />
+        <img src={logo} style={{ width: '40px' }} />
         </div>
-        <h2>codigo369</h2>
+        <h2>FRED-UNL</h2>
       </div>
       {linksArray.map(({ icon, label, to }) => (
         <div className="LinkContainer" key={label}>
@@ -105,6 +106,12 @@ const linksArray = [
     icon: <MdOutlineAnalytics />,
     to: "/reportes",
   },
+  {
+    label: "Gestion de Nodos",
+    icon: <AiOutlineNodeIndex />,
+    to: "/crudnodo",
+  },
+
 ];
 const secondarylinksArray = [
   {
@@ -141,7 +148,7 @@ const Container = styled.div`
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s;
-    transform: ${({ isOpen }) => (isOpen ? `initial` : `rotate(180deg)`)};
+    transform: ${({ $isOpen }) => ($isOpen ? `initial` : `rotate(180deg)`)};
     border: none;
     letter-spacing: inherit;
     color: inherit;
@@ -165,10 +172,10 @@ const Container = styled.div`
       }
       cursor: pointer;
       transition: all 0.3s;
-      transform: ${({ isOpen }) => (isOpen ? `scale(0.7)` : `scale(1.5)`)};
+      transform: ${({ $isOpen }) => ($isOpen ? `scale(0.7)` : `scale(1.5)`)};
     }
     h2 {
-      display: ${({ isOpen }) => (isOpen ? `block` : `none`)};
+      display: ${({ $isOpen }) => ($isOpen ? `block` : `none`)};
     }
   }
   .LinkContainer {
@@ -210,13 +217,13 @@ const Container = styled.div`
       display: block;
       padding: 10px;
       font-weight: 700;
-      opacity: ${({ isOpen }) => (isOpen ? `1` : `0`)};
+      opacity: ${({ $isOpen }) => ($isOpen ? `1` : `0`)};
       transition: all 0.3s;
       white-space: nowrap;
       overflow: hidden;
     }
     .Togglecontent {
-      margin: ${({ isOpen }) => (isOpen ? `auto 40px` : `auto 15px`)};
+      margin: ${({ $isOpen }) => ($isOpen ? `auto 40px` : `auto 15px`)};
       width: 36px;
       height: 20px;
       border-radius: 10px;
@@ -257,8 +264,8 @@ const Container = styled.div`
               left: 0;
               right: 0;
               bottom: 0;
-              background: ${({ themeUse }) =>
-                themeUse === "light" ? v.lightcheckbox : v.checkbox};
+              background: ${({ $themeUse }) =>
+                $themeUse === "light" ? v.lightcheckbox : v.checkbox};
 
               transition: 0.4s;
               &::before {

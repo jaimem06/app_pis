@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Image, View, TextInput, Button, Alert } from 'react-native';
+import { Image, TouchableOpacity, Text, TextInput, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
 import user from '../../assets/user.png'
@@ -11,7 +11,8 @@ const Home = () => {
   const mapRef = useRef(null);
 
   const buscar = () => {
-    fetch('http://192.168.1.9:3000/camino_minimo', { // ip Jaime
+    fetch('http://10.20.138.158:3000/camino_minimo', { // ip Universidad
+    //fetch('http://10.20.138.158:3000/camino_minimo', { // ip Jaime
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -48,8 +49,8 @@ const Home = () => {
         Alert.alert('Error', 'Hubo un error al buscar la ruta');
       });
   };
-return (
-<View style={{ flex: 1 }}>
+  return (
+    <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', height: 50 }}>
         <TextInput
           placeholder="Inicio"
@@ -62,8 +63,31 @@ return (
           onChangeText={text => setFin(text)}
         />
       </View>
-      <Button title="Buscar" onPress={buscar} />
-      <View style={{ flex: 1, borderWidth: 1, marginTop: 10 }}>
+      {/* Boton Buscar */}
+      <TouchableOpacity
+        style={{
+          backgroundColor: '#2A364E',
+          padding: 5,
+          width: 260, // Tamaño horizontal
+          alignItems: 'center',
+          borderRadius: 5,
+          alignSelf: 'center',
+          marginTop: 10,
+        }}
+        onPress={buscar}
+      >
+        <Text style={{ color: 'white', fontSize: 20 }}>Buscar Ruta</Text>
+      </TouchableOpacity>
+
+      <View style={{
+        borderWidth: 5,
+        borderColor: '#2A364E', // Color del borde
+        borderRadius: 10, // Borde redondeado
+        height: '83%', // Cambiar la altura del mapa
+        width: '95%', // Cambiar el ancho del mapa
+        marginTop: 10,
+        alignSelf: 'center',
+      }}>
         <MapView
           ref={mapRef}
           style={{ flex: 1 }}
