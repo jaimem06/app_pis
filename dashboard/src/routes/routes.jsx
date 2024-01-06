@@ -4,15 +4,14 @@ import ProtectedRoute from '../ProtectedRouther';
 import Pagina_inicio from '../pantallas/Pagina_inicio';
 import Pagina_registro from '../pantallas/Pagina_registro'; 
 import PaginaLogin from '../pantallas/Pagina_login';
-import Pagina_DeleteUser from '../pantallas/Pagina_DeleteUser';
-import Pagina_UpdateUser from '../pantallas/Pagina_UpdateUser';
-import Pagina_CrudNodo from '../pantallas/Pagina_crudNodos';
+
 import styled from "styled-components";
 import { Light, Dark } from "../styles/Themes";
 import { ThemeProvider } from "styled-components";
 import React, { useState } from "react";
 import { ThemeContext } from "../App";
 import { Sidebar } from '../componentes/Sidebar';
+import Pagina_Logout from '../pantallas/pagina_logout';
 
 export function routes() { 
 
@@ -21,11 +20,8 @@ export function routes() {
       <Routes>
         <Route path='/' element={<PaginaLogin/>}/>
         <Route element={<ProtectedRoute/>}>
-          <Route path='/HomePage' element={<Pagina_inicio />}/>
-          <Route path='/register' element={<Pagina_registro/>}/>
-          <Route path='/eliminacion' element={<Pagina_DeleteUser/>}/>
-          <Route path='/actualizacion' element={<Pagina_UpdateUser/>}/>
-          <Route path='/crudnodo' element={<Pagina_CrudNodo/>}/>
+          <Route path='/fred/*' element={<Pagina_inicio />}/>
+          <Route path='/logout' element={<Pagina_Logout/>}/>
         </Route>
        
       </Routes>

@@ -87,9 +87,9 @@ const linksArray = [
     to: "/",
   },
   {
-    label: "Register Web",
+    label: "Registro de Usuario",
     icon: <MdOutlineAnalytics />,
-    to: "/register",
+    to: "/fred/register",
   },
   {
     label: "Productos",
@@ -111,7 +111,6 @@ const linksArray = [
     icon: <AiOutlineNodeIndex />,
     to: "/crudnodo",
   },
-
 ];
 const secondarylinksArray = [
   {
@@ -122,7 +121,7 @@ const secondarylinksArray = [
   {
     label: "Salir",
     icon: <MdLogout />,
-    to: "/null",
+    to: "/logout",
   },
 ];
 //#endregion
