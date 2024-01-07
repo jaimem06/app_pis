@@ -45,11 +45,11 @@ async function rutaMasCorta(inicio, fin) {
         const ruta = dijkstra(grafo, inicio, fin);
         console.log('Ruta calculada con éxito: ', ruta);
 
-        // Convierte los nombres de los nodos en la ruta a sus correspondientes coordenadas
+        // Convierte los nombres de los nodos en la ruta a sus correspondientes coordenadas y tipo
         const rutaCoordenadas = [];
         for (const nombreNodo of ruta) {
             const nodo = await nodoSchema.findOne({ 'properties.nombre': nombreNodo });
-            rutaCoordenadas.push(nodo.geometry.coordinates);
+            rutaCoordenadas.push({ nombre: nombreNodo, coordenadas: nodo.geometry.coordinates, tipo: nodo.properties.tipo });
         }
 
         return rutaCoordenadas;
