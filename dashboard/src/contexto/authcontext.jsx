@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest, logoutRequest} from "../api/auth";
+import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
 import cookies from "js-cookie";
 export const AuthContext = createContext();
 export const useAuth = () => {
@@ -45,17 +45,6 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = async() => {
-    const res = await logoutRequest();
-    if (res.status === 200) { // Asume que 200 es un estado exitoso
-        setUser(null);
-        setIsAuthenticated(false);
-        cookies.remove("token");
-    } else {
-        // Maneja el error. Podrías mostrar un mensaje al usuario, por ejemplo.
-        console.error('Logout failed:', res);
-    }
-}
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -101,7 +90,6 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     errors,
     loading,
-    logout,
   }}
   >
     {children}

@@ -109,7 +109,7 @@ const linksArray = [
   {
     label: "Gestion de Nodos",
     icon: <AiOutlineNodeIndex />,
-    to: "/crudnodo",
+    to: "/fred/crudnodo",
   },
 ];
 const secondarylinksArray = [
