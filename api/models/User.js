@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
         required: true
 
     },
+    rol: {
+        type: String,
+        required: true
+    },
     dob: {
         type: String,
         required: true
