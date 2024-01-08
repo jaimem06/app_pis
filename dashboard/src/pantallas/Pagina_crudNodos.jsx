@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { createNodoRequest, readallNodoRequest } from '../api/auth' //CRUD NODES
-import { AiFillDelete } from "react-icons/ai";
+import {
+    createNodoRequest,
+    readallNodoRequest,
+    deleteNodoRequest
+} from '../api/auth' //CRUD NODES
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 
 //Estilos de la pagina
 import {
-    formStyle,
-    inputStyle,
-    buttonADD,
-    titulosStyle,
-    tablaStyle,
-    filaStyle,
-    celdaStyle,
-    deletebutton,
-    buttonCrearNodo
+    formStyle, inputStyle, buttonADD, titulosStyle,
+    tablaStyle, filaStyle, celdaStyle, deletebutton,
+    buttonCrearNodo, buttonsForm, cancelbutton, editbutton,
+    celdaButtons
 }
     from '../styles/PageNodos';
 
@@ -94,7 +93,7 @@ const Pagina_crudNodos = () => {
             }));
         }
     }
-
+    //Agregar un nodo
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -106,20 +105,40 @@ const Pagina_crudNodos = () => {
         try {
             const response = await createNodoRequest(nodo);
             console.log(response.data);
-            // Aquí puedes manejar la respuesta. Por ejemplo, puedes mostrar un mensaje de éxito o actualizar el estado de tu aplicación.
+            setNodos(prevNodos => [...prevNodos, response.data]);
+            setShowForm(false);
+            alert('Nodo creado exitosamente!');
         } catch (error) {
             console.error(error);
-            // Aquí puedes manejar los errores. Por ejemplo, puedes mostrar un mensaje de error.
         }
     }
+
     //Cancelar formulario
     const handleCancel = () => {
         setShowForm(false);
     }
 
+    //Eliminar un nodo
+    const handleDelete = (index) => {
+        const nodoToDelete = nodos[index];
+        const confirmDelete = window.confirm(`¿Estás seguro de que quieres eliminar el nodo ${nodoToDelete.properties.nombre}?`);
+        if (confirmDelete) {
+            deleteNodoRequest(nodoToDelete.geometry.coordinates)
+                .then(response => {
+                    console.log(response.data);
+                    // Actualiza el estado de los nodos después de eliminar el nodo
+                    const newNodos = nodos.filter((nodo, i) => i !== index);
+                    setNodos(newNodos);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    };
+
     return (
-        <div>
-            <h1 style={{ textAlign: 'center', fontSize: '30px', color: '#3E91E5' }}>Gestión de Nodos</h1>
+        <div style={{ backgroundColor: "" }}>
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white' }}>Gestión de Nodos</h1>
             <div>
                 <input style={{
                     marginLeft: "60px",
@@ -152,9 +171,10 @@ const Pagina_crudNodos = () => {
                                 </option>
                             ))}
                         </select>
-
-                        <button style={buttonADD} type="submit">Agregar Nodo</button>
-                        <button style={buttonADD} type="button" onClick={handleCancel}>Cancelar</button>
+                        <div style={buttonsForm}>
+                            <button style={cancelbutton} type="button" onClick={handleCancel}>Cancelar</button>
+                            <button style={buttonADD} type="submit">Agregar Nodo</button>
+                        </div>
                     </form>
                 )}
                 <table style={tablaStyle}>
@@ -174,10 +194,13 @@ const Pagina_crudNodos = () => {
                                 <td style={celdaStyle}>{nodo.properties.facultad}</td>
                                 <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
                                 <td style={celdaStyle}>{nodo.properties.tipo}</td>
-                                <td style={celdaStyle}>
-                                    <button onClick={() => handleEdit(index)}>Editar</button>
+                                <td style={celdaButtons}>
+                                    <button style={editbutton} onClick={() => handleEdit(index)}><AiFillEdit
+                                        style={{ color: "white", fontSize: "24px" }} />
+                                    </button>
+
                                     <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                        style={{ color: "white", fontSize: "20px" }} /> Eliminar
+                                        style={{ color: "white", fontSize: "24px" }} />
                                     </button>
                                 </td>
                             </tr>

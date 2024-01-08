@@ -9,3 +9,4 @@ export const logoutRequest = () => axios.get(`/logout`);
 // Direcciones CRUD NODO
 export const createNodoRequest = nodo => axios.post(`/nodos`, nodo);
 export const readallNodoRequest = () => axios.get(`/nodos/read_nodos`);
+export const deleteNodoRequest = coordinates => axios.delete(`/nodos/delete_nodo`, { data: { coordinates } });

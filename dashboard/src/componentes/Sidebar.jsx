@@ -5,7 +5,6 @@ import {
   AiOutlineLeft,
   AiOutlineHome,
   AiOutlineApartment,
-  AiOutlineSetting,
   AiOutlineNodeIndex,
 } from "react-icons/ai";
 import { MdOutlineAnalytics, MdLogout } from "react-icons/md";
@@ -114,15 +113,10 @@ const linksArray = [
 ];
 const secondarylinksArray = [
   {
-    label: "Configuración",
-    icon: <AiOutlineSetting />,
-    to: "/null",
-  },
-  {
     label: "Salir",
     icon: <MdLogout />,
     to: "/logout",
-  },
+  }
 ];
 //#endregion
 
@@ -196,7 +190,7 @@ const Container = styled.div`
         display: flex;
 
         svg {
-          font-size: 25px;
+          font-size: 30px;
         }
       }
       &.active {
