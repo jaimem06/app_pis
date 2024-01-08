@@ -11,8 +11,8 @@ const Home = () => {
   const mapRef = useRef(null);
 
   const buscar = () => {
-    //fetch('http://10.20.138.158:3000/camino_minimo', { // ip Universidad
-    fetch('http://192.168.1.9:3000/camino_minimo', { // ip Jaime
+    fetch('http://10.20.137.216:3000/camino_minimo', { // ip Universidad
+    //fetch('http://192.168.1.9:3000/camino_minimo', { // ip Jaime
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
