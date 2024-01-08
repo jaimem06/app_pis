@@ -141,8 +141,10 @@ const Pagina_crudNodos = () => {
             <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white' }}>Gestión de Nodos</h1>
             <div>
                 <input style={{
-                    marginLeft: "60px",
-                    border: '1px solid #2A364E',
+                    marginLeft: "45px",
+                    backgroundColor: '#2A364E',
+                    border: '1px solid #3E91E5',
+                    padding: '3px',
                     borderRadius: '4px',
                 }} type="text" placeholder="Buscar" required />
                 <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>

@@ -10,8 +10,8 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
 
   const handleLogin = () => {
     //fetch('http://10.20.138.158:3000/login_mobile', { // ip Universidad
-    //fetch('http://192.168.1.9:3000/login_mobile', { // ip Jaime
-     fetch('http://192.168.1.13:3000/login_mobile', { // ip Wilson
+    fetch('http://192.168.1.9:3000/login_mobile', { // ip Jaime
+     //fetch('http://192.168.1.13:3000/login_mobile', { // ip Wilson
 
       method: 'POST',
       headers: {

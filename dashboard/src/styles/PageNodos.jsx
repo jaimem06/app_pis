@@ -10,7 +10,7 @@ export const formStyle = {
     //////////////
     display: 'flex',
     flexDirection: 'column',
-    alightItems: 'center',
+    alignItems: 'left',
     border: '1px solid black',
     padding: '20px',
     marginTop: '20px',
@@ -41,10 +41,7 @@ export const titulosStyle = {
 };
 
 export const tablaStyle = {
-    padding: '20px',
-    marginTop: '20px',
     backgroundColor: '#8BB6E2',
-    width: '90%',
     margin: '0 auto',
     fontSize: '15px',
     color: 'black',
@@ -94,11 +91,12 @@ export const  editbutton = {
 
 export const buttonCrearNodo = {
     width: '18%',
+    padding: '3px',
     backgroundColor: '#2A364E',
     borderRadius: '8px',
-    border: '2px solid #3E91E5',
+    border: '1px solid #3E91E5',
     fontSize: '18px',
-    alightItems: 'left',
+    alignItems: 'left',
     color: 'white',
     margin: '20px'
 };

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Image, TouchableOpacity, Text, TextInput, View } from 'react-native';
+import { Image, TouchableOpacity, Text, TextInput, View, Alert} from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
 import user from '../../assets/user.png'
@@ -11,8 +11,8 @@ const Home = () => {
   const mapRef = useRef(null);
 
   const buscar = () => {
-    fetch('http://10.20.138.158:3000/camino_minimo', { // ip Universidad
-    //fetch('http://10.20.138.158:3000/camino_minimo', { // ip Jaime
+    //fetch('http://10.20.138.158:3000/camino_minimo', { // ip Universidad
+    fetch('http://192.168.1.9:3000/camino_minimo', { // ip Jaime
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ const Home = () => {
                     <Image source={puntoEncuentro} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
                   </View>
                 )}
-                {marker.tipo === 'Bloque' && (
+                {marker.tipo === 'Edificacion' && (
                   <View style={{ width: 45, height: 45, overflow: 'hidden' }}>
                     <Image source={user} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
                   </View>

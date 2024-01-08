@@ -7,7 +7,7 @@ import Info_Contingencia from '../logged_pantallas/info_contingencia';
 import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
-import Add_nodo from '../logged_pantallas/add_nodo';
+import Puntos_Map from '../logged_pantallas/puntos';
 
 
 const Drawer = createDrawerNavigator();
@@ -22,7 +22,7 @@ export function DrawerNavigation() {
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
       <Drawer.Screen name = "Informacion" component={About_App} />
-      <Drawer.Screen name = "Nuevo Nodo" component={Add_nodo} />
+      <Drawer.Screen name = "Puntos" component={Puntos_Map} />
     </Drawer.Navigator>
   );
 }
@@ -60,8 +60,8 @@ const MenuItems = ({ navigation }) => {
       />
 
       <MenuButtonItem
-        text="Nuevo Nodo"
-        onPress={() => navigation.navigate('Nuevo Nodo')} iconName="chart-bubble"
+        text="Puntos"
+        onPress={() => navigation.navigate('Puntos')} iconName="chart-bubble"
       />
        <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}}>BOTONES:</Text>
       <MenuButtonItem
