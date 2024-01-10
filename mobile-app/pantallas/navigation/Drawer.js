@@ -1,7 +1,6 @@
 import React from 'react';
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../logged_pantallas/home';
-import Registrar from '../logged_pantallas/registrar';
 import Info_Brigadista from '../logged_pantallas/info_brigadista';
 import Info_Contingencia from '../logged_pantallas/info_contingencia';
 import { StyleSheet, Text } from 'react-native';
@@ -18,7 +17,6 @@ export function DrawerNavigation() {
       drawerContent={(props) => <MenuItems {...props} />}
     >
       <Drawer.Screen name="Mapa" component={Home} />
-      <Drawer.Screen name="Nuevo Usuario" component={Registrar} />
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
       <Drawer.Screen name = "Informacion" component={About_App} />
@@ -43,11 +41,7 @@ const MenuItems = ({ navigation }) => {
         onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
       />
 
-      <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}} >ADMINISTRACION:</Text>
-      <MenuButtonItem
-        text="Nuevo Usuario"
-        onPress={() => navigation.navigate('Nuevo Usuario')} iconName="account-multiple-plus"
-      />
+      
 
       <MenuButtonItem
         text="Brigadista"

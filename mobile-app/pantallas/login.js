@@ -9,7 +9,9 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://10.20.137.216:3000/login_mobile', { // ip Universidad
+    //https://api-fredunl.onrender.com/login_mobile
+    fetch('https://api-fredunl.onrender.com/login_mobile', {
+    //fetch('http://10.20.137.216:3000/login_mobile', { // ip Universidad
     //fetch('http://192.168.1.9:3000/login_mobile', { // ip Jaime
      //fetch('http://192.168.1.13:3000/login_mobile', { // ip Wilson
 
