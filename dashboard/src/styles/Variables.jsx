@@ -3,7 +3,7 @@ export const v={
     sidebarWidthInitial: `10vw`,
     smSpacing: `8px`,
     mdSpacing: `16px`,
-    lgSpacing: `24px`,
+    lgSpacing: `20px`,
     xlSpacing: `32px`,
     xxlSpacing: `48px`,
     borderRadius: `6px`,

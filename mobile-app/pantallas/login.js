@@ -9,9 +9,9 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://10.20.138.158:3000/login_mobile', { // ip Universidad
+    fetch('http://10.20.137.216:3000/login_mobile', { // ip Universidad
     //fetch('http://192.168.1.9:3000/login_mobile', { // ip Jaime
-    // fetch('http://192.168.1.30:3000/signin', { // ip Wilson
+     //fetch('http://192.168.1.13:3000/login_mobile', { // ip Wilson
 
       method: 'POST',
       headers: {

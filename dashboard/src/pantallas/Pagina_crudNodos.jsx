@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { createNodoRequest, readallNodoRequest } from '../api/auth' //CRUD NODES
+import {
+    createNodoRequest,
+    readallNodoRequest,
+    deleteNodoRequest
+} from '../api/auth' //CRUD NODES
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+
+//Estilos de la pagina
+import {
+    formStyle, inputStyle, buttonADD, titulosStyle,
+    tablaStyle, filaStyle, celdaStyle, deletebutton,
+    buttonCrearNodo, buttonsForm, cancelbutton, editbutton,
+    celdaButtons
+}
+    from '../styles/PageNodos';
 
 const Pagina_crudNodos = () => {
 
@@ -20,6 +34,22 @@ const Pagina_crudNodos = () => {
 
     const [nodos, setNodos] = useState([]);
 
+    const facultades = [
+        "Administración Central",
+        "Bienestar Universitario",
+        "Educación a Distancia",
+        "Agropecuaria y de Recursos Nat Renovables",
+        "Energía, las Ind y los Recursos Nat No Renovables",
+        "Educación el Arte y la Comunicación",
+        "Jurídica, Social y Administrativa",
+        "Salud Humana"
+    ];
+
+    const tipos = [
+        "Edificacion",
+        "Ruta",
+        "PDE" //Punto de Encuentro
+    ]
 
     useEffect(() => {
         const fetchNodos = async () => {
@@ -63,108 +93,90 @@ const Pagina_crudNodos = () => {
             }));
         }
     }
-
+    //Agregar un nodo
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!nodo.properties.facultad || !nodo.properties.tipo) {
+            alert('Por favor, seleccione una facultad y un tipo.');
+            return;
+        }
+
         try {
             const response = await createNodoRequest(nodo);
             console.log(response.data);
-            // Aquí puedes manejar la respuesta. Por ejemplo, puedes mostrar un mensaje de éxito o actualizar el estado de tu aplicación.
+            setNodos(prevNodos => [...prevNodos, response.data]);
+            setShowForm(false);
+            alert('Nodo creado exitosamente!');
         } catch (error) {
             console.error(error);
-            // Aquí puedes manejar los errores. Por ejemplo, puedes mostrar un mensaje de error.
         }
     }
 
-    //Estilos formulario
-    const formStyle = {
-        //Estilos flotantes
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: '1000',
-        //////////////
-        display: 'flex',
-        flexDirection: 'column',
-        alightItems: 'center',
-        border: '1px solid black',
-        padding: '20px',
-        marginTop: '20px',
-        backgroundColor: '#2A364E',
-        width: '30%',
-        margin: '0 auto',
-        borderRadius: '10px',
-        fontSize: '20px'
-    };
+    //Cancelar formulario
+    const handleCancel = () => {
+        setShowForm(false);
+    }
 
-    //Estilos entrada de texto
-    const inputStyle = {
-        color: '#2A364E',
-        margin: '10px',
-        borderRadius: '5px',
-    };
-
-    const buttonStyle = {
-        backgroundColor: 'white',
-        borderRadius: '5px',
-        width: '65%',
-    };
-
-    const titulosStyle = {
-        color: 'white',
-        textAlign: 'left',
-        fontSize: '16px',
-    };
-
-    const tablaStyle = {
-        border: '1px solid white',
-        padding: '20px',
-        marginTop: '20px',
-        backgroundColor: '#2A364E',
-        width: '90%',
-        margin: '0 auto',
-        borderRadius: '10px',
-        fontSize: '15px'
-    };
-
-    const filaStyle = {
-        border: '1px solid white',
-        textAlign: 'center',
-    };
-
-    const celdaStyle = {
-        border: '1px solid white'
+    //Eliminar un nodo
+    const handleDelete = (index) => {
+        const nodoToDelete = nodos[index];
+        const confirmDelete = window.confirm(`¿Estás seguro de que quieres eliminar el nodo ${nodoToDelete.properties.nombre}?`);
+        if (confirmDelete) {
+            deleteNodoRequest(nodoToDelete.geometry.coordinates)
+                .then(response => {
+                    console.log(response.data);
+                    // Actualiza el estado de los nodos después de eliminar el nodo
+                    const newNodos = nodos.filter((nodo, i) => i !== index);
+                    setNodos(newNodos);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     };
 
     return (
-        <div>
-            <h1 style={{ textAlign: 'center', fontSize: '40px', color: '#3E91E5' }}>Gestión de Nodos</h1>
+        <div style={{ backgroundColor: "" }}>
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white' }}>Gestión de Nodos</h1>
             <div>
-                <label style={titulosStyle}>Nombre:</label>
-                <input style={inputStyle} type="text" placeholder="Nombre" required />
-                <button style={{
-                    width: '18%',
+                <input style={{
+                    marginLeft: "45px",
                     backgroundColor: '#2A364E',
-                    borderRadius: '8px',
-                    border: '2px solid #3E91E5',
-                    fontSize: '18px',
-                    alightItems: 'left',
-                    color: 'white',
-                    margin: '20px'
-
-                }} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
+                    border: '1px solid #3E91E5',
+                    padding: '3px',
+                    borderRadius: '4px',
+                }} type="text" placeholder="Buscar" required />
+                <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
                 {showForm && (
                     <form onSubmit={handleSubmit} style={formStyle}>
                         <label style={titulosStyle}>Nombre:</label>
                         <input style={inputStyle} type="text" name="nombre" onChange={handleChange} placeholder="Nombre" required />
                         <label style={titulosStyle}>Facultad:</label>
-                        <input style={inputStyle} type="text" name="facultad" onChange={handleChange} placeholder="Facultad" required />
+                        <select style={inputStyle} name="facultad" onChange={handleChange} required>
+                            <option value="">Seleccione una facultad</option>
+                            {facultades.map((facultad, index) => (
+                                <option key={index} value={facultad}>
+                                    {facultad}
+                                </option>
+                            ))}
+                        </select>
                         <label style={titulosStyle}>Coordenadas:</label>
                         <input style={inputStyle} type="text" name="coordinates" onChange={handleChange} placeholder="Coordenadas" required />
+
                         <label style={titulosStyle}>Tipo:</label>
-                        <input style={inputStyle} type="text" name="tipo" onChange={handleChange} placeholder="Tipo" required />
-                        <button style={buttonStyle} type="submit">Crear Nodo</button>
+                        <select style={inputStyle} name="tipo" onChange={handleChange} required>
+                            <option value="">Seleccione un tipo</option>
+                            {tipos.map((tipo, index) => (
+                                <option key={index} value={tipo}>
+                                    {tipo}
+                                </option>
+                            ))}
+                        </select>
+                        <div style={buttonsForm}>
+                            <button style={cancelbutton} type="button" onClick={handleCancel}>Cancelar</button>
+                            <button style={buttonADD} type="submit">Agregar Nodo</button>
+                        </div>
                     </form>
                 )}
                 <table style={tablaStyle}>
@@ -174,7 +186,7 @@ const Pagina_crudNodos = () => {
                             <th>Facultad</th>
                             <th>Coordenadas</th>
                             <th>Tipo</th>
-                            <th>Acciones</th> {/* Nueva celda para el título de la columna */}
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -184,9 +196,14 @@ const Pagina_crudNodos = () => {
                                 <td style={celdaStyle}>{nodo.properties.facultad}</td>
                                 <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
                                 <td style={celdaStyle}>{nodo.properties.tipo}</td>
-                                <td style={celdaStyle}> {/* Nueva celda para los botones */}
-                                    <button onClick={() => handleEdit(index)}>Editar</button>
-                                    <button onClick={() => handleUpdate(index)}>Actualizar</button>
+                                <td style={celdaButtons}>
+                                    <button style={editbutton} onClick={() => handleEdit(index)}><AiFillEdit
+                                        style={{ color: "white", fontSize: "24px" }} />
+                                    </button>
+
+                                    <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                        style={{ color: "white", fontSize: "24px" }} />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -195,6 +212,6 @@ const Pagina_crudNodos = () => {
             </div>
         </div>
     );
-
 }
+
 export default Pagina_crudNodos;

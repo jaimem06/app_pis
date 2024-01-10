@@ -36,12 +36,26 @@ router.put('/update_nodo', async (req, res) => {
   res.send(nodo);
 });
 
-// Eliminar un nodo por ID
+// Eliminar un nodo por coordenadas
 router.delete('/delete_nodo', async (req, res) => {
-  const nodo = await Nodo.findByIdAndDelete(req.params.id);
+  const nodo = await Nodo.findOne({ "geometry.coordinates": req.body.coordinates });
   if (!nodo) {
     return res.status(404).send();
   }
+  // Para borrar el nodo y sus conexiones con otros nodos:
+  // Buscar todos los nodos que tienen una conexión con el nodo que se está eliminando
+  const connectedNodos = await Nodo.find({ "properties.connections.nodo": nodo._id });
+
+  // Eliminar la conexión con el nodo que se está eliminando
+  for (let connectedNodo of connectedNodos) {
+    const index = connectedNodo.properties.connections.findIndex(connection => connection.nodo.toString() === nodo._id.toString());
+    if (index > -1) {
+      connectedNodo.properties.connections.splice(index, 1);
+      await connectedNodo.save();
+    }
+  }
+  await Nodo.deleteOne({ _id: nodo._id });
+
   res.send(nodo);
 });
 
