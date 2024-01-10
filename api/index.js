@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser'); // Para manejar cookies del login
 const cors = require('cors');
 // 
 require('./db');
-require('./models/User');
+require('./models/user');
 //
 const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el login MOBILE
 const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
