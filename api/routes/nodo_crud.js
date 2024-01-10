@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Nodo = require('../models/nodo');
+const Nodo = require('../models/nodo'); 
 const Haversine = require('../utils/haversine');
 
 
