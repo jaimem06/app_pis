@@ -7,7 +7,7 @@ export default function Puntos_Map() {
   const [nodos, setNodos] = useState([]);
 
   useEffect(() => {
-    axios.get('http://10.20.137.216:3000/nodos/read_nodos')
+    axios.get('https://api-fredunl.onrender.com/nodos/read_nodos')
       .then(response => {
         setNodos(response.data);
       })
