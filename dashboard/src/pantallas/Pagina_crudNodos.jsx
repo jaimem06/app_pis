@@ -2,21 +2,23 @@ import React, { useState, useEffect } from 'react';
 import {
     createNodoRequest,
     readallNodoRequest,
-    deleteNodoRequest
+    deleteNodoRequest,
+    searchNodoRequest
 } from '../api/auth' //CRUD NODES
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 
 //Estilos de la pagina
 import {
     formStyle, inputStyle, buttonADD, titulosStyle,
     tablaStyle, filaStyle, celdaStyle, deletebutton,
     buttonCrearNodo, buttonsForm, cancelbutton, editbutton,
-    celdaButtons
+    celdaButtons, buttonBuscar, inputBuscar
 }
     from '../styles/PageNodos';
 
 const Pagina_crudNodos = () => {
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [nodo, setNodo] = useState({
         type: 'Feature',
@@ -135,19 +137,46 @@ const Pagina_crudNodos = () => {
                 });
         }
     };
+    const handleSearch = async (event) => {
+        event.preventDefault();
+        const searchQueryLower = searchQuery.toLowerCase();
+        try {
+            const response = await searchNodoRequest(searchQueryLower);
+            if (response.data.length === 0) {
+                setErrorMessage('Los datos no existen en la base');
+            } else {
+                setErrorMessage('');
+                setNodos(response.data.filter(nodo => 
+                    nodo.properties.nombre.toLowerCase().includes(searchQueryLower) ||
+                    nodo.properties.facultad.toLowerCase().includes(searchQueryLower) ||
+                    nodo.properties.tipo.toLowerCase().includes(searchQueryLower)
+                ));
+            }
+        } catch (error) {
+            console.error(error);
+            setErrorMessage('Verifique los datos ingresados, error en la busqueda');
+        }
+    };
 
     return (
-        <div style={{ backgroundColor: "" }}>
+        <div>
             <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white' }}>Gestión de Nodos</h1>
             <div>
-                <input style={{
-                    marginLeft: "45px",
-                    backgroundColor: '#2A364E',
-                    border: '1px solid #3E91E5',
-                    padding: '3px',
-                    borderRadius: '4px',
-                }} type="text" placeholder="Buscar" required />
-                <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <form style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }} onSubmit={handleSearch}>
+                        <input
+                            style={inputBuscar}
+                            type="text"
+                            placeholder="Buscar"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            required
+                        />
+                        <button style={buttonBuscar} type="submit"><AiOutlineSearch /></button>
+                    </form>
+                    <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
+                </div>
+                {errorMessage && <p style={{ color: 'red', fontSize: '16px', textAlign: 'center', paddingBottom: '5px' }}>{errorMessage}</p>}
                 {showForm && (
                     <form onSubmit={handleSubmit} style={formStyle}>
                         <label style={titulosStyle}>Nombre:</label>

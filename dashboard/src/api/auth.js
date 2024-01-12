@@ -8,3 +8,5 @@ export const logoutRequest = () => axios.get(`/logout`);
 export const createNodoRequest = nodo => axios.post(`/nodos`, nodo);
 export const readallNodoRequest = () => axios.get(`/nodos/read_nodos`);
 export const deleteNodoRequest = coordinates => axios.delete(`/nodos/delete_nodo`, { data: { coordinates } });
+export const searchNodoRequest = query => axios.get(`/nodos/buscar_nodos/${query}`);
+export const updateNodoRequest = (id, nodo) => axios.put(`/nodos/update_nodo/${id}`, nodo);

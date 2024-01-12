@@ -89,16 +89,34 @@ export const  editbutton = {
     color: 'white',
 };
 
+export const inputBuscar = {
+    backgroundColor: '#2A364E',
+    border: '1px solid #3E91E5',
+    padding: '3px',
+    borderRadius: '4px',
+};
+
+export const buttonBuscar = {
+    marginLeft: "5px",
+    backgroundColor: '#3E91E5',
+    color: 'white',
+    padding: '7px 6px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+};
+
 export const buttonCrearNodo = {
-    width: '18%',
+    width: '14%',
     padding: '3px',
     backgroundColor: '#2A364E',
     borderRadius: '8px',
     border: '1px solid #3E91E5',
-    fontSize: '18px',
-    alignItems: 'left',
+    fontSize: '15px',
     color: 'white',
-    margin: '20px'
+    marginLeft: '250px',
+    marginTop: '20px',
+    marginBottom: '10px',
+    marginRight: '300px',
 };
 export const cancelbutton = {
     backgroundColor: '#FFD43B',
