@@ -32,8 +32,6 @@ router.get('/read_nodos', async (req, res) => {
 });
 
 // Buscar nodos por nombre, tipo o facultad
-const removeAccents = require('remove-accents');
-
 router.get('/buscar_nodos/:query', async (req, res) => {
   const query = req.params.query.toLowerCase();
   const regex = new RegExp(query, 'i'); // 'i' hace que la búsqueda sea insensible a mayúsculas y minúsculas

@@ -8,13 +8,12 @@ import {
 import { AiFillDelete, AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 
 //Estilos de la pagina
-import {
-    formStyle, inputStyle, buttonADD, titulosStyle,
-    tablaStyle, filaStyle, celdaStyle, deletebutton,
-    buttonCrearNodo, buttonsForm, cancelbutton, editbutton,
+import {tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo,  editbutton,
     celdaButtons, buttonBuscar, inputBuscar
-}
-    from '../styles/PageNodos';
+} from '../styles/styles_pageNodo';
+
+// Formulario para crear un nodo
+import FormAddNodo from '../pantallas/forms/Form_CrearNodo';
 
 const Pagina_crudNodos = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -35,23 +34,6 @@ const Pagina_crudNodos = () => {
     });
 
     const [nodos, setNodos] = useState([]);
-
-    const facultades = [
-        "Administración Central",
-        "Bienestar Universitario",
-        "Educación a Distancia",
-        "Agropecuaria y de Recursos Nat Renovables",
-        "Energía, las Ind y los Recursos Nat No Renovables",
-        "Educación el Arte y la Comunicación",
-        "Jurídica, Social y Administrativa",
-        "Salud Humana"
-    ];
-
-    const tipos = [
-        "Edificacion",
-        "Ruta",
-        "PDE" //Punto de Encuentro
-    ]
 
     useEffect(() => {
         const fetchNodos = async () => {
@@ -146,7 +128,7 @@ const Pagina_crudNodos = () => {
                 setErrorMessage('Los datos no existen en la base');
             } else {
                 setErrorMessage('');
-                setNodos(response.data.filter(nodo => 
+                setNodos(response.data.filter(nodo =>
                     nodo.properties.nombre.toLowerCase().includes(searchQueryLower) ||
                     nodo.properties.facultad.toLowerCase().includes(searchQueryLower) ||
                     nodo.properties.tipo.toLowerCase().includes(searchQueryLower)
@@ -160,10 +142,10 @@ const Pagina_crudNodos = () => {
 
     return (
         <div>
-            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white' }}>Gestión de Nodos</h1>
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Nodos</h1>
             <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <form style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }} onSubmit={handleSearch}>
+                <div style={{ display: 'flex', marginLeft: "50px", marginBottom: "5px" }}>
+                    <form onSubmit={handleSearch}>
                         <input
                             style={inputBuscar}
                             type="text"
@@ -178,66 +160,44 @@ const Pagina_crudNodos = () => {
                 </div>
                 {errorMessage && <p style={{ color: 'red', fontSize: '16px', textAlign: 'center', paddingBottom: '5px' }}>{errorMessage}</p>}
                 {showForm && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
-                        <label style={titulosStyle}>Nombre:</label>
-                        <input style={inputStyle} type="text" name="nombre" onChange={handleChange} placeholder="Nombre" required />
-                        <label style={titulosStyle}>Facultad:</label>
-                        <select style={inputStyle} name="facultad" onChange={handleChange} required>
-                            <option value="">Seleccione una facultad</option>
-                            {facultades.map((facultad, index) => (
-                                <option key={index} value={facultad}>
-                                    {facultad}
-                                </option>
-                            ))}
-                        </select>
-                        <label style={titulosStyle}>Coordenadas:</label>
-                        <input style={inputStyle} type="text" name="coordinates" onChange={handleChange} placeholder="Coordenadas" required />
-
-                        <label style={titulosStyle}>Tipo:</label>
-                        <select style={inputStyle} name="tipo" onChange={handleChange} required>
-                            <option value="">Seleccione un tipo</option>
-                            {tipos.map((tipo, index) => (
-                                <option key={index} value={tipo}>
-                                    {tipo}
-                                </option>
-                            ))}
-                        </select>
-                        <div style={buttonsForm}>
-                            <button style={cancelbutton} type="button" onClick={handleCancel}>Cancelar</button>
-                            <button style={buttonADD} type="submit">Agregar Nodo</button>
-                        </div>
-                    </form>
+                    <FormAddNodo
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        handleCancel={handleCancel}
+                    />
                 )}
-                <table style={tablaStyle}>
-                    <thead>
-                        <tr style={filaStyle}>
-                            <th>Nombre</th>
-                            <th>Facultad</th>
-                            <th>Coordenadas</th>
-                            <th>Tipo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {nodos.map((nodo, index) => (
-                            <tr style={filaStyle} key={index}>
-                                <td style={celdaStyle}>{nodo.properties.nombre}</td>
-                                <td style={celdaStyle}>{nodo.properties.facultad}</td>
-                                <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
-                                <td style={celdaStyle}>{nodo.properties.tipo}</td>
-                                <td style={celdaButtons}>
-                                    <button style={editbutton} onClick={() => handleEdit(index)}><AiFillEdit
-                                        style={{ color: "white", fontSize: "24px" }} />
-                                    </button>
-
-                                    <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                        style={{ color: "white", fontSize: "24px" }} />
-                                    </button>
-                                </td>
+                <div style={{ overflow: 'auto', height: '500px' }}> {/* Ajusta la altura según tus necesidades */}
+                    <table style={tablaStyle}>
+                        <thead>
+                            <tr style={filaStyle}>
+                                <th>Nombre</th>
+                                <th>Facultad</th>
+                                <th>Coordenadas</th>
+                                <th>Tipo</th>
+                                <th>Acciones</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {nodos.map((nodo, index) => (
+                                <tr style={filaStyle} key={index}>
+                                    <td style={celdaStyle}>{nodo.properties.nombre}</td>
+                                    <td style={celdaStyle}>{nodo.properties.facultad}</td>
+                                    <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
+                                    <td style={celdaStyle}>{nodo.properties.tipo}</td>
+                                    <td style={celdaButtons}>
+                                        <button style={editbutton} onClick={() => handleEdit(index)}><AiFillEdit
+                                            style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+
+                                        <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                            style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
