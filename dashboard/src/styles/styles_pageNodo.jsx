@@ -1,6 +1,5 @@
-
 //Estilos formulario
-export const formStyle = {
+export const formCrearNodo = {
     //Estilos flotantes
     position: 'absolute',
     top: '50%',
@@ -11,10 +10,31 @@ export const formStyle = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'left',
-    border: '1px solid black',
+    border: '1px solid white',
     padding: '20px',
     marginTop: '20px',
     backgroundColor: '#2A364E',
+    width: '30%',
+    margin: '0 auto',
+    borderRadius: '10px',
+    fontSize: '15px'
+};
+
+export const formEditarNodo = {
+    //Estilos flotantes
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: '1000',
+    //////////////
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'left',
+    border: '1px solid white',
+    padding: '20px',
+    marginTop: '20px',
+    backgroundColor: '#38576e',
     width: '30%',
     margin: '0 auto',
     borderRadius: '10px',
@@ -38,6 +58,7 @@ export const titulosStyle = {
     color: 'white',
     textAlign: 'left',
     fontSize: '16px',
+    marginLeft: '10px',
 };
 
 export const tablaStyle = {
@@ -89,16 +110,30 @@ export const  editbutton = {
     color: 'white',
 };
 
+export const inputBuscar = {
+    backgroundColor: 'none',
+    border: '1px solid #3E91E5',
+    padding: '5px',
+    borderRadius: '8px',
+    color: '#2A364E',
+};
+
+export const buttonBuscar = {
+    marginLeft: "5px",
+    backgroundColor: '#3E91E5',
+    color: 'white',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    padding: '10px',
+    marginRight: '10px',
+};
+
 export const buttonCrearNodo = {
-    width: '18%',
-    padding: '3px',
+    width: '15%',
     backgroundColor: '#2A364E',
     borderRadius: '8px',
     border: '1px solid #3E91E5',
-    fontSize: '18px',
-    alignItems: 'left',
     color: 'white',
-    margin: '20px'
 };
 export const cancelbutton = {
     backgroundColor: '#FFD43B',
