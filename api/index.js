@@ -18,7 +18,7 @@ const register_web = require('./routes/register_web'); // Ruta para el registro 
 /////// Parte del login WEB ////////
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://fredunl.unlmaps.com',
     credentials: true
 }));
 ///////////////////////////////////

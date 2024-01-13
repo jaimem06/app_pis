@@ -19,7 +19,6 @@ useEffect(() => {
 }, [isAuthenticated]) 
 const onSubmit = handleSubmit((data) => { 
         signin(data) })
-
         
     return (
         <div className='flex h-screen items-center justify-center'>
