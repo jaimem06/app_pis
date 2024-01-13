@@ -21,10 +21,9 @@ const tipos = [
 const FormEditarNodo = ({ handleChange, handleSubmit, handleCancel }) => {
     return (
         <form onSubmit={handleSubmit} style={formEditarNodo}>
-            <p style={{ textAlign: "center" }}><span style={{
-                border: "2px solid white",
-                borderRadius: "5px", padding: "3px"
-            }}>EDITAR NODO</span></p>
+            <p style={{textAlign: "center", color: "white"}}><span style={{border: "2px solid white",
+        borderRadius: "5px", padding: "3px"
+        }}>EDITAR NODO</span></p>
             <label style={titulosStyle}>Nombre:</label>
             <input style={inputStyle} type="text" name="nombre" onChange={handleChange} placeholder="Nombre" required />
             <label style={titulosStyle}>Facultad:</label>

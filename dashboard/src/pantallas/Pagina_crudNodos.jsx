@@ -3,17 +3,20 @@ import {
     createNodoRequest,
     readallNodoRequest,
     deleteNodoRequest,
-    searchNodoRequest
+    searchNodoRequest,
+    updateNodoRequest
 } from '../api/auth' //CRUD NODES
 import { AiFillDelete, AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 
 //Estilos de la pagina
-import {tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo,  editbutton,
+import {
+    tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo, editbutton,
     celdaButtons, buttonBuscar, inputBuscar
 } from '../styles/styles_pageNodo';
 
 // Formulario para crear un nodo
 import FormAddNodo from '../pantallas/forms/Form_CrearNodo';
+import FormEditarNodo from '../pantallas/forms/Form_EditNodo'
 
 const Pagina_crudNodos = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -139,6 +142,32 @@ const Pagina_crudNodos = () => {
             setErrorMessage('Verifique los datos ingresados, error en la busqueda');
         }
     };
+    
+    const [showEditForm, setShowEditForm] = useState(false);
+    const handleEdit = (index) => {
+        const nodoToEdit = nodos[index];
+        setNodo(nodoToEdit);
+        setShowEditForm(true);
+    };
+
+    //Actualizar nodo
+    const handleUpdate = async () => {
+        try {
+            const updatedNodo = {
+                nombre: nodo.properties.nombre,
+                facultad: nodo.properties.facultad,
+                tipo: nodo.properties.tipo,
+                geometry: nodo.geometry
+            };
+            await updateNodoRequest(nodo._id, updatedNodo);
+            // Actualiza el estado de los nodos después de actualizar el nodo
+            loadNodos();
+            setShowEditForm(false);
+        } catch (error) {
+            console.error(error);
+            setErrorMessage('Error al actualizar el nodo');
+        }
+    };
 
     return (
         <div>
@@ -185,10 +214,17 @@ const Pagina_crudNodos = () => {
                                     <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
                                     <td style={celdaStyle}>{nodo.properties.tipo}</td>
                                     <td style={celdaButtons}>
-                                        <button style={editbutton} onClick={() => handleEdit(index)}><AiFillEdit
-                                            style={{ color: "white", fontSize: "24px" }} />
+                                        <button style={editbutton} onClick={() => handleEdit(index)}>
+                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
                                         </button>
-
+                                        {showEditForm && (
+                                            <FormEditarNodo
+                                                nodo={nodo}
+                                                handleChange={handleChange}
+                                                handleSubmit={handleUpdate}
+                                                handleCancel={() => setShowEditForm(false)}
+                                            />
+                                        )}
                                         <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
                                             style={{ color: "white", fontSize: "24px" }} />
                                         </button>
