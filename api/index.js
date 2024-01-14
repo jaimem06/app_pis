@@ -17,7 +17,7 @@ const register_web = require('./routes/register_web'); // Ruta para el registro 
 
 app.use(cors({
     // Página que pueden acceder al API
-    origin: 'https://fredunl.unlmaps.com/'
+    origin: 'https://fredunl.unlmaps.com'
 }));
 
 app.use(bodyParser.json());
