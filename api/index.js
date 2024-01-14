@@ -16,8 +16,8 @@ const requireToken = require('./Middlewares/AuthTokenRequired');
 const register_web = require('./routes/register_web'); // Ruta para el registro WEB
 
 app.use(cors({
-    // Páginas que pueden acceder al API
-    origin: ['https://fredunl.unlmaps.com/', 'http://localhost:5173']
+    // Página que pueden acceder al API
+    origin: 'https://fredunl.unlmaps.com/'
 }));
 
 app.use(bodyParser.json());
