@@ -4,7 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
 const mejorRuta = require('./routes/mejor_ruta');
-const cookieParser = require('cookie-parser'); // Para manejar cookies del login WEB
 
 const cors = require('cors');
 // 
@@ -15,13 +14,11 @@ const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el 
 const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
 const requireToken = require('./Middlewares/AuthTokenRequired');
 const register_web = require('./routes/register_web'); // Ruta para el registro WEB
-/////// Parte del login WEB ////////
-app.use(cookieParser());
+
 app.use(cors({
-    origin: 'https://fredunl.unlmaps.com',
-    credentials: true
+    // Páginas que pueden acceder al API
+    origin: ['https://fredunl.unlmaps.com', 'http://localhost:5173']
 }));
-///////////////////////////////////
 
 app.use(bodyParser.json());
 app.use(auth_login_mobile);
