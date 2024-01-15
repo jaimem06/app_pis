@@ -1,6 +1,11 @@
 import axios from './axios.js';
 
-export const registerRequest = user => axios.post(`/register_web`, user);
+export const registerRequest = user => axios.post(`/register`, user);
+export const readUserRequest = id => axios.get(`/user/${id}`);
+export const readallUserRequest = () => axios.get(`/read_users`);
+export const deleteUserRequest = id => axios.delete(`/user/${id}`);
+export const updateUserRequest = (id, user) => axios.put(`/user/${id}`, user);
+
 export const loginRequest = user => axios.post(`/login_web`, user);
 export const verifyTokenRequest = () => axios.get(`/verifyToken`);
 export const logoutRequest = () => axios.get(`/logout`);

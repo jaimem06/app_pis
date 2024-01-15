@@ -13,7 +13,7 @@ require('./models/user');
 const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el login MOBILE
 const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
 const requireToken = require('./Middlewares/AuthTokenRequired');
-const register_web = require('./routes/register_web'); // Ruta para el registro WEB
+const usuario_crud = require('./routes/usuario_crud'); // Ruta para el registro WEB
 
 app.use(cors({
     // Páginas que pueden acceder al API
@@ -23,7 +23,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(auth_login_mobile);
 app.use(auth_login_web);
-app.use(register_web);
+app.use(usuario_crud);
 app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2

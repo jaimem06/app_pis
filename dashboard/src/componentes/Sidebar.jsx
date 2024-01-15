@@ -88,7 +88,7 @@ const linksArray = [
   {
     label: "Registro de Usuario",
     icon: <MdOutlineAnalytics />,
-    to: "/fred/register",
+    to: "/fred/user",
   },
   {
     label: "Productos",
