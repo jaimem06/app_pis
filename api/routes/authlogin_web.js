@@ -24,7 +24,7 @@ router.post('/login_web', async (req, res) => {
                 console.log("Contraseña correcta");
                 const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
                 res.cookie('token', token);
-                res.json({ token, user: { _id: savedUser._id, name: savedUser.name, email: savedUser.email } });
+                res.json({ token, user: { _id: savedUser._id, name: savedUser.name, email: savedUser.email ,rol:savedUser.rol} });
                 //res.send({ token });
             }
             else {
