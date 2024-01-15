@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../contexto/authcontext";
-import { useState ,useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest, logoutRequest ,updateUserRequest ,readallUserRequest,deleteUserRequest} from "../api/auth";
+import { useState, useEffect } from "react";
+import { registerRequest, loginRequest, verifyTokenRequest, logoutRequest, updateUserRequest, readallUserRequest, deleteUserRequest } from "../api/auth";
 import {
     tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo, editbutton,
     celdaButtons, buttonBuscar, inputBuscar
@@ -11,8 +11,8 @@ import FormRegisterUser from "./forms/Form_RegisterUser";
 import FormEditarUser from "./forms/Form_EditUser";
 function Pagina_crudUser() {
 
-  
-   const [showEditForm, setShowEditForm] = useState(false);
+
+    const [showEditForm, setShowEditForm] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [showForm, setShowForm] = useState(false);
@@ -21,7 +21,7 @@ function Pagina_crudUser() {
         email: '',
         password: '',
         rol: '',
-        dob :''
+        dob: ''
     });
 
     const [users, setUsers] = useState([]);
@@ -35,7 +35,7 @@ function Pagina_crudUser() {
         fetchUsers();
     }, []);
 
-
+    //Crear Usuario
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -43,18 +43,16 @@ function Pagina_crudUser() {
             alert('Por favor, complete todos los campos.');
             return;
         }
-
         try {
-            const response = await registerRequest(user);
-            console.log(response.data);
-            setUsers(prevUsers => [...prevUsers, response.data]);
+            await registerRequest(user);
+            setUsers(prevUsers => [...prevUsers, user]);
             setShowForm(false);
             alert('Usuario creado exitosamente!');
         } catch (error) {
             console.error(error);
         }
     }
-    
+
     const handleCancel = () => {
         setShowForm(false);
     }
@@ -131,70 +129,70 @@ function Pagina_crudUser() {
 
     return (
         <div>
-        <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Nodos</h1>
-        <div>
-            <div style={{ display: 'flex', marginLeft: "50px", marginBottom: "5px" }}>
-                <form onSubmit={handleSearch}>
-                    <input
-                        style={inputBuscar}
-                        type="text"
-                        placeholder="Buscar"
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        required
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Nodos</h1>
+            <div>
+                <div style={{ display: 'flex', marginLeft: "50px", marginBottom: "5px" }}>
+                    <form onSubmit={handleSearch}>
+                        <input
+                            style={inputBuscar}
+                            type="text"
+                            placeholder="Buscar"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            required
+                        />
+                        <button style={buttonBuscar} type="submit"><AiOutlineSearch /></button>
+                    </form>
+                    <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Usuario</button>
+                </div>
+                {errorMessage && <p style={{ color: 'red', fontSize: '16px', textAlign: 'center', paddingBottom: '5px' }}>{errorMessage}</p>}
+                {showForm && (
+                    <FormRegisterUser
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        handleCancel={handleCancel}
                     />
-                    <button style={buttonBuscar} type="submit"><AiOutlineSearch /></button>
-                </form>
-                <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Usuario</button>
-            </div>
-            {errorMessage && <p style={{ color: 'red', fontSize: '16px', textAlign: 'center', paddingBottom: '5px' }}>{errorMessage}</p>}
-            {showForm && (
-                <FormRegisterUser
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    handleCancel={handleCancel}
-                />
-            )}
-            <div style={{ overflow: 'auto', height: '900px' }}> {/* Ajusta la altura según tus necesidades */}
-                <table style={tablaStyle}>
-                    <thead>
-                        <tr style={filaStyle}>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Date of Birth</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user, index) => (
-                            <tr style={filaStyle} key={index}>
-                                <td style={celdaStyle}>{user.name}</td>
-                                <td style={celdaStyle}>{user.email}</td>
-                                <td style={celdaStyle}>{user.rol}</td>
-                                <td style={celdaStyle}>{user.dob}</td>
-                                <td style={celdaButtons}>
-                                    <button style={editbutton} onClick={() => handleEdit(index)}>
-                                        <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
-                                    </button>
-                                    {showEditForm && (
-                                        <FormEditarUser
-                                            user={user}
-                                            handleChange={handleChange}
-                                            handleSubmit={handleUpdate}
-                                            handleCancel={() => setShowEditForm(false)}
-                                        />
-                                    )}
-                                    <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                        style={{ color: "white", fontSize: "24px" }} />
-                                    </button>
-                                </td>
+                )}
+                <div style={{ overflow: 'auto', height: '900px' }}> {/* Ajusta la altura según tus necesidades */}
+                    <table style={tablaStyle}>
+                        <thead>
+                            <tr style={filaStyle}>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Date of Birth</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {users.map((user, index) => (
+                                <tr style={filaStyle} key={index}>
+                                    <td style={celdaStyle}>{user.name}</td>
+                                    <td style={celdaStyle}>{user.email}</td>
+                                    <td style={celdaStyle}>{user.rol}</td>
+                                    <td style={celdaStyle}>{user.dob}</td>
+                                    <td style={celdaButtons}>
+                                        <button style={editbutton} onClick={() => handleEdit(index)}>
+                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+                                        {showEditForm && (
+                                            <FormEditarUser
+                                                user={user}
+                                                handleChange={handleChange}
+                                                handleSubmit={handleUpdate}
+                                                handleCancel={() => setShowEditForm(false)}
+                                            />
+                                        )}
+                                        <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                            style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     )
 }
 

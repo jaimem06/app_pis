@@ -4,6 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 require('dotenv').config();
 
@@ -47,11 +48,17 @@ router.get('/read_users', async (req, res) => {
     const user = await User.find();
     res.send(user);
   });
-  
+
+// Actualizar usuario
 router.put('/user/:id', async (req, res) => {
     const { id } = req.params;
     const { name, email, password, rol, dob } = req.body;
-    const user = { name, email, password, rol, dob };
+
+    // Hashear la contraseña
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = { name, email, password: hashedPassword, rol, dob };
     await User.findByIdAndUpdate(id, user);
     
     res.json({ message: "Usuario actualizado correctamente" });
