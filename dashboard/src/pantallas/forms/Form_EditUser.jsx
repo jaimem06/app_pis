@@ -13,12 +13,12 @@ const Form_EditUser = ({ handleChange, handleSubmit, handleCancel }) => {
         <form onSubmit={handleSubmit} style={formCrearNodo}>
             <p style={{textAlign: "center", color: "white" }}><span style={{border: "2px solid white",
         borderRadius: "5px", padding: "3px"
-        }}>CREAR NODO</span></p>
+        }}>EDIT USUARIO</span></p>
             <label style={titulosStyle}>Nombre:</label>
             <input style={inputStyle} type="text" name="name" onChange={handleChange} placeholder="Nombre" required />
      
             <label style={titulosStyle}>Email:</label>
-            <input style={inputStyle} type="text" name="email" onChange={handleChange} placeholder="Email" required />
+            <input style={inputStyle} type="email" name="email" onChange={handleChange} placeholder="Email" required />
             
             <label style={titulosStyle}>Password:</label>
             <input style={inputStyle} type="password" name="password" onChange={handleChange} placeholder="Password" required />
