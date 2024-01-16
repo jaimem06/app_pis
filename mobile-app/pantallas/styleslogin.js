@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+
 export const styles = StyleSheet.create({
   //Estilos de la pantalla.
   backgroundImage: {
@@ -50,9 +51,8 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 50,
-
     color: '#2A364E',
-    fontFamily: 'sans-serif',
+    
     fontWeight: 'bold',
   },
   subtitle: {

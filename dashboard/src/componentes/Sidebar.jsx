@@ -83,12 +83,12 @@ const linksArray = [
   {
     label: "Home",
     icon: <AiOutlineHome />,
-    to: "/",
+    to: "/fred/home",
   },
   {
     label: "Registro de Usuario",
     icon: <MdOutlineAnalytics />,
-    to: "/fred/register",
+    to: "/fred/user",
   },
   {
     label: "Productos",

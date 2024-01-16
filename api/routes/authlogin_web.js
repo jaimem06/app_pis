@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
@@ -16,7 +15,7 @@ router.post('/login_web', async (req, res) => {
     const savedUser = await User.findOne({ email: email })
 
     if (!savedUser) {
-        return res.status(422).json({message:"Credenciales no válidas"} );
+        return res.status(422).json({ message: "Credenciales no válidas" });
     }
 
     try {
@@ -25,12 +24,14 @@ router.post('/login_web', async (req, res) => {
                 console.log("Contraseña correcta");
                 const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
                 res.cookie('token', token);
-                res.json({ token, user: { _id: savedUser._id, name: savedUser.name, email: savedUser.email } });
-                //res.send({ token });
+                if(savedUser.rol !== 'Administrador') {
+                    return res.status(403).json({ message: "No tienes permiso para acceder al Dashboard \n Atentamente: FRED-UNL" });
+                }
+                res.json({ token, user: { _id: savedUser._id, name: savedUser.name, email: savedUser.email ,rol:savedUser.rol} });
             }
             else {
                 console.log('La contraseña no coincide');
-                return res.status(422).json( {message:"Credenciales no válidas"});
+                return res.status(422).json({ message: "Credenciales no válidas" });
             }
         })
     }
@@ -40,32 +41,29 @@ router.post('/login_web', async (req, res) => {
 })
 
 router.get('/verifyToken', (req, res) => {
-    const {token} = req.cookies;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
     if (!token) {
         return res.json({ error: "No se ha iniciado sesión" });
     }
+
     jwt.verify(token, TOKEN_SECRET, async (err, user) => {
-        if (err) {    
+        if (err) {
             return res.json({ error: "No se ha iniciado sesión" });
         }
         const userFound = await User.findById(user.id);
         if (!userFound) {
             return res.status(401).json({ error: "No se ha iniciado sesión" });
         }
-        return  res.json({ user: { _id: userFound._id, name: userFound.name, email: userFound.email } });
-
-    })
-     
-
-})
-router.get('/logout', async (req, res) => {
-    res.cookie('token','', {
-        httpOnly: true,
-        secure: true,
-        expires: new Date(0),  
+        return res.json({ user: { _id: userFound._id, name: userFound.name, email: userFound.email } });
     });
+});
+
+// Eliminar token de almacenamiento
+router.get('/logout', async (req, res) => {
     return res.sendStatus(200);
-  });
+});
 
 
 module.exports = router;

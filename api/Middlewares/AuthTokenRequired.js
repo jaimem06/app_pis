@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
 
     //console.log(authorization);
         if (!authorization) {
-        return res.status(401).json({ error: "Usted debe estar conectado, token no proporcionado" });
+        return res.status(401).json({ error: "Servicio desplegado para la aplicación FRED-UNL --> Usted debe estar conectado, token no proporcionado" });
     }
     const token = authorization.replace("Bearer ", "");
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {

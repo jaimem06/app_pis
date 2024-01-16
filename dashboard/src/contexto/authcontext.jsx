@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest,logoutRequest } from "../api/auth";
-import cookies from "js-cookie";
+import { registerRequest, loginRequest, verifyTokenRequest, logoutRequest } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 export const useAuth = () => {
 
@@ -30,6 +30,8 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const navigate = useNavigate();
+
   //Login
   const signin = async (user) => {
     try {
@@ -37,6 +39,10 @@ export const AuthProvider = ({ children }) => {
       console.log(res)
       setIsAuthenticated(true);
       setUser(res.data);
+      localStorage.setItem('token', res.data.token); // Guardar token en almacenamiento local
+
+      // Redirigir a fred/home
+      navigate('/fred/home');
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -44,17 +50,17 @@ export const AuthProvider = ({ children }) => {
       setErrors([error.response.data.message]);
     }
   }
-  const logout = async() => {
+  const logout = async () => {
     const res = await logoutRequest();
     if (res.status === 200) { // Asume que 200 es un estado exitoso
-        setUser(null);
-        setIsAuthenticated(false);
-        cookies.remove("token");
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem('token'); // Eliminar token del almacenamiento local
     } else {
-        // Maneja el error. Podrías mostrar un mensaje al usuario, por ejemplo.
-        console.error('Logout failed:', res);
+      // Maneja el error. Podrías mostrar un mensaje al usuario, por ejemplo.
+      console.error('Logout failed:', res);
     }
-}
+  }
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -68,15 +74,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
 
     async function checkLogin() {
-      const cookie = cookies.get();
-      if (!cookie.token) {
+      const token = localStorage.getItem('token'); // Obtener token del almacenamiento local
+      if (!token) {
         setIsAuthenticated(false);
         setLoading(false);
         return setUser(null);
       }
 
       try {
-        const res = await verifyTokenRequest(cookie.token);
+        const res = await verifyTokenRequest(token);
         if (!res.data) {
           setIsAuthenticated(false);
           setLoading(false);

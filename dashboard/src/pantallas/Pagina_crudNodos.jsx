@@ -2,22 +2,27 @@ import React, { useState, useEffect } from 'react';
 import {
     createNodoRequest,
     readallNodoRequest,
-    deleteNodoRequest
+    deleteNodoRequest,
+    searchNodoRequest,
+    updateNodoRequest
 } from '../api/auth' //CRUD NODES
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-
+import { AiFillDelete, AiFillEdit, AiOutlineSearch, AiTwotoneEnvironment} from "react-icons/ai";
+import MapaFlotante from '../componentes/MapaFlotante';
 //Estilos de la pagina
 import {
-    formStyle, inputStyle, buttonADD, titulosStyle,
-    tablaStyle, filaStyle, celdaStyle, deletebutton,
-    buttonCrearNodo, buttonsForm, cancelbutton, editbutton,
-    celdaButtons
-}
-    from '../styles/PageNodos';
+    tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo, editbutton,
+    celdaButtons, buttonBuscar, inputBuscar
+} from '../styles/styles_pageNodo';
+
+// Formulario para crear un nodo
+import FormAddNodo from '../pantallas/forms/Form_CrearNodo';
+import FormEditarNodo from '../pantallas/forms/Form_EditNodo'
 
 const Pagina_crudNodos = () => {
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [showForm, setShowForm] = useState(false);
+    const [showMap, setShowMap] = useState(false); // Llamar al mapa
     const [nodo, setNodo] = useState({
         type: 'Feature',
         properties: {
@@ -33,23 +38,6 @@ const Pagina_crudNodos = () => {
     });
 
     const [nodos, setNodos] = useState([]);
-
-    const facultades = [
-        "Administración Central",
-        "Bienestar Universitario",
-        "Educación a Distancia",
-        "Agropecuaria y de Recursos Nat Renovables",
-        "Energía, las Ind y los Recursos Nat No Renovables",
-        "Educación el Arte y la Comunicación",
-        "Jurídica, Social y Administrativa",
-        "Salud Humana"
-    ];
-
-    const tipos = [
-        "Edificacion",
-        "Ruta",
-        "PDE" //Punto de Encuentro
-    ]
 
     useEffect(() => {
         const fetchNodos = async () => {
@@ -135,80 +123,121 @@ const Pagina_crudNodos = () => {
                 });
         }
     };
+    const handleSearch = async (event) => {
+        event.preventDefault();
+        const searchQueryLower = searchQuery.toLowerCase();
+        try {
+            const response = await searchNodoRequest(searchQueryLower);
+            if (response.data.length === 0) {
+                setErrorMessage('Los datos no existen en la base');
+            } else {
+                setErrorMessage('');
+                setNodos(response.data.filter(nodo =>
+                    nodo.properties.nombre.toLowerCase().includes(searchQueryLower) ||
+                    nodo.properties.facultad.toLowerCase().includes(searchQueryLower) ||
+                    nodo.properties.tipo.toLowerCase().includes(searchQueryLower)
+                ));
+            }
+        } catch (error) {
+            console.error(error);
+            setErrorMessage('Verifique los datos ingresados, error en la busqueda');
+        }
+    };
+
+    const [showEditForm, setShowEditForm] = useState(false);
+    const handleEdit = (index) => {
+        const nodoToEdit = nodos[index];
+        setNodo(nodoToEdit);
+        setShowEditForm(true);
+    };
+
+    //Actualizar nodo
+    const handleUpdate = async () => {
+        try {
+            const updatedNodo = {
+                nombre: nodo.properties.nombre,
+                facultad: nodo.properties.facultad,
+                tipo: nodo.properties.tipo,
+                geometry: nodo.geometry
+            };
+            await updateNodoRequest(nodo._id, updatedNodo);
+            // Actualiza el estado de los nodos después de actualizar el nodo
+            loadNodos();
+            setShowEditForm(false);
+        } catch (error) {
+            console.error(error);
+            setErrorMessage('Error al actualizar el nodo');
+        }
+    };
 
     return (
-        <div style={{ backgroundColor: "" }}>
-            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white' }}>Gestión de Nodos</h1>
+        <div>
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Nodos</h1>
             <div>
-                <input style={{
-                    marginLeft: "45px",
-                    backgroundColor: '#2A364E',
-                    border: '1px solid #3E91E5',
-                    padding: '3px',
-                    borderRadius: '4px',
-                }} type="text" placeholder="Buscar" required />
-                <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
-                {showForm && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
-                        <label style={titulosStyle}>Nombre:</label>
-                        <input style={inputStyle} type="text" name="nombre" onChange={handleChange} placeholder="Nombre" required />
-                        <label style={titulosStyle}>Facultad:</label>
-                        <select style={inputStyle} name="facultad" onChange={handleChange} required>
-                            <option value="">Seleccione una facultad</option>
-                            {facultades.map((facultad, index) => (
-                                <option key={index} value={facultad}>
-                                    {facultad}
-                                </option>
-                            ))}
-                        </select>
-                        <label style={titulosStyle}>Coordenadas:</label>
-                        <input style={inputStyle} type="text" name="coordinates" onChange={handleChange} placeholder="Coordenadas" required />
-
-                        <label style={titulosStyle}>Tipo:</label>
-                        <select style={inputStyle} name="tipo" onChange={handleChange} required>
-                            <option value="">Seleccione un tipo</option>
-                            {tipos.map((tipo, index) => (
-                                <option key={index} value={tipo}>
-                                    {tipo}
-                                </option>
-                            ))}
-                        </select>
-                        <div style={buttonsForm}>
-                            <button style={cancelbutton} type="button" onClick={handleCancel}>Cancelar</button>
-                            <button style={buttonADD} type="submit">Agregar Nodo</button>
-                        </div>
+                <div style={{ display: 'flex', marginLeft: "50px", marginBottom: "5px" }}>
+                    <form onSubmit={handleSearch}>
+                        <input
+                            style={inputBuscar}
+                            type="text"
+                            placeholder="Buscar"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            required
+                        />
+                        <button style={buttonBuscar} type="submit"><AiOutlineSearch /></button>
                     </form>
+                    <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
+                    <button onClick={() => setShowMap(!showMap)}><AiTwotoneEnvironment style={{color: '#2A364E', fontSize: '35px'}}/></button>
+                    {/* Muuesta el mapa y envia un prompt para que se actualice */}
+                    {showMap && <MapaFlotante nodos={nodos} />}
+                </div>
+                {errorMessage && <p style={{ color: 'red', fontSize: '16px', textAlign: 'center', paddingBottom: '5px' }}>{errorMessage}</p>}
+                {showForm && (
+                    <FormAddNodo
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        handleCancel={handleCancel}
+                    />
                 )}
-                <table style={tablaStyle}>
-                    <thead>
-                        <tr style={filaStyle}>
-                            <th>Nombre</th>
-                            <th>Facultad</th>
-                            <th>Coordenadas</th>
-                            <th>Tipo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {nodos.map((nodo, index) => (
-                            <tr style={filaStyle} key={index}>
-                                <td style={celdaStyle}>{nodo.properties.nombre}</td>
-                                <td style={celdaStyle}>{nodo.properties.facultad}</td>
-                                <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
-                                <td style={celdaStyle}>{nodo.properties.tipo}</td>
-                                <td style={celdaButtons}>
-                                    <button style={editbutton} onClick={() => handleEdit(index)}><AiFillEdit
-                                        style={{ color: "white", fontSize: "24px" }} />
-                                    </button>
-
-                                    <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                        style={{ color: "white", fontSize: "24px" }} />
-                                    </button>
-                                </td>
+                <div style={{ overflow: 'auto', height: '500px' }}> {/* Ajusta la altura según tus necesidades */}
+                    <table style={tablaStyle}>
+                        <thead>
+                            <tr style={filaStyle}>
+                                <th>Nombre</th>
+                                <th>Facultad</th>
+                                <th>Coordenadas</th>
+                                <th>Tipo</th>
+                                <th>Acciones</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {nodos.map((nodo, index) => (
+                                <tr style={filaStyle} key={index}>
+                                    <td style={celdaStyle}>{nodo.properties.nombre}</td>
+                                    <td style={celdaStyle}>{nodo.properties.facultad}</td>
+                                    <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
+                                    <td style={celdaStyle}>{nodo.properties.tipo}</td>
+                                    <td style={celdaButtons}>
+                                        <button style={editbutton} onClick={() => handleEdit(index)}>
+                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+                                        {showEditForm && (
+                                            <FormEditarNodo
+                                                nodo={nodo}
+                                                handleChange={handleChange}
+                                                handleSubmit={handleUpdate}
+                                                handleCancel={() => setShowEditForm(false)}
+                                            />
+                                        )}
+                                        <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                            style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

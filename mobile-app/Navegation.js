@@ -18,8 +18,29 @@ const Stack = createStackNavigator(); // Crear StackNavigator
 function LoginStack() {
     return (
         <Stack.Navigator initialRouteName="login">
-            <Stack.Screen name="login" component={login} options={{ headerShown: false }} />
-            <Stack.Screen name="logged" component={Logged} options={{ headerShown: false }} />
+            <Stack.Screen 
+                name="login" 
+                component={login} 
+                options={{ 
+                    headerShown: false,
+                    gestureEnabled: false // Deshabilita los gestos de deslizamiento
+                }} 
+            />
+            <Stack.Screen 
+                name="logged" 
+                component={Logged} 
+                options={{ 
+                    headerShown: false,
+                    gestureEnabled: false, // Deshabilita los gestos de deslizamiento
+                    headerLeft: () => ( // Personaliza el botón de retroceso
+                        <Button
+                            onPress={() => null} // No hace nada cuando se presiona
+                            title="Back"
+                            color="#000"
+                        />
+                    ),
+                }} 
+            />
         </Stack.Navigator>
     );
 }

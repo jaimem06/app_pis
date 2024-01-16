@@ -8,10 +8,7 @@ const NodoSchema = new Schema({
         facultad: String,
         tipo: String,
         conexiones: [{
-            nodo: {
-                type: Schema.Types.ObjectId,
-                ref: 'Nodo'
-            },
+            nodo: String, // Cambiado de Schema.Types.ObjectId a String
             distancia: Number
         }]
     },
