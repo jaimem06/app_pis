@@ -6,6 +6,8 @@ import {
   AiOutlineHome,
   AiOutlineApartment,
   AiOutlineNodeIndex,
+  AiOutlineUsergroupAdd,
+  AiOutlinePartition
 } from "react-icons/ai";
 import { MdOutlineAnalytics, MdLogout } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -86,30 +88,31 @@ const linksArray = [
     to: "/fred/home",
   },
   {
-    label: "Registro de Usuario",
-    icon: <MdOutlineAnalytics />,
+    label: "Gestión de Usuario",
+    icon: <AiOutlineUsergroupAdd />,
     to: "/fred/user",
   },
   {
-    label: "Productos",
-    icon: <AiOutlineApartment />,
+    label: "Gestión de Nodos",
+    icon: <AiOutlineNodeIndex />,
+    to: "/fred/crudnodo",
+  },
+  {
+    label: "Conexión de Nodos",
+    icon: <AiOutlinePartition />,
     to: "/productos",
   },
   {
-    label: "Diagramas",
+    label: "Gestión Brigadistas",
     icon: <MdOutlineAnalytics />,
     to: "/diagramas",
   },
   {
-    label: "Reportes",
+    label: "Gestión Plan Cont...",
     icon: <MdOutlineAnalytics />,
     to: "/reportes",
   },
-  {
-    label: "Gestion de Nodos",
-    icon: <AiOutlineNodeIndex />,
-    to: "/fred/crudnodo",
-  },
+
 ];
 const secondarylinksArray = [
   {
