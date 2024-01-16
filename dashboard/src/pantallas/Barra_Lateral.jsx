@@ -10,6 +10,8 @@ import { Routes, Route } from 'react-router-dom';
 import Pagina_CrudNodo from './Pagina_crudNodos';
 import Pagina_crudUser from './Pagina_crudUser';
 import PaginaHome from './Pagina_Home';
+import ConexionNodos from './Pagina_ConexionNodo';
+
 function Pagina_inicio() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [theme, setTheme] = useState("light");
@@ -24,6 +26,7 @@ function Pagina_inicio() {
             <Route path='/user' element={<Pagina_crudUser />} />
             <Route path='/crudnodo' element={<Pagina_CrudNodo />} />
             <Route path='/home' element={<PaginaHome />} />
+            <Route path='/conexionnodo' element={<ConexionNodos />} />
           </Routes>
         </Container>
       </ThemeProvider>

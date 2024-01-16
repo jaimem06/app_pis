@@ -4,10 +4,11 @@ import { v } from "../styles/Variables";
 import {
   AiOutlineLeft,
   AiOutlineHome,
-  AiOutlineApartment,
+  AiTwotoneAlert,
   AiOutlineNodeIndex,
   AiOutlineUsergroupAdd,
-  AiOutlinePartition
+  AiOutlineDeploymentUnit,
+  AiOutlineTeam
 } from "react-icons/ai";
 import { MdOutlineAnalytics, MdLogout } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -99,17 +100,17 @@ const linksArray = [
   },
   {
     label: "Conexión de Nodos",
-    icon: <AiOutlinePartition />,
-    to: "/productos",
+    icon: <AiOutlineDeploymentUnit />,
+    to: "/fred/conexionnodo",
   },
   {
     label: "Gestión Brigadistas",
-    icon: <MdOutlineAnalytics />,
+    icon: <AiOutlineTeam />,
     to: "/diagramas",
   },
   {
     label: "Gestión Plan Cont...",
-    icon: <MdOutlineAnalytics />,
+    icon: <AiTwotoneAlert />,
     to: "/reportes",
   },
 
