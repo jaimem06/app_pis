@@ -134,6 +134,7 @@ export const buttonCrearNodo = {
     borderRadius: '8px',
     border: '1px solid #3E91E5',
     color: 'white',
+    marginRight: '10px',
 };
 export const cancelbutton = {
     backgroundColor: '#FFD43B',

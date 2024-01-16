@@ -6,8 +6,8 @@ import {
     searchNodoRequest,
     updateNodoRequest
 } from '../api/auth' //CRUD NODES
-import { AiFillDelete, AiFillEdit, AiOutlineSearch } from "react-icons/ai";
-
+import { AiFillDelete, AiFillEdit, AiOutlineSearch, AiTwotoneEnvironment} from "react-icons/ai";
+import MapaFlotante from '../componentes/MapaFlotante';
 //Estilos de la pagina
 import {
     tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo, editbutton,
@@ -22,6 +22,7 @@ const Pagina_crudNodos = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [showForm, setShowForm] = useState(false);
+    const [showMap, setShowMap] = useState(false); // Llamar al mapa
     const [nodo, setNodo] = useState({
         type: 'Feature',
         properties: {
@@ -142,7 +143,7 @@ const Pagina_crudNodos = () => {
             setErrorMessage('Verifique los datos ingresados, error en la busqueda');
         }
     };
-    
+
     const [showEditForm, setShowEditForm] = useState(false);
     const handleEdit = (index) => {
         const nodoToEdit = nodos[index];
@@ -186,6 +187,9 @@ const Pagina_crudNodos = () => {
                         <button style={buttonBuscar} type="submit"><AiOutlineSearch /></button>
                     </form>
                     <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
+                    <button onClick={() => setShowMap(!showMap)}><AiTwotoneEnvironment style={{color: '#2A364E', fontSize: '35px'}}/></button>
+                    {/* Muuesta el mapa y envia un prompt para que se actualice */}
+                    {showMap && <MapaFlotante nodos={nodos} />}
                 </div>
                 {errorMessage && <p style={{ color: 'red', fontSize: '16px', textAlign: 'center', paddingBottom: '5px' }}>{errorMessage}</p>}
                 {showForm && (
