@@ -5,7 +5,7 @@ export const selectstyles = {
         minHeight: '40px',
         width: '200px',
         minWidth: '200px',
-        margin: '10px',
+        margin: '5px',
         backgroundColor: 'white',
         boxShadow: state.isFocused ? '0 0 0 2px ocean' : null, // Color del borde cuando el select está enfocado
         color: 'white', // Color del texto en el control
@@ -29,7 +29,8 @@ export const titulostyles = {
     textAlign: 'center',
     color: "white",
     backgroundColor: "#2A364E",
-    fontSize: "25px"
+    fontSize: "25px",
+    width: "100%",
 };
 
 export const buttonConect = {
@@ -40,4 +41,13 @@ export const buttonConect = {
     padding: "5px",
     border: "2px solid #2A364E",
     fontWeight: 'bold',
+};
+
+export const advertenciaStyle = {
+color: 'white',
+backgroundColor: '#FF2A24',
+borderRadius: '10px',
+padding: '3px',
+fontSize: '14px',
+margin: '0 auto',
 };

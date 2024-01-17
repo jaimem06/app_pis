@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { readallNodoRequest, connectNodoRequest } from '../api/auth'; //CRUD NODES
-import { selectstyles, titulostyles, buttonConect } from '../styles/styles_connectNodo';
+import { selectstyles, titulostyles, buttonConect, advertenciaStyle} from '../styles/styles_connectNodo';
+import Mapa_Conexiones from '../componentes/MapaConexiones';
 
 function ConexionNodos() {
     const [options, setOptions] = useState([]);
     const [selectedOptionA, setSelectedOptionA] = useState(null);
     const [selectedOptionB, setSelectedOptionB] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [nodesConnected, setNodesConnected] = useState(false); // Nuevo estado
+    const [lastConnection, setLastConnection] = useState(null); // Nuevo estado para la última conexión
 
     useEffect(() => {
         const fetchNodos = async () => {
@@ -21,27 +24,31 @@ function ConexionNodos() {
     }, []);
 
     const handleConnect = async () => {
-        if (selectedOptionA && selectedOptionB) {
-            if (selectedOptionA.label === selectedOptionB.label) {
-                setErrorMessage('Los nodos no deben ser iguales.');
-                return;
-            }
+        if (!selectedOptionA || !selectedOptionB) {
+            setErrorMessage('Ambos nodos deben estar seleccionados.');
+            return;
+        }
 
-            try {
-                await connectNodoRequest(selectedOptionA.label, selectedOptionB.label);
-                setErrorMessage(null);
-            } catch (error) {
-                setErrorMessage(error.response.data.message);
-            }
+        if (selectedOptionA.label === selectedOptionB.label) {
+            setErrorMessage('Los nodos no deben ser iguales.');
+            return;
+        }
+
+        try {
+            await connectNodoRequest(selectedOptionA.label, selectedOptionB.label);
+            setErrorMessage(null);
+            setNodesConnected(!nodesConnected); // Cambia el estado cuando los nodos se conectan
+            setLastConnection({ from: selectedOptionA.label, to: selectedOptionB.label }); // Almacena la última conexión
+        } catch (error) {
+            setErrorMessage(error.response.data.message);
         }
     };
 
     return (
-        <div style={{ flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 style={titulostyles}>Conexión de Nodos</h1>
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             <div style={{
-                display: 'flex', flexDirection: 'row', justifyContent: 'center'
+                display: 'flex', flexDirection: 'row', justifyContent: 'center', zIndex: 1, position: 'relative'
             }}>
                 <Select
                     options={options}
@@ -58,6 +65,16 @@ function ConexionNodos() {
                 <button style={buttonConect} onClick={handleConnect}>
                     Conectar
                 </button>
+            </div>
+            {errorMessage && <p style={advertenciaStyle}>{errorMessage}</p>}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '80vh', // Asegura que el div ocupe toda la altura de la pantalla
+                zIndex: 0, position: 'relative'
+            }}>
+                <Mapa_Conexiones nodesConnected={nodesConnected} lastConnection={lastConnection} />
             </div>
         </div>
     );
