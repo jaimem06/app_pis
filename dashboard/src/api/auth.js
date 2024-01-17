@@ -15,3 +15,4 @@ export const readallNodoRequest = () => axios.get(`/nodos/read_nodos`);
 export const deleteNodoRequest = coordinates => axios.delete(`/nodos/delete_nodo`, { data: { coordinates } });
 export const searchNodoRequest = query => axios.get(`/nodos/buscar_nodos/${query}`);
 export const updateNodoRequest = (id, nodo) => axios.put(`/nodos/update_nodo/${id}`, nodo);
+export const connectNodoRequest = (nombreNodoA, nombreNodoB) => axios.post(`/nodos/create_conexion`, { nombreNodoA, nombreNodoB });
