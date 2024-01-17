@@ -11,6 +11,7 @@ import Pagina_CrudNodo from './Pagina_crudNodos';
 import Pagina_crudUser from './Pagina_crudUser';
 import PaginaHome from './Pagina_Home';
 import ConexionNodos from './Pagina_ConexionNodo';
+import Pagina_PlanEmergencia from './Pagina_PlanEmergencia';
 
 function Pagina_inicio() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -27,6 +28,7 @@ function Pagina_inicio() {
             <Route path='/crudnodo' element={<Pagina_CrudNodo />} />
             <Route path='/home' element={<PaginaHome />} />
             <Route path='/conexionnodo' element={<ConexionNodos />} />
+            <Route path='/planemergencia' element={<Pagina_PlanEmergencia />} />
           </Routes>
         </Container>
       </ThemeProvider>

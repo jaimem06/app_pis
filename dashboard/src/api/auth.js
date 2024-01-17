@@ -16,3 +16,10 @@ export const deleteNodoRequest = coordinates => axios.delete(`/nodos/delete_nodo
 export const searchNodoRequest = query => axios.get(`/nodos/buscar_nodos/${query}`);
 export const updateNodoRequest = (id, nodo) => axios.put(`/nodos/update_nodo/${id}`, nodo);
 export const connectNodoRequest = (nombreNodoA, nombreNodoB) => axios.post(`/nodos/create_conexion`, { nombreNodoA, nombreNodoB });
+
+// Direcciones CRUD PLAN DE EMERGENCIA
+export const createPlanEmergenciaRequest = plan => axios.post(`/planemergencia`, plan);
+export const readallPlanEmergenciaRequest = () => axios.get(`/planemergencia/read_plan`);
+export const deletePlanEmergenciaRequest = id => axios.delete(`/planemergencia/delete_plan`, { data: { id } });
+export const updatePlanEmergenciaRequest = (id, plan) => axios.put(`/planemergencia/update_plan/${id}`, plan);
+export const readPlanEmergenciaRequest = id => axios.get(`/planemergencia/read_plan/${id}`);

@@ -106,12 +106,12 @@ const linksArray = [
   {
     label: "Gestión Brigadistas",
     icon: <AiOutlineTeam />,
-    to: "/diagramas",
+    to: "/",
   },
   {
     label: "Gestión Plan Cont...",
     icon: <AiTwotoneAlert />,
-    to: "/reportes",
+    to: "/fred/planemergencia",
   },
 
 ];

@@ -14,7 +14,7 @@ const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el 
 const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
 const requireToken = require('./Middlewares/AuthTokenRequired');
 const usuario_crud = require('./routes/usuario_crud'); // Ruta para el registro WEB
-
+const planemergencia_crud = require('./routes/planemergencia_crud'); // Ruta para el CRUD de planes de emergencia
 app.use(cors({
     // Páginas que pueden acceder al API
     origin: ['https://fredunl.unlmaps.com', 'http://localhost:5173']
@@ -27,6 +27,7 @@ app.use(usuario_crud);
 app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2
+app.use('/planemergencia',planemergencia_crud);
 //
 
 app.get('/', requireToken, (req, res) => {
