@@ -31,7 +31,7 @@ function Mapa({ nodos }) {
 
             // Añade una capa de mapa (puedes usar diferentes proveedores de mapas)
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: "© OpenStreetMap contributors"
+                attribution: "FRED-UNL"
             }).addTo(mapRef.current);
 
             // Fuerza la actualización del mapa después de que se haya renderizado y los estilos se hayan aplicado

@@ -6,7 +6,7 @@ export const selectstyles = {
         width: '200px',
         minWidth: '200px',
         margin: '10px',
-        backgroundColor: '#2A364E',
+        backgroundColor: 'white',
         boxShadow: state.isFocused ? '0 0 0 2px ocean' : null, // Color del borde cuando el select está enfocado
         color: 'white', // Color del texto en el control
     }),
@@ -21,7 +21,7 @@ export const selectstyles = {
     },
     singleValue: (styles) => ({
         ...styles,
-        color: 'white', // Color del texto del elemento seleccionado en el control
+        color: 'black', // Color del texto del elemento seleccionado en el control
     }),
 };
 
