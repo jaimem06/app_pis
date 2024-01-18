@@ -87,8 +87,7 @@ function Mapa_Conexiones({ nodesConnected }) { // Cambia nodos a nodesConnected
                                 L.latLng(item.geometry.coordinates),
                                 L.latLng(nodoConexion.getLatLng())
                             ];
-                            const color = conexion.ultimaConexion ? 'red' : '#2A364E'; // Cambia el color si es la última conexión
-                            const polyline = L.polyline(latlngs, { color: color, weight: 1 }).addTo(mapRef.current);
+                            const polyline = L.polyline(latlngs, { color: '#2A364E', weight: 2 }).addTo(mapRef.current);
                         }
                     });
                 });
@@ -100,8 +99,8 @@ function Mapa_Conexiones({ nodesConnected }) { // Cambia nodos a nodesConnected
         <div id="map-container" style={{
             height: "450px",
             width: "990px",
-            borderRadius: "10px",
-            border: "3px solid #2A364E",
+            borderRadius: "30px",
+            border: "5px solid #2A364E",
             margin: "0 auto",
         }}></div>
     );

@@ -10,7 +10,6 @@ function ConexionNodos() {
     const [selectedOptionB, setSelectedOptionB] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
     const [nodesConnected, setNodesConnected] = useState(false); // Nuevo estado
-    const [lastConnection, setLastConnection] = useState(null); // Nuevo estado para la última conexión
 
     useEffect(() => {
         const fetchNodos = async () => {
@@ -38,7 +37,6 @@ function ConexionNodos() {
             await connectNodoRequest(selectedOptionA.label, selectedOptionB.label);
             setErrorMessage(null);
             setNodesConnected(!nodesConnected); // Cambia el estado cuando los nodos se conectan
-            setLastConnection({ from: selectedOptionA.label, to: selectedOptionB.label }); // Almacena la última conexión
         } catch (error) {
             setErrorMessage(error.response.data.message);
         }
@@ -74,7 +72,7 @@ function ConexionNodos() {
                 height: '80vh', // Asegura que el div ocupe toda la altura de la pantalla
                 zIndex: 0, position: 'relative'
             }}>
-                <Mapa_Conexiones nodesConnected={nodesConnected} lastConnection={lastConnection} />
+                <Mapa_Conexiones nodesConnected={nodesConnected} />
             </div>
         </div>
     );

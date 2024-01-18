@@ -44,10 +44,12 @@ export const buttonConect = {
 };
 
 export const advertenciaStyle = {
-color: 'white',
-backgroundColor: '#FF2A24',
-borderRadius: '10px',
-padding: '3px',
-fontSize: '14px',
-margin: '0 auto',
+    color: 'white',
+    backgroundColor: '#FF2A24',
+    borderRadius: '10px',
+    padding: '3px',
+    fontSize: '14px',
+    margin: '6.5%',
+    position: 'absolute', // o 'absolute'
+
 };
