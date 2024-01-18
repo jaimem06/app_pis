@@ -8,7 +8,6 @@ require('dotenv').config();
 
 // Registro de un nuevo brigadista
 router.post('/register', async (req, res) => {
-    console.log('Enviado por el cliente - ', req.body);
     const { nombre, apellido, area, numeroTitular} = req.body;
 
     // Comprobar si ya existe un brigadista con este número titular
@@ -52,7 +51,6 @@ router.get('/read_brigadistas', async (req, res) => {
 router.put('/brigadista/:id', async (req, res) => {
     const { id } = req.params;
     const { nombre, apellido, area, numeroTitular} = req.body;
-
 
     const updatedBrigadista = {
         nombre,
