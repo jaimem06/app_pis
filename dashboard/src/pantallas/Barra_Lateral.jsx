@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../Pagina_inicio.css';
 import { ThemeContext } from '../App';
 import { Sidebar } from '../componentes/Sidebar';
 import { ThemeProvider } from 'styled-components';
