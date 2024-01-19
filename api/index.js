@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
 const mejorRuta = require('./routes/mejor_ruta');
+const sismoRouter = require('./routes/simularSismo');
 
 const cors = require('cors');
 // 
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2
 app.use('/planemergencia',planemergencia_crud);
+app.use(sismoRouter); // Simular sismo
 //
 
 app.get('/', requireToken, (req, res) => {

@@ -39,17 +39,29 @@ export const buttonConect = {
     margin: "10px", 
     borderRadius: "10px",
     padding: "5px",
-    border: "2px solid #2A364E",
+    border: "2px solid #003873",
+    fontWeight: 'bold',
+};
+
+export const buttonSismo = {
+    color: "white",
+    backgroundColor: "#FF2A24",
+    margin: "10px", 
+    borderRadius: "10px",
+    padding: "5px",
+    border: "2px solid #990000",
     fontWeight: 'bold',
 };
 
 export const advertenciaStyle = {
     color: 'white',
-    backgroundColor: '#FF2A24',
-    borderRadius: '10px',
-    padding: '3px',
+    backgroundColor: '#2A364E',
+    borderRadius: '25px',
+    paddingLeft: '20px', 
+    paddingRight: '20px',
+    paddingTop: '3px',
+    paddingBottom: '3px',
     fontSize: '14px',
     margin: '6.5%',
-    position: 'absolute', // o 'absolute'
-
+    position: 'absolute', 
 };

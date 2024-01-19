@@ -16,6 +16,8 @@ export const deleteNodoRequest = coordinates => axios.delete(`/nodos/delete_nodo
 export const searchNodoRequest = query => axios.get(`/nodos/buscar_nodos/${query}`);
 export const updateNodoRequest = (id, nodo) => axios.put(`/nodos/update_nodo/${id}`, nodo);
 export const connectNodoRequest = (nombreNodoA, nombreNodoB) => axios.post(`/nodos/create_conexion`, { nombreNodoA, nombreNodoB });
+// Simular SISMO
+export const simularSismoRequest = () => axios.post(`/simular_sismo`);
 
 // Direcciones CRUD PLAN DE EMERGENCIA
 export const createPlanEmergenciaRequest = plan => axios.post(`/planemergencia`, plan);
