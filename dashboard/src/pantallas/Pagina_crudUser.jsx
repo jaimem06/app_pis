@@ -153,7 +153,7 @@ function Pagina_crudUser() {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{ overflow: 'auto', height: '800px' }}> {/* Ajusta la altura según tus necesidades */}
+                <div style={{ overflow: 'auto', height: '525px' }}> {/* Ajusta la altura según tus necesidades */}
                     <table style={tablaStyle}>
                         <thead>
                             <tr style={filaStyle}>

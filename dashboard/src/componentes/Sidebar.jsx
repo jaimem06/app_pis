@@ -4,8 +4,11 @@ import { v } from "../styles/Variables";
 import {
   AiOutlineLeft,
   AiOutlineHome,
-  AiOutlineApartment,
+  AiTwotoneAlert,
   AiOutlineNodeIndex,
+  AiOutlineUsergroupAdd,
+  AiOutlineDeploymentUnit,
+  AiOutlineTeam
 } from "react-icons/ai";
 import { MdOutlineAnalytics, MdLogout } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -86,30 +89,31 @@ const linksArray = [
     to: "/fred/home",
   },
   {
-    label: "Registro de Usuario",
-    icon: <MdOutlineAnalytics />,
+    label: "Gestión de Usuario",
+    icon: <AiOutlineUsergroupAdd />,
     to: "/fred/user",
   },
   {
-    label: "Productos",
-    icon: <AiOutlineApartment />,
-    to: "/productos",
-  },
-  {
-    label: "Diagramas",
-    icon: <MdOutlineAnalytics />,
-    to: "/diagramas",
-  },
-  {
-    label: "Reportes",
-    icon: <MdOutlineAnalytics />,
-    to: "/reportes",
-  },
-  {
-    label: "Gestion de Nodos",
+    label: "Gestión de Nodos",
     icon: <AiOutlineNodeIndex />,
     to: "/fred/crudnodo",
   },
+  {
+    label: "Conexión de Nodos",
+    icon: <AiOutlineDeploymentUnit />,
+    to: "/fred/conexionnodo",
+  },
+  {
+    label: "Gestión Brigadistas",
+    icon: <AiOutlineTeam />,
+    to: "/",
+  },
+  {
+    label: "Gestión Plan Cont...",
+    icon: <AiTwotoneAlert />,
+    to: "/fred/planemergencia",
+  },
+
 ];
 const secondarylinksArray = [
   {

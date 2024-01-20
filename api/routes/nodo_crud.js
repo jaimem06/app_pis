@@ -121,7 +121,6 @@ router.delete('/delete_nodo', async (req, res) => {
 
   res.send(nodo);
 });
-
 // Agregar una conexión a un nodo
 router.post('/create_conexion', async (req, res) => {
   const { nombreNodoA, nombreNodoB } = req.body;
@@ -133,6 +132,14 @@ router.post('/create_conexion', async (req, res) => {
   // Verificar que ambos nodos existen
   if (!nodoA || !nodoB) {
     return res.status(404).send({ message: 'No se encontró uno o ambos nodos.' });
+  }
+
+  // Verificar si los nodos ya están conectados
+  const yaConectados = nodoA.properties.conexiones.some(conexion => conexion.nodo === nombreNodoB) &&
+                       nodoB.properties.conexiones.some(conexion => conexion.nodo === nombreNodoA);
+
+  if (yaConectados) {
+    return res.status(400).send({ message: 'Los nodos ya están conectados.' });
   }
 
   // Calcular la distancia Haversine entre los nodos

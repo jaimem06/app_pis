@@ -105,14 +105,14 @@ export default function MapaFlotante({nodos}) {
     return (
         <div style={{
             position: 'fixed', // Posiciona el mapa de forma fija en la pantalla
-            top: '52%', // Centra el mapa verticalmente
+            top: '50%', // Centra el mapa verticalmente
             left: '50%', // Centra el mapa horizontalmente
             transform: 'translate(-50%, -50%)', // Asegura que el mapa esté centrado
             zIndex: 1000, // Asegura que el mapa esté por encima de otros elementos
         }}>
             <div id="map-container" style={{
-                height: "450px",
-                width: "700px",
+                height: "440px",
+                width: "750px",
                 borderRadius: "20px",
                 border: "3px solid #2A364E",
             }}></div>
