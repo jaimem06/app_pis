@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { readallNodoRequest } from '../api/auth'
-import PinVerde from '../assets/green_pin.svg';
-import PinAzul from '../assets/blue_pin.svg';
+import PinVerde from '../assets/meeting_point.svg';
+import PinAzul from '../assets/location.svg';
 import PinRojo from '../assets/red_pin.svg';
 
 function Mapa({ nodos }) {
@@ -12,17 +12,17 @@ function Mapa({ nodos }) {
 
     const iconVerde = L.icon({
         iconUrl: PinVerde,
-        iconSize: [15], // Tamaño del icono
+        iconSize: [30], // Tamaño del icono
     });
 
     const iconRojo = L.icon({
         iconUrl: PinRojo,
-        iconSize: [11], // Tamaño del icono
+        iconSize: [10], // Tamaño del icono
     });
 
     const iconAzul = L.icon({
         iconUrl: PinAzul,
-        iconSize: [15], // Tamaño del icono
+        iconSize: [30], // Tamaño del icono
     });
     useEffect(() => {
         if (!mapRef.current) {
@@ -96,11 +96,10 @@ function Mapa({ nodos }) {
 
     return (
         <div id="map-container" style={{
-            height: "510px",
-            width: "990px",
+            height: "470px",
+            width: "1020px",
             borderRadius: "20px",
-            border: "3px solid #2A364E",
-            boxShadow: "0px 10px 25px #2A364E",
+            border: "4px solid #2A364E",
         }}></div>
     );
 }

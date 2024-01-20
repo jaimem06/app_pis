@@ -87,6 +87,11 @@ export const useNodos = () => {
             alert('Nodo creado exitosamente!');
         } catch (error) {
             console.error(error);
+            if (error.response && error.response.data && error.response.data.error) {
+                alert(error.response.data.error);
+            } else {
+                alert('Ocurrió un error al crear el nodo.');
+            }
         }
     }
 
