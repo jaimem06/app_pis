@@ -21,7 +21,6 @@ router.post('/register', async (req, res) => {
         apellido,
         area,
         numeroTitular,
-        password: hashedPassword
     });
 
     try {
@@ -57,7 +56,6 @@ router.put('/brigadista/:id', async (req, res) => {
         apellido,
         area,
         numeroTitular,
-        password: hashedPassword
     };
 
     await Brigadista.findByIdAndUpdate(id, updatedBrigadista);
