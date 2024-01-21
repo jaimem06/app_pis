@@ -21,7 +21,7 @@ async function crearGrafo () {
             // Para cada conexión de este nodo
             for (const conexion of nodo.properties.conexiones) {
                 // Busca el nodo al que esta conexión lleva
-                const nodoConectado = await nodoSchema.findById(conexion.nodo);
+                const nodoConectado = await nodoSchema.findOne({ 'properties.nombre': conexion.nodo });
 
                 // Añade el nombre del nodo conectado a la lista de adyacencia
                 grafo[nombreNodo][nodoConectado.properties.nombre] = conexion.distancia;

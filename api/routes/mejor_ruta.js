@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const grafo = require('../utils/crear_grafo');
+const { rutaMasCorta } = require('../utils/crear_grafo');
+const buscarNodoMasCercano = require('../utils/nodo_cercano.js');
+const Nodo = require('../models/nodo');
 
-router.use(express.json()); // Para poder parsear el cuerpo de las solicitudes POST
+router.use(express.json());
 
 router.post('/camino_minimo', async (req, res) => {
-    const inicio = req.body.inicio;
+    let inicio = req.body.inicio;
     const fin = req.body.fin;
 
     if (!inicio || !fin) {
@@ -13,10 +15,22 @@ router.post('/camino_minimo', async (req, res) => {
     }
 
     try {
-        const ruta = await grafo.rutaMasCorta(inicio, fin);
+        if (inicio.coords) {
+            const nodoInicio = await buscarNodoMasCercano(inicio.coords);
+            inicio = nodoInicio.properties.nombre; // Usa el nombre del nodo de inicio
+        }
+
+        const nodoFinal = await Nodo.findOne({ 'properties.nombre': fin });
+
+        if (!nodoFinal) {
+            return res.status(404).send('El nodo final no se encontró en la base de datos');
+        }
+
+        const ruta = await rutaMasCorta(inicio, nodoFinal.properties.nombre);
         res.json(ruta);
     } catch (error) {
-        res.status(500).send('Hubo un error al calcular la ruta más corta');
+        console.error('Error al calcular la ruta más corta:', error);
+        res.status(500).send('Error al calcular la ruta más corta');
     }
 });
 

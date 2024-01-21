@@ -8,7 +8,7 @@ const windowHeight = Dimensions.get('window').height;
 const Info = () => {
   const [plan, setPlan] = useState(null);
   useEffect(() => {
-    fetch('http://192.168.1.24:3000/planemergencia/read_plan/')
+    fetch('http://192.168.1.2:3000/planemergencia/read_plan/')
       .then(response => response.json())
       .then(data => setPlan(data[0]))
 

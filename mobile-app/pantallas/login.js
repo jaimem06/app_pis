@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { styles } from './styleslogin';
+import { styles } from './styles/styleslogin';
 
 const Login = ({ navigation }) => { // Agregar navigation aquí
   const [username, setUsername] = useState('');
@@ -9,11 +9,8 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    //https://api-fredunl.onrender.com/login_mobile
-    fetch('https://api-fredunl.onrender.com/login_mobile', {
-    //fetch('http://10.20.137.216:3000/login_mobile', { // ip Universidad
-    //fetch('http://192.168.1.9:3000/login_mobile', { // ip Jaime
-     //fetch('http://192.168.1.13:3000/login_mobile', { // ip Wilson
+    fetch('http://192.168.1.2:3000/login_mobile', { // ip Jaime
+
 
       method: 'POST',
       headers: {
