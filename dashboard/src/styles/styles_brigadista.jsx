@@ -1,5 +1,5 @@
 //Estilos formulario
-export const formCrearNodo = {
+export const formCrearBrigadista = {
     //Estilos flotantes
     position: 'absolute',
     top: '50%',
@@ -13,14 +13,14 @@ export const formCrearNodo = {
     border: '1px solid white',
     padding: '20px',
     marginTop: '20px',
-    backgroundColor: '#2A364E',
-    width: '30%',
+    backgroundColor: 'black ',
+    width: '40%',
     margin: '0 auto',
     borderRadius: '10px',
     fontSize: '15px'
 };
 
-export const formEditarNodo = {
+export const formEditarBrigadista = {
     //Estilos flotantes
     position: 'absolute',
     top: '50%',
@@ -35,10 +35,12 @@ export const formEditarNodo = {
     padding: '20px',
     marginTop: '20px',
     backgroundColor: '#38576e',
-    width: '30%',
+    width: '40%',
     margin: '0 auto',
     borderRadius: '10px',
-    fontSize: '15px'
+    fontSize: '15px',
+    overflowY: 'auto',
+    maxHeight: '500px'
 };
 
 export const buttonsForm = {
@@ -54,6 +56,13 @@ export const inputStyle = {
     borderRadius: '5px',
 };
 
+export const inputSelectStyle = {
+    color: '#2A364E',
+    margin: '10px',
+    borderRadius: '5px',
+    width : '200px',
+};
+
 export const titulosStyle = {
     color: 'white',
     textAlign: 'left',
@@ -61,31 +70,11 @@ export const titulosStyle = {
     marginLeft: '10px',
 };
 
-export const tablaStyle = {
-    backgroundColor: '#8BB6E2',
-    margin: '0 auto',
-    fontSize: '15px',
-    color: 'black',
-};
-
-export const filaStyle = {
-    border: '1px solid #001933',
-    textAlign: 'center',
-};
-
-export const celdaStyle = {
-    border: '1px solid #001933',
-};
-
-export const celdaButtons = {
-    display: 'flex',
-    justifyContent: 'center',   
-};
-
 
 export const deletebutton = {
     backgroundColor: '#CE0000',
     borderRadius: '0px 6px 6px 0px', //Derecha
+    width: '95%',
     padding: '6px',
     marginTop: '6px',
     marginBottom: '6px',
@@ -98,6 +87,7 @@ export const deletebutton = {
 export const  editbutton = {
     backgroundColor: '#0D8419',
     borderRadius: '6px 0px 0px 6px',//Izquierda
+    width: '95%',
     padding: '6px',
     marginTop: '6px',
     marginBottom: '6px',
@@ -126,7 +116,7 @@ export const buttonBuscar = {
     marginRight: '10px',
 };
 
-export const buttonCrearNodo = {
+export const buttonCrearBrigadista = {
     width: '15%',
     backgroundColor: '#2A364E',
     borderRadius: '8px',

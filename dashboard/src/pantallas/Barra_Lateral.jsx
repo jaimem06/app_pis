@@ -8,6 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Pagina_CrudNodo from './Pagina_crudNodos';
 import Pagina_crudUser from './Pagina_crudUser';
+import Pagina_crudBrigadista from './Pagina_crudBrigadista';
 import PaginaHome from './Pagina_Home';
 import ConexionNodos from './Pagina_ConexionNodo';
 import Pagina_PlanEmergencia from './Pagina_PlanEmergencia';
@@ -28,6 +29,7 @@ function Pagina_inicio() {
             <Route path='/home' element={<PaginaHome />} />
             <Route path='/conexionnodo' element={<ConexionNodos />} />
             <Route path='/planemergencia' element={<Pagina_PlanEmergencia />} />
+            <Route path='/brigadista' element={<Pagina_crudBrigadista />} />
           </Routes>
         </Container>
       </ThemeProvider>

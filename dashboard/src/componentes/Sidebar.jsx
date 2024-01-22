@@ -106,7 +106,7 @@ const linksArray = [
   {
     label: "Gestión Brigadistas",
     icon: <AiOutlineTeam />,
-    to: "/",
+    to: "/fred/brigadista",
   },
   {
     label: "Gestión Plan Cont...",

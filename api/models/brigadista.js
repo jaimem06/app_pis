@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const brigadistaSchema = new mongoose.Schema({
     titular: [{
-        nombresComplesto: {
+        nombresCompletos: {
             type: String,
             required: true
         },
@@ -11,23 +11,20 @@ const brigadistaSchema = new mongoose.Schema({
             required: true
         }
     }],
-    
     reemplazo: [{
-        nombresComplesto: {
+        nombresCompletos: {
             type: String,
             required: true
         },
         nroReemplazo: {
             type: Number,
             required: true
-        } 
+        }
     }],
-    
-    area:{
+    area: {
         type: String,
         required: true
     }
 });
 
-mongoose.model("Brigadista", brigadistaSchema);
-
+module.exports = mongoose.model('Brigadista', brigadistaSchema);

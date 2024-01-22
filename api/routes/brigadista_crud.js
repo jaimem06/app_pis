@@ -1,73 +1,41 @@
 const express = require('express');
+const Brigadista = require('../models/brigadista');
 const router = express.Router();
-const mongoose = require('mongoose');
-const Brigadista = mongoose.model("Brigadista");
-const jwt = require('jsonwebtoken');
 
-require('dotenv').config();
-
-// Registro de un nuevo brigadista
-router.post('/register', async (req, res) => {
-    const { nombre, apellido, area, numeroTitular} = req.body;
-
-    // Comprobar si ya existe un brigadista con este número titular
-    const existingBrigadista = await Brigadista.findOne({ numeroTitular });
-    if (existingBrigadista) {
-        return res.status(400).json(["Ya existe un brigadista con este número titular"]);
-    }
-
-    const brigadista = new Brigadista({
-        nombre,
-        apellido,
-        area,
-        numeroTitular,
-    });
-
-    try {
-        await brigadista.save();
-        const token = jwt.sign({ _id: brigadista._id }, process.env.JWT_SECRET);
-        res.json({ token, brigadista: { _id: brigadista._id, nombre, apellido, area, numeroTitular } });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Error interno del servidor" });
-    }
+// Crear un nuevo brigadista
+router.post('/register', (req, res) => {
+    const brigadista = new Brigadista(req.body);
+    brigadista.save()
+        .then(() => res.status(201).send(brigadista))
+        .catch(error => res.status(400).send(error));
 });
 
-// Obtener información de un brigadista por su ID
-router.get('/brigadista/:id', async (req, res) => {
-    const { id } = req.params;
-    const brigadista = await Brigadista.findById(id);
-    res.json(brigadista);
+// Leer todos los brigadistas
+router.get('/read_brigadista', (req, res) => {
+    Brigadista.find()
+        .then(brigadistas => res.send(brigadistas))
+        .catch(error => res.status(500).send(error));
 });
 
-// Obtener todos los brigadistas
-router.get('/read_brigadistas', async (req, res) => {
-    const brigadistas = await Brigadista.find();
-    res.send(brigadistas);
+// Leer un brigadista por ID
+router.get('/read_brigadista/:id', (req, res) => {
+    Brigadista.findById(req.params.id)
+        .then(brigadista => brigadista ? res.send(brigadista) : res.sendStatus(404))
+        .catch(error => res.status(500).send(error));
 });
 
-// Actualizar información de un brigadista por su ID
-router.put('/brigadista/:id', async (req, res) => {
-    const { id } = req.params;
-    const { nombre, apellido, area, numeroTitular} = req.body;
-
-    const updatedBrigadista = {
-        nombre,
-        apellido,
-        area,
-        numeroTitular,
-    };
-
-    await Brigadista.findByIdAndUpdate(id, updatedBrigadista);
-    
-    res.json({ message: "Brigadista actualizado correctamente" });
+// Actualizar un brigadista por ID
+router.put('/update/:id', (req, res) => {
+    Brigadista.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .then(brigadista => brigadista ? res.send(brigadista) : res.sendStatus(404))
+        .catch(error => res.status(500).send(error));
 });
 
-// Eliminar un brigadista por su ID
-router.delete('/brigadista/:id', async (req, res) => {
-    const { id } = req.params;
-    await Brigadista.findByIdAndDelete(id);
-    res.json({ message: "Brigadista eliminado correctamente" });
+// Eliminar un brigadista por ID
+router.delete('/delete/:id', (req, res) => {
+    Brigadista.findByIdAndDelete(req.params.id)
+        .then(brigadista => brigadista ? res.send(brigadista) : res.sendStatus(404))
+        .catch(error => res.status(500).send(error));
 });
 
 module.exports = router;

@@ -25,3 +25,10 @@ export const readallPlanEmergenciaRequest = () => axios.get(`/planemergencia/rea
 export const deletePlanEmergenciaRequest = id => axios.delete(`/planemergencia/delete_plan`, { data: { id } });
 export const updatePlanEmergenciaRequest = (id, plan) => axios.put(`/planemergencia/update_plan/${id}`, plan);
 export const readPlanEmergenciaRequest = id => axios.get(`/planemergencia/read_plan/${id}`);
+
+// Direcciones CRUD BRIGADISTA
+export const createBrigadistaRequest = brigadista => axios.post(`/brigadista/register`, brigadista);
+export const readallBrigadistaRequest = () => axios.get(`/brigadista/read_brigadista`);
+export const deleteBrigadistaRequest = id => axios.delete(`/brigadista/delete/${id}`);
+export const updateBrigadistaRequest = (id, brigadista) => axios.put(`/brigadista/update/${id}`, brigadista);
+export const readBrigadistaRequest = id => axios.get(`/brigadista/read_brigadista/${id}`);

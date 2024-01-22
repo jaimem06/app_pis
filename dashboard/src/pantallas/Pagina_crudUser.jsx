@@ -129,7 +129,7 @@ function Pagina_crudUser() {
 
     return (
         <div>
-            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Nodos</h1>
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Usuario</h1>
             <div>
                 <div style={{ display: 'flex', marginLeft: "50px", marginBottom: "5px" }}>
                     <form onSubmit={handleSearch}>
