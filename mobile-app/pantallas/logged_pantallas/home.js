@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Image, TouchableOpacity, Text, View, Alert } from 'react-native';
 import styles from '../styles/styleshome';
 import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -19,25 +19,57 @@ const Home = () => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    let inicio = { coords: location.coords };
-    let fin = { coords: { latitude: 0, longitude: 0 } }; // Aquí puedes poner las coordenadas del nodo PDE más cercano
+    console.log(location.coords);
+    let inicio = {
+      coords: {
+        latitude: location.coords.longitude,
+        longitude: location.coords.latitude
+      }
+    };
+    let fin = "Punto de encuentro";
 
     fetch('http://192.168.1.2:3000/camino_minimo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ inicio, fin })
+      body: JSON.stringify({
+        inicio: {
+          coords: {
+            longitude: inicio.coords.longitude,
+            latitude: inicio.coords.latitude
+          }
+        },
+        fin: fin
+      })
     })
       .then(response => response.json())
       .then(data => {
-        // Aquí puedes manejar la respuesta del servidor
         console.log(data);
+        let newMarkers = data.map(item => ({
+          nombre: item.nombre,
+          tipo: item.tipo,
+          coordenadas: {
+            longitude: item.coordenadas[1],
+            latitude: item.coordenadas[0]
+          }
+        }));
+
+        setMarkers(newMarkers);
       })
       .catch(error => {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    if (mapRef.current && markers.length > 0) {
+      mapRef.current.fitToCoordinates(markers.map(marker => marker.coordenadas), {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
+    }
+  }, [markers]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -59,33 +91,29 @@ const Home = () => {
             longitudeDelta: 0.003,
           }}
         >
-          {markers.map((marker, index) => (
-            marker.tipo !== "Ruta" && (
-              <Marker
-                key={index}
-                coordinate={{
-                  latitude: marker.coordenadas[0],
-                  longitude: marker.coordenadas[1]
-                }}
-              >
-                {marker.tipo === 'PDE' && (
-                  <View style={{ width: 40, height: 40, borderRadius: 5, overflow: 'hidden' }}>
-                    <Image source={puntoEncuentro} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-                  </View>
-                )}
-                {marker.tipo === 'Edificacion' && (
-                  <View style={{ width: 45, height: 45, overflow: 'hidden' }}>
-                    <Image source={user} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-                  </View>
-                )}
-              </Marker>
-            )
-          ))}
+          {markers.map((marker, index) => {
+            if (index === 0 || index === markers.length - 1) {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={marker.coordenadas}
+                >
+                  {index === 0 && (
+                    <View style={{ width: 45, height: 45, overflow: 'hidden' }}>
+                      <Image source={user} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                    </View>
+                  )}
+                  {index === markers.length - 1 && (
+                    <View style={{ width: 40, height: 40, borderRadius: 5, overflow: 'hidden' }}>
+                      <Image source={puntoEncuentro} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                    </View>
+                  )}
+                </Marker>
+              );
+            }
+          })}
           <Polyline
-            coordinates={markers.map(marker => ({
-              latitude: marker.coordenadas[0],
-              longitude: marker.coordenadas[1],
-            }))}
+            coordinates={markers.map(marker => marker.coordenadas)}
             strokeColor="#2A364E"
             strokeWidth={6}
           />
