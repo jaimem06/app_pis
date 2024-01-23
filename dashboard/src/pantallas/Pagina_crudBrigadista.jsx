@@ -184,7 +184,7 @@ function Pagina_crudBrigadista() {
                 <div style={{ overflow: 'auto', height: '10%', marginLeft: '2%', flexWrap: 'wrap', justifyContent: 'space-around', display: 'flex' }}> {/* Ajusta la altura según tus necesidades */}
                     {Array.isArray(brigadistas) && brigadistas.map((brigadista, index) => (
                         <div key={brigadista._id} style={{ display: 'flex', alignContent: 'start', flexBasis: '18rem', margin: '1%' }}>
-                            <div className="card" style={{ width: "100%", height: 'auto', color: 'black', border: '2px black solid', borderRadius: '2%', marginTop: '2%' }} key={index}>
+                            <div className="card" style={{ width: "100%", height: 'auto', color: 'black', border: '2px black solid',backgroundColor:'white', borderRadius: '2%', marginTop: '2%' }} key={index}>
                                 <div className="card-body">
 
                                     <div className="card-text">

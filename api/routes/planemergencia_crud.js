@@ -51,7 +51,7 @@ router.put('/update_plan/:id', getPlanEmergencia, async (req, res) => {
 });
 
 // Eliminar un plan de emergencia
-router.delete('/:id', getPlanEmergencia, async (req, res) => {
+router.delete('/delete_plan/:id', getPlanEmergencia, async (req, res) => {
     try {
         const { id } = req.params;
         await PlanEmergencia.findByIdAndDelete(id);

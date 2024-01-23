@@ -22,7 +22,7 @@ export const simularSismoRequest = () => axios.post(`/simular_sismo`);
 // Direcciones CRUD PLAN DE EMERGENCIA
 export const createPlanEmergenciaRequest = plan => axios.post(`/planemergencia`, plan);
 export const readallPlanEmergenciaRequest = () => axios.get(`/planemergencia/read_plan`);
-export const deletePlanEmergenciaRequest = id => axios.delete(`/planemergencia/delete_plan`, { data: { id } });
+export const deletePlanEmergenciaRequest = id => axios.delete(`/planemergencia/delete_plan/${id}`);
 export const updatePlanEmergenciaRequest = (id, plan) => axios.put(`/planemergencia/update_plan/${id}`, plan);
 export const readPlanEmergenciaRequest = id => axios.get(`/planemergencia/read_plan/${id}`);
 
