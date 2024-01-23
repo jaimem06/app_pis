@@ -181,5 +181,7 @@ export const useNodos = () => {
         handleUpdate,
         showEditForm, 
         setShowEditForm, 
+        nodo,
+        setNodo
     };
 };

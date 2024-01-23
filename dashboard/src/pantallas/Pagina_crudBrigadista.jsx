@@ -8,8 +8,8 @@ import {
 } from '../styles/styles_pageNodo';
 import { formCrearBrigadista, formEditarBrigadista } from '../styles/styles_brigadista';
 import { AiFillDelete, AiFillEdit, AiOutlineSearch } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 import ForCrearBrigadista from "./forms/Form_CrearBrigadista";
-import FormEditarUser from "./forms/Form_EditUser";
 import Form_EditBrigadista from "./forms/Form_EditBrigadista";
 function Pagina_crudBrigadista() {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -78,7 +78,7 @@ function Pagina_crudBrigadista() {
         const { name, value } = e.target;
         setBrigadista(prevBrigadista => {
             const updatedBrigadista = { ...prevBrigadista };
-    
+
             if (name.startsWith('nombresCompletosTitular')) {
                 const index = parseInt(name.replace('nombresCompletosTitular', '')) - 1;
                 if (!updatedBrigadista.titular[index]) {
@@ -181,10 +181,10 @@ function Pagina_crudBrigadista() {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{  overflow: 'auto', height: '10%', marginLeft: '2%', flexWrap: 'wrap' ,justifyContent:'space-around',display:'flex'}}> {/* Ajusta la altura según tus necesidades */}
+                <div style={{ overflow: 'auto', height: '10%', marginLeft: '2%', flexWrap: 'wrap', justifyContent: 'space-around', display: 'flex' }}> {/* Ajusta la altura según tus necesidades */}
                     {Array.isArray(brigadistas) && brigadistas.map((brigadista, index) => (
-                        <div key={brigadista._id} style={{ display: 'flex', alignContent: 'start',flexBasis:'18rem',margin:'1%' }}>
-                            <div className="card" style={{ width: "100%",height:'auto', color: 'black', border: '2px black solid', borderRadius: '2%', marginTop: '2%' }} key={index}>
+                        <div key={brigadista._id} style={{ display: 'flex', alignContent: 'start', flexBasis: '18rem', margin: '1%' }}>
+                            <div className="card" style={{ width: "100%", height: 'auto', color: 'black', border: '2px black solid', borderRadius: '2%', marginTop: '2%' }} key={index}>
                                 <div className="card-body">
 
                                     <div className="card-text">
@@ -201,21 +201,26 @@ function Pagina_crudBrigadista() {
                                         <p>Área: {brigadista.area}</p>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-    <button style={{ ...editbutton, marginRight: '2px' }} onClick={() => handleEdit(index)}>
-        <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
-    </button>
+                                        <button style={{ ...editbutton, marginRight: '2px' }} onClick={() => handleEdit(index)}>
+                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
 
-    <button style={{ ...deletebutton, marginLeft: '2px' }} onClick={() => handleDelete(index)}>
-        <AiFillDelete style={{ color: "white", fontSize: "24px" }} />
-    </button>
-</div>
+                                        <button style={{ ...deletebutton, marginLeft: '2px' }} onClick={() => handleDelete(index)}>
+                                            <MdDelete style={{ color: "white", fontSize: "24px" }} />
+                                        </button>
+                                    </div>
                                 </div>
 
                             </div>
-                            {selectedBrigadistaId === brigadista._id && showEditForm && (
-                                <div style={formEditarBrigadista} >
+                           
+                        </div>
+
+                    ))}
+
+                </div>
+                {selectedBrigadistaId === brigadista._id && showEditForm && (
+                                <div style={formCrearBrigadista} >
                                     <Form_EditBrigadista
-                                        id={brigadista._id}
                                         brigadista={brigadista}
                                         setBrigadista={setBrigadista}
                                         handleSubmit={handleUpdate}
@@ -226,11 +231,6 @@ function Pagina_crudBrigadista() {
                                     />
                                 </div>
                             )}
-                        </div>
-
-                    ))}
-
-                </div>
             </div>
         </div>
     )

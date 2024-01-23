@@ -13,7 +13,7 @@ const areas = [
     "Salud Humana"
 ];
 
-const Form_EditBrigadista = ({ brigadista, setBrigadista, handleSubmit, handleCancel, id}) => {
+const Form_EditBrigadista = ({ brigadista, setBrigadista, handleSubmit, handleCancel}) => {
     const handleChange1 = (event) => {
         
         const { name, value } = event.target;
@@ -35,6 +35,9 @@ const Form_EditBrigadista = ({ brigadista, setBrigadista, handleSubmit, handleCa
     };
     return (
         <form onSubmit={handleSubmit}  >
+            <p style={{ textAlign: "center", color: "white" }}>
+                <span style={{ border: "2px solid white", borderRadius: "5px", padding: "3px" }}>EDITAR BRIGADISTA</span>
+            </p>
             {brigadista.titular.map((titular, index) => (
                 <div key={`titular-${index}`}>
                     <label style={titulosStyle}>
@@ -56,7 +59,7 @@ const Form_EditBrigadista = ({ brigadista, setBrigadista, handleSubmit, handleCa
 
             <div>
                 <label style={titulosStyle}> Área:
-                    <select style={inputStyle} name="area" onChange={handleChange1}  >
+                    <select style={inputStyle} name="area" value={brigadista.area} onChange={handleChange1}  >
                         <option value="">Seleccione una área</option>
                         {areas.map((area, index) => (
                             <option key={index} value={area}>

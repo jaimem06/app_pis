@@ -1,17 +1,21 @@
 import React from 'react';
-import { AiFillDelete, AiFillEdit, AiOutlineSearch, AiTwotoneEnvironment} from "react-icons/ai";
+import { useState, useEffect } from 'react';
+import { readallNodoRequest } from '../api/auth';
+import { AiFillDelete, AiFillEdit, AiOutlineSearch, AiTwotoneEnvironment } from "react-icons/ai";
 import MapaFlotante from '../componentes/MapaFlotante';
 import {
     tablaStyle, filaStyle, celdaStyle, deletebutton, buttonCrearNodo, editbutton,
-    celdaButtons, buttonBuscar, inputBuscar
+    celdaButtons, buttonBuscar, inputBuscar, formEditarNodo
 } from '../styles/styles_pageNodo';
 import FormAddNodo from '../pantallas/forms/Form_CrearNodo';
 import FormEditarNodo from '../pantallas/forms/Form_EditNodo'
+import { formEditarBrigadista } from '../styles/styles_brigadista';
 import { useNodos } from '../contexto/nodoContext';
 
 const Pagina_crudNodos = () => {
+
     const {
-         searchQuery,
+        searchQuery,
         setSearchQuery,
         errorMessage,
         showForm,
@@ -26,8 +30,10 @@ const Pagina_crudNodos = () => {
         handleSearch,
         handleEdit,
         handleUpdate,
-        showEditForm, 
-        setShowEditForm, 
+        showEditForm,
+        setShowEditForm,
+        nodo,
+        setNodo,
     } = useNodos();
 
     return (
@@ -47,7 +53,7 @@ const Pagina_crudNodos = () => {
                         <button style={buttonBuscar} type="submit"><AiOutlineSearch /></button>
                     </form>
                     <button style={buttonCrearNodo} onClick={() => setShowForm(!showForm)}>Crear Nodo</button>
-                    <button onClick={() => setShowMap(!showMap)}><AiTwotoneEnvironment style={{color: '#2A364E', fontSize: '35px'}}/></button>
+                    <button onClick={() => setShowMap(!showMap)}><AiTwotoneEnvironment style={{ color: '#2A364E', fontSize: '35px' }} /></button>
                     {/* Muuesta el mapa y envia un prompt para que se actualice */}
                     {showMap && <MapaFlotante nodos={nodos} />}
                 </div>
@@ -81,23 +87,29 @@ const Pagina_crudNodos = () => {
                                         <button style={editbutton} onClick={() => handleEdit(index)}>
                                             <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
                                         </button>
-                                        {showEditForm && (
-                                            <FormEditarNodo
-                                                nodo={nodo}
-                                                handleChange={handleChange}
-                                                handleSubmit={handleUpdate}
-                                                handleCancel={() => setShowEditForm(false)}
-                                            />
-                                        )}
+
                                         <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
                                             style={{ color: "white", fontSize: "24px" }} />
                                         </button>
                                     </td>
                                 </tr>
+
                             ))}
+
                         </tbody>
                     </table>
                 </div>
+                {showEditForm && (
+                    <div style={formEditarNodo}>
+                        <FormEditarNodo
+                            nodo={nodo}
+                            setNodo={setNodo}
+                            handleChange={handleChange}
+                            handleSubmit={handleUpdate}
+                            handleCancel={() => setShowEditForm(false)}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

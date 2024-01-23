@@ -174,14 +174,7 @@ function Pagina_crudUser() {
                                         <button style={editbutton} onClick={() => handleEdit(index)}>
                                             <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
                                         </button>
-                                        {showEditForm && (
-                                            <FormEditarUser
-                                                user={user}
-                                                handleChange={handleChange}
-                                                handleSubmit={handleUpdate}
-                                                handleCancel={() => setShowEditForm(false)}
-                                            />
-                                        )}
+                                      
                                         <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
                                             style={{ color: "white", fontSize: "24px" }} />
                                         </button>
@@ -191,6 +184,15 @@ function Pagina_crudUser() {
                         </tbody>
                     </table>
                 </div>
+                {showEditForm && (
+                                            <FormEditarUser
+                                                user={user}
+                                                setUser={setUser}
+                                                handleChange={handleChange}
+                                                handleSubmit={handleUpdate}
+                                                handleCancel={() => setShowEditForm(false)}
+                                            />
+                                        )}
             </div>
         </div>
     )
