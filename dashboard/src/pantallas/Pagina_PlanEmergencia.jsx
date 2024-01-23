@@ -115,14 +115,14 @@ const Pagina_PlanEmergencia = () => {
     };
 
     const handleDelete = (index) => {
-        const planToDelete = plans[index];
+        const planToDelete = plan[index];
         const confirmDelete = window.confirm(`¿Estás seguro de que quieres eliminar el plan ${planToDelete.titulo}?`);
         if (confirmDelete) {
             deletePlanEmergenciaRequest(planToDelete._id)
                 .then(response => {
                     console.log(response.data);
                     // Actualiza el estado de los planes después de eliminar el plan
-                    const newPlans = plans.filter((plan, i) => i !== index);
+                    const newPlans = plan.filter((plan, i) => i !== index);
                     setPlan(newPlans);
                 })
                 .catch(error => {
@@ -140,16 +140,16 @@ const Pagina_PlanEmergencia = () => {
                         <span style={{ color: 'black' }}>CREAR PLAN DE EMERGENCIA</span>
                     </p>
                     <label style={titulosStyle}>Título del Plan:</label>
-                    <input style={inputStyle} type="text" name="titulo" onChange={handleChange} placeholder="Título del Plan" required />
+                    <input style={inputStyle} type="text" name="titulo" value={plan.titulo} onChange={handleChange} placeholder="Título del Plan" required />
 
                     <label style={titulosStyle}>Resumen del Plan:</label>
-                    <textarea style={inputRStyle} name="resumen" onChange={handleChange} placeholder="Resumen del Plan" required />
+                    <textarea style={inputRStyle} name="resumen" value={plan.resumen} onChange={handleChange} placeholder="Resumen del Plan" required />
 
                     <label style={titulosStyle}>Imagen del Plan:</label>
-                    <input style={inputStyle} type="text" name="imagen" onChange={handleChange} placeholder="URL de la imagen del Plan" required />
+                    <input style={inputStyle} type="text" name="imagen"value={plan.imagen}  onChange={handleChange} placeholder="URL de la imagen del Plan" required />
 
                     <label style={titulosStyle}>Link del Plan:</label>
-                    <input style={inputStyle} type="text" name="link" onChange={handleChange} placeholder="Link del Plan" required />
+                    <input style={inputStyle} type="text" name="link"value={plan.link}  onChange={handleChange} placeholder="Link del Plan" required />
 
                     <div style={buttonsForm}>
                         <button style={cancelbutton} type="button" onClick={handleUpdate}>Modificar</button>
