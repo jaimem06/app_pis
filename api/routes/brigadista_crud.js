@@ -23,6 +23,12 @@ router.get('/read_brigadista/:id', (req, res) => {
         .then(brigadista => brigadista ? res.send(brigadista) : res.sendStatus(404))
         .catch(error => res.status(500).send(error));
 });
+// Leer un brigadista por area
+router.get('/read_brigadista/area/:area', (req, res) => {
+    Brigadista.find({ area: req.params.area })
+        .then(brigadistas => brigadistas ? res.send(brigadistas) : res.sendStatus(404))
+        .catch(error => res.status(500).send(error));
+});
 
 // Actualizar un brigadista por ID
 router.put('/update/:id', (req, res) => {

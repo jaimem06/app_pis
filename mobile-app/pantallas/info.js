@@ -8,7 +8,7 @@ const windowHeight = Dimensions.get('window').height;
 const Info = () => {
   const [plan, setPlan] = useState(null);
   useEffect(() => {
-    fetch('http://192.168.1.2:3000/planemergencia/read_plan/')
+    fetch('http://192.168.1.24:3000/planemergencia/read_plan/')
       .then(response => response.json())
       .then(data => setPlan(data[0]))
 
@@ -51,11 +51,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    justifyContent: 'center',
+    marginRight: '10%',
     
   },
   image: {
     width: '100%',
-    height: 200,
+    height: '16%',
+    marginTop: '65%',
     
   },
   text: {
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
     marginHorizontal: '7%',
     marginTop: "10%",
-    marginBottom: 10,
+    marginBottom: '30%',
     padding: 10,
     borderRadius: 5, 
     marginRight: '15%',

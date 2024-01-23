@@ -3,8 +3,7 @@ import { Image } from 'react-native';
 import { Dimensions } from 'react-native';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { useEffect, useState } from 'react';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+
 
 const Info_Contingencia = () => {
 
@@ -28,7 +27,7 @@ const Info_Contingencia = () => {
             <TouchableOpacity style={styles.link }
               onPress={() => Linking.openURL(plan.link)}
             >
-              <Text style={{ color: 'black', textAlign: 'center', fontSize: 20, }}>Plande Contingencia</Text>
+              <Text style={{ color: 'black', textAlign: 'center', fontSize: 20, }}>Plan de Emergencia</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -53,11 +52,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    justifyContent: 'center',
+    marginRight: '10%',
     
   },
   image: {
     width: '100%',
-    height: 200,
+    height: '16%',
+    marginTop: '65%',
     
   },
   text: {

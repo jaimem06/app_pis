@@ -9,7 +9,7 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://192.168.1.2:3000/login_mobile', { // ip Jaime
+    fetch('http://192.168.1.24:3000/login_mobile', { // ip Jaime
 
 
       method: 'POST',
