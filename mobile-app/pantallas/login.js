@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles/styleslogin';
+import * as SecureStore from 'expo-secure-store';
+
 
 const Login = ({ navigation }) => { // Agregar navigation aquí
   const [username, setUsername] = useState('');
@@ -9,9 +11,7 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://192.168.1.24:3000/login_mobile', { // ip Jaime
-
-
+    fetch('http://192.168.1.24:3000/login_mobile', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -22,12 +22,13 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
       })
     })
       .then(response => response.json())
-      .then(data => {
+      .then(async data => {
         if (data.error) {
           Alert.alert('Error', data.error);
         } else {
-          Alert.alert('Éxito', 'Inicio de sesión exitoso');
-          navigation.navigate('logged'); //Pantalla si el inicio de sesión es exitoso
+          Alert.alert('Éxito', 'Inicio de sesión exitoso',data.token);
+          await SecureStore.setItemAsync('token', data.token); // Guardar el token en SecureStore
+          navigation.navigate('logged'); // Navegar a la pantalla si el inicio de sesión es exitoso
         }
       })
       .catch(error => {
@@ -40,6 +41,15 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
     setShowPassword(!showPassword);
   };
 
+  React.useEffect(() => {
+    SecureStore.getItemAsync('token').then(token => {
+      if (token) {
+        navigation.navigate('logged');
+      }
+    });
+  }, []);
+
+  
   return (
 
     <ImageBackground source={require('./fondo.png')} style={styles.backgroundImage}>

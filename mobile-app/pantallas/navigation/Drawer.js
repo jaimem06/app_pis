@@ -7,6 +7,8 @@ import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
 import Puntos_Map from '../logged_pantallas/puntos';
+import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Drawer = createDrawerNavigator();
@@ -25,7 +27,13 @@ export function DrawerNavigation() {
   );
 }
 
+
 const MenuItems = ({ navigation }) => {
+  const handlelogoutPress = async () => {
+    await SecureStore.deleteItemAsync('token');
+    console.log('Sesión cerrada');
+    navigation.navigate('login');
+  }
   return (
     
     <DrawerContentScrollView
@@ -60,7 +68,7 @@ const MenuItems = ({ navigation }) => {
        <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}}>BOTONES:</Text>
       <MenuButtonItem
         text="Cerrar sesión"
-        onPress={() => navigation.navigate('login')} // Asume que 'Login' es el nombre de la ruta de la pantalla de inicio de sesión
+        onPress={handlelogoutPress} // Asume que 'Login' es el nombre de la ruta de la pantalla de inicio de sesión
         iconName="logout"
         buttonColor="#3C89C8"
       />
