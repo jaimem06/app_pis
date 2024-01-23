@@ -5,13 +5,13 @@ import { styles } from './styles/styleslogin';
 import * as SecureStore from 'expo-secure-store';
 
 
-const Login = ({ navigation }) => { // Agregar navigation aquí
+const Login = ({ navigation }) => { // Agregar navigation como parámetro
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://192.168.1.24:3000/login_mobile', {
+    fetch('http://192.168.1.2:3000/login_mobile', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -26,8 +26,13 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
         if (data.error) {
           Alert.alert('Error', data.error);
         } else {
-          Alert.alert('Éxito', 'Inicio de sesión exitoso',data.token);
-          await SecureStore.setItemAsync('token', data.token); // Guardar el token en SecureStore
+          Alert.alert('Éxito', 'Inicio de sesión exitoso');
+          try {
+            await SecureStore.setItemAsync('token', data.token); // Guardar el token en SecureStore
+
+          } catch (e) {
+            console.error('Error al guardar el token:', e);
+          }
           navigation.navigate('logged'); // Navegar a la pantalla si el inicio de sesión es exitoso
         }
       })

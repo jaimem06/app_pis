@@ -12,7 +12,7 @@ const Brigadista = () => {
   useEffect(() => {
     const fetchBrigadistas = async () => {
       try {
-        const response = await fetch('http://192.168.1.24:3000/brigadista/read_brigadista');
+        const response = await fetch('http://192.168.1.2:3000/brigadista/read_brigadista');
         const data = await response.json();
         setBrigadista(data); // Aquí cambiamos data[0] por data
         console.log(selectedArea);
