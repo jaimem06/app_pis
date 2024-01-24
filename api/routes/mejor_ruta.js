@@ -2,22 +2,30 @@ const express = require('express');
 const router = express.Router();
 const { rutaMasCorta } = require('../utils/crear_grafo');
 const buscarNodoMasCercano = require('../utils/nodo_cercano.js');
+const buscarNodoPDEMasCercano = require('../utils/nodoPDE.js');
 const Nodo = require('../models/nodo');
 
 router.use(express.json());
 
 router.post('/camino_minimo', async (req, res) => {
     let inicio = req.body.inicio;
-    const fin = req.body.fin;
+    let fin = req.body.fin;
 
-    if (!inicio || !fin) {
-        return res.status(400).send('Debes proporcionar un nodo de inicio y un nodo final');
+    if (!inicio) {
+        return res.status(400).send('Debes proporcionar un nodo de inicio');
     }
 
     try {
-        if (inicio.coords) {
-            const nodoInicio = await buscarNodoMasCercano(inicio.coords);
+        if (inicio.coords && Array.isArray(inicio.coords) && inicio.coords.length === 2) {
+            const nodoInicio = await buscarNodoMasCercano(inicio);
             inicio = nodoInicio.properties.nombre; // Usa el nombre del nodo de inicio
+        } else {
+            return res.status(400).send('Las coordenadas de inicio deben ser un array de dos números');
+        }
+
+        // Si no se proporcionó un nodo final, usa el nodo PDE más cercano
+        if (!fin) {
+            fin = await buscarNodoPDEMasCercano(inicio);
         }
 
         const nodoFinal = await Nodo.findOne({ 'properties.nombre': fin });

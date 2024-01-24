@@ -1,13 +1,14 @@
 const Nodo = require('../models/nodo'); // Asegúrate de que esta ruta sea correcta
 
-const buscarNodoMasCercano = async (coords) => {
+const buscarNodoMasCercano = async (inicio) => {
     try {
+        const coords = inicio.coords;
         const nodo = await Nodo.findOne({
             geometry: {
                 $near: {
                     $geometry: {
                         type: "Point",
-                        coordinates: [coords.longitude, coords.latitude]
+                        coordinates: coords
                     }
                 }
             }
