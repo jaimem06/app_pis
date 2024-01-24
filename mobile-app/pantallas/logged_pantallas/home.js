@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Image, TouchableOpacity, Text, View, Alert } from 'react-native';
+import { ScrollView, Image, TouchableOpacity, Text, View, Alert } from 'react-native';
 import styles from '../styles/styleshome';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
@@ -21,12 +21,8 @@ const Home = () => {
     let location = await Location.getCurrentPositionAsync({});
     console.log(location.coords);
     let inicio = {
-      coords: {
-        latitude: location.coords.longitude,
-        longitude: location.coords.latitude
-      }
+      coords: [location.coords.latitude, location.coords.longitude]
     };
-    let fin = "Punto de encuentro";
 
     fetch('http://192.168.1.2:3000/camino_minimo', {
       method: 'POST',
@@ -34,16 +30,23 @@ const Home = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        inicio: {
-          coords: {
-            longitude: inicio.coords.longitude,
-            latitude: inicio.coords.latitude
-          }
-        },
-        fin: fin
+        inicio: inicio
       })
     })
-      .then(response => response.json())
+      .then(response => {
+        // Comprueba si el servidor ha devuelto un código de estado HTTP exitoso
+        if (!response.ok) {
+          throw new Error(`El servidor devolvió un error: ${response.status}`);
+        }
+
+        // Comprueba si la respuesta es un JSON válido
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') !== -1) {
+          return response.json();
+        } else {
+          throw new Error('La respuesta del servidor no es un JSON válido');
+        }
+      })
       .then(data => {
         console.log(data);
         let newMarkers = data.map(item => ({
@@ -72,14 +75,13 @@ const Home = () => {
   }, [markers]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         style={styles.buscarButton}
         onPress={calcularRuta}
       >
-        <Text style={styles.buscarText}>Calcular Ruta</Text>
+        <Text style={styles.buscarText}>Buscar Zona Segura Cercana</Text>
       </TouchableOpacity>
-
       <View style={styles.mapViewContainer}>
         <MapView
           ref={mapRef}
@@ -118,6 +120,19 @@ const Home = () => {
             strokeWidth={6}
           />
         </MapView>
+      </View>
+      <View style= {{width: '95%', marginTop: 15}}>
+        <ScrollView style={{
+          display: 'flex',
+          alignContent: 'center',
+          borderColor: 'white',
+          borderRadius: 20,
+          backgroundColor: "#2A364E",
+        }}>
+          <Text style={{ padding: 10, textAlign: "justify", color: "white" }}>
+            {'Debes pasar por los siguientes puntos:\n' + markers.map((marker, index) => `${index + 1}. ${marker.nombre}`).join('\n')}
+          </Text>
+        </ScrollView>
       </View>
     </View>
   );
