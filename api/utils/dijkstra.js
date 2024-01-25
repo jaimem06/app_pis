@@ -18,32 +18,33 @@ function dijkstra(graph, startNode, endNode) {
     distances[startNode] = 0;
     queue.push(startNode);
 
+    console.log('Nodo de inicio:', startNode);
+
     while (!queue.isEmpty()) {
         let currentNode = queue.pop();
         visited[currentNode] = true;
 
+        console.log('Nodo actual:', currentNode);
+
         for (let neighbor in graph[currentNode]) {
-            if (visited[neighbor]) continue;
-
             let newDistance = distances[currentNode] + graph[currentNode][neighbor];
-
             if (newDistance < distances[neighbor]) {
                 distances[neighbor] = newDistance;
                 previous[neighbor] = currentNode;
-                if (!queue.isEmpty()) {
-                    queue.pop();
-                }
                 queue.push(neighbor);
+                console.log(`Actualizando distancia del vecino ${neighbor} a ${newDistance}`);
             }
         }
     }
 
-    let path = [];
+    let path = [endNode];
     let currentNode = endNode;
-    while (currentNode != null) {
-        path.unshift(currentNode);
+    while (previous[currentNode] != null) {
         currentNode = previous[currentNode];
+        path.unshift(currentNode);
     }
+
+    console.log('Ruta encontrada:', path);
 
     return path;
 }

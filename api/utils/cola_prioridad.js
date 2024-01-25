@@ -1,5 +1,5 @@
 class ColaPrioridad {
-    constructor(comparator = (a, b) => a > b) {
+    constructor(comparator = (a, b) => a < b) {
         this._heap = [];
         this._comparator = comparator;
     }

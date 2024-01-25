@@ -15,7 +15,7 @@ export default function App() {
 
   useEffect(() => {
     if (expoPushToken) {
-      fetch('http://192.168.1.24:3000/notification/send-notification', {
+      fetch('http://192.168.1.2:3000/notification/send-notification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

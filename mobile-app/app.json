@@ -28,7 +28,8 @@
     },
     "extra": {
       "eas": {
-        "projectId": "65976fdc-d9ff-4c6b-800e-700435b8ee5a"
+        "projectId": "65976fdc-d9ff-4c6b-800e-700435b8ee5a",
+        "owner": "j4ime_06"
       }
     }
   }
