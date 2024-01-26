@@ -12,7 +12,7 @@ const Info_Brigadista = () => {
   useEffect(() => {
     const fetchBrigadistas = async () => {
       try {
-        const response = await fetch('http://192.168.1.24:3000/brigadista/read_brigadista');
+        const response = await fetch('http://192.168.1.3:3000/brigadista/read_brigadista');
         const data = await response.json();
         setBrigadista(data); // Aquí cambiamos data[0] por data
         console.log(selectedArea);
@@ -55,7 +55,7 @@ const Info_Brigadista = () => {
     <>
       <Text style={styles.title}>Brigadistas de rutas de evacuación</Text>
       <Dropdown
-      style={{ width: 200 , marginLeft: '5%', marginTop: '5%',width:'90%',backgroundColor:'white',marginBottom:'2%'}}
+     style={{ width: 200 , marginLeft: '5%', marginTop: '10%',width:'90%',backgroundColor:'white',marginBottom:'2%'}}
       data={facultades.map((facultad, index) => ({ label: facultad, value: index + 1 }))}
         search
         searchPlaceholder="Search"

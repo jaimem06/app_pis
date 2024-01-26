@@ -58,6 +58,7 @@ function Pagina_crudBrigadista() {
         try {
             await createBrigadistaRequest(brigadista);
             setBrigadistas(prevBrigadistas => [...prevBrigadistas, brigadista]);
+            
             setShowForm(false);
             alert('Brigadista creado exitosamente!');
         } catch (error) {
@@ -181,6 +182,7 @@ function Pagina_crudBrigadista() {
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         handleCancel={handleCancel}
+                        setBrigadista={setBrigadista}
                     />
                 )}
                 <div style={{ overflow: 'auto', height: '100%', marginLeft: '2%', flexWrap: 'wrap', justifyContent: 'inherit', display: 'flex',}}>
@@ -189,25 +191,26 @@ function Pagina_crudBrigadista() {
                             <div className="card" style={{ width: "100%", height: '100%', color: 'black', border: '2px black solid',backgroundColor:'white', borderRadius: '2%', marginTop: '2%' }} key={index}>
                                 <div className="card-body">
 
-                                    <div className="card-text">
+                                    <div  className="card-text">
                                         {brigadista.titular.map((titular, index) => (
-                                            <p key={`titular-${index}`}>
+                                            <p  style={{paddingLeft:'10px'}}  key={`titular-${index}`}>
                                                 Titular {titular.nroTitular} : {titular.nombresCompletos}
                                             </p>
                                         ))}
                                         {brigadista.reemplazo.map((reemplazo, index) => (
-                                            <p key={`reemplazo-${index}`}>
+                                            <p  style={{paddingLeft:'10px'}}  key={`reemplazo-${index}`}>
                                                 Reemplazo {reemplazo.nroReemplazo} : {reemplazo.nombresCompletos}
                                             </p>
                                         ))}
-                                        <p>Área: {brigadista.area}</p>
+                                        <hr style={{borderColor: 'black', borderWidth: '1px', borderStyle: 'revert-layer', width: '100%' ,marginTop:'2%'}}/>
+                                        <p style={{paddingLeft:'10px',marginTop:'10px',fontWeight:'bold'}}  >Área: {brigadista.area}</p>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <button style={{ ...editbutton, marginRight: '2px' }} onClick={() => handleEdit(index)}>
+                                        <button style={{ ...editbutton, width:'25%'}} onClick={() => handleEdit(index)}>
                                             <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
                                         </button>
 
-                                        <button style={{ ...deletebutton, marginLeft: '2px' }} onClick={() => handleDelete(index)}>
+                                        <button style={{ ...deletebutton,width:'25%'}} onClick={() => handleDelete(index)}>
                                             <MdDelete style={{ color: "white", fontSize: "24px" }} />
                                         </button>
                                     </div>

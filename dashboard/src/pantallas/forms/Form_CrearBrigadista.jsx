@@ -17,7 +17,13 @@ const Form_CrearBrigadista = ({ handleChange, handleSubmit, handleCancel }) => {
 
     const handleAddBrigadista = () => {
         setNumBrigadistas(prevNumBrigadistas => prevNumBrigadistas + 1);
-    };
+        // Restablecer el estado del brigadista
+        setBrigadista({
+          area: '',
+          titular: [{ nombresCompletos: '', nroTitular: '' }],
+          reemplazo: [{ nombresCompletos: '', nroReemplazo: '' }],
+        });
+      };
 
 
     return (
