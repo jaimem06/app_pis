@@ -3,12 +3,26 @@ import { Image } from 'react-native';
 import { Dimensions } from 'react-native';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { useEffect, useState } from 'react';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import { calcularRuta } from './logged_pantallas/home';
+import { useNavigation } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
 const Info = () => {
   const [plan, setPlan] = useState(null);
+ const navigation = useNavigation();
+const [markers, setMarkers] = useState([]);
+ useEffect(() => {
+  const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+    // Navega a la pantalla 'Home'
+    navigation.navigate("auth");
+    // Ejecuta la función 'calcularRuta'
+    calcularRuta(setMarkers);
+  });
+
+  return () => subscription.remove();
+}, []);
+
   useEffect(() => {
-    fetch('http://192.168.1.2:3000/planemergencia/read_plan/')
+    fetch('http://192.168.1.3:3000/planemergencia/read_plan/')
       .then(response => response.json())
       .then(data => setPlan(data[0]))
 
@@ -26,7 +40,7 @@ const Info = () => {
             <TouchableOpacity style={styles.link }
               onPress={() => Linking.openURL(plan.link)}
             >
-              <Text style={{ color: 'black', textAlign: 'center', fontSize: 20, }}>Plande Contingencia</Text>
+              <Text style={{ color: 'black', textAlign: 'center', fontSize: 20, }}>Plan de Contingencia</Text>
             </TouchableOpacity>
           </View>
         )}

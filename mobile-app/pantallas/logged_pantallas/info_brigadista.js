@@ -27,7 +27,7 @@ const Info_Brigadista = () => {
   useEffect(() => {
     const fetchBrigadistas = async () => {
       try {
-        const response = await fetch(`http://192.168.1.24:3000/brigadista/read_brigadista/area/${selectedArea}`);
+        const response = await fetch(`http://192.168.1.3:3000/brigadista/read_brigadista/area/${selectedArea}`);
         const data = await response.json();
         setBrigadista(data);
       } catch (error) {

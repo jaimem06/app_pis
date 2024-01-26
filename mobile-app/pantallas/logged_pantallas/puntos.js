@@ -7,7 +7,7 @@ export default function Puntos_Map() {
   const [nodos, setNodos] = useState([]);
 
   useEffect(() => {
-    axios.get('http://192.168.1.2:3000/nodos/read_nodos')
+    axios.get('http://192.168.1.3:3000/nodos/read_nodos')
       .then(response => {
         setNodos(response.data);
       })

@@ -147,14 +147,16 @@ function Pagina_crudBrigadista() {
 
     }
     const handleDelete = async (index) => {
-        try {
+        if (window.confirm('¿Estás seguro de que quieres eliminar este brigadista?')) {
+          try {
             await deleteBrigadistaRequest(brigadistas[index]._id);
             setBrigadistas(prevBrigadistas => prevBrigadistas.filter((brigadista, i) => i !== index));
-        } catch (error) {
+          } catch (error) {
             console.error(error);
             setErrorMessage('Error al eliminar el brigadista');
-        };
-    }
+          }
+        }
+      };
     return (
         <div>
             <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Brigadistas</h1>
@@ -181,10 +183,10 @@ function Pagina_crudBrigadista() {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{ overflow: 'auto', height: '10%', marginLeft: '2%', flexWrap: 'wrap', justifyContent: 'space-around', display: 'flex' }}> {/* Ajusta la altura según tus necesidades */}
+                <div style={{ overflow: 'auto', height: '100%', marginLeft: '2%', flexWrap: 'wrap', justifyContent: 'inherit', display: 'flex',}}>
                     {Array.isArray(brigadistas) && brigadistas.map((brigadista, index) => (
                         <div key={brigadista._id} style={{ display: 'flex', alignContent: 'start', flexBasis: '18rem', margin: '1%' }}>
-                            <div className="card" style={{ width: "100%", height: 'auto', color: 'black', border: '2px black solid',backgroundColor:'white', borderRadius: '2%', marginTop: '2%' }} key={index}>
+                            <div className="card" style={{ width: "100%", height: '100%', color: 'black', border: '2px black solid',backgroundColor:'white', borderRadius: '2%', marginTop: '2%' }} key={index}>
                                 <div className="card-body">
 
                                     <div className="card-text">

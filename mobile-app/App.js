@@ -15,7 +15,7 @@ export default function App() {
 
   useEffect(() => {
     if (expoPushToken) {
-      fetch('http://192.168.1.2:3000/notification/send-notification', {
+      fetch('http://192.168.1.3:3000/notification/send-notification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +34,6 @@ export default function App() {
   }, [expoPushToken]);
  useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification);
     });
 
     return () => subscription.remove();
@@ -43,7 +42,6 @@ export default function App() {
   // Manejador para notificaciones recibidas mientras la app está en segundo plano o cerrada
   useEffect(() => {
     const subscription = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
     });
 
     return () => subscription.remove();

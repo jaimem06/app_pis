@@ -6,64 +6,65 @@ import puntoEncuentro from '../../assets/pde.png';
 import user from '../../assets/user.png';
 import * as Location from 'expo-location';
 
+ export const calcularRuta = async (setMarkers) => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== 'granted') {
+    Alert.alert('Permiso de acceso a la ubicación denegado');
+    return;
+  }
+
+  let location = await Location.getCurrentPositionAsync({});
+  console.log(location.coords);
+  let inicio = {
+    coords: [location.coords.latitude, location.coords.longitude]
+  };
+
+  fetch('http://192.168.1.3:3000/camino_minimo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      inicio: inicio
+    })
+  })
+    .then(response => {
+      // Comprueba si el servidor ha devuelto un código de estado HTTP exitoso
+      if (!response.ok) {
+        throw new Error(`El servidor devolvió un error: ${response.status}`);
+      }
+
+      // Comprueba si la respuesta es un JSON válido
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.indexOf('application/json') !== -1) {
+        return response.json();
+      } else {
+        throw new Error('La respuesta del servidor no es un JSON válido');
+      }
+    })
+    .then(data => {
+      console.log(data);
+      let newMarkers = data.map(item => ({
+        nombre: item.nombre,
+        tipo: item.tipo,
+        coordenadas: {
+          longitude: item.coordenadas[1],
+          latitude: item.coordenadas[0]
+        }
+      }));
+
+      setMarkers(newMarkers);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
 
 const Home = () => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
 
-  const calcularRuta = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permiso de acceso a la ubicación denegado');
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    console.log(location.coords);
-    let inicio = {
-      coords: [location.coords.latitude, location.coords.longitude]
-    };
-
-    fetch('http://192.168.1.2:3000/camino_minimo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        inicio: inicio
-      })
-    })
-      .then(response => {
-        // Comprueba si el servidor ha devuelto un código de estado HTTP exitoso
-        if (!response.ok) {
-          throw new Error(`El servidor devolvió un error: ${response.status}`);
-        }
-
-        // Comprueba si la respuesta es un JSON válido
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.indexOf('application/json') !== -1) {
-          return response.json();
-        } else {
-          throw new Error('La respuesta del servidor no es un JSON válido');
-        }
-      })
-      .then(data => {
-        console.log(data);
-        let newMarkers = data.map(item => ({
-          nombre: item.nombre,
-          tipo: item.tipo,
-          coordenadas: {
-            longitude: item.coordenadas[1],
-            latitude: item.coordenadas[0]
-          }
-        }));
-
-        setMarkers(newMarkers);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
+  calcularRuta(setMarkers);
 
   useEffect(() => {
     if (mapRef.current && markers.length > 0) {
