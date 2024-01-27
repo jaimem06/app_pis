@@ -1,63 +1,40 @@
 const nodoSchema = require('../models/nodo.js');
-const dijkstra = require('./dijkstra.js');
 
-async function crearGrafo () {
-    // Obtén todos los nodos de la base de datos
+let grafo;
+
+async function obtenerGrafo() {
+    // Si el grafo ya ha sido creado, devuélvelo
+    if (grafo) {
+        console.log('El grafo ya ha sido creado');
+        return grafo;
+    }
+
+    // Si no, crea el grafo
     const nodos = await nodoSchema.find();
+    grafo = {};
 
-    // Crea un objeto para representar el grafo
-    const grafo = {};
-
-    // Para cada nodo en la base de datos
+    // Crea un mapa de nodos para buscar mas rapido por nombre
+    const mapaNodos = {};
     for (const nodo of nodos) {
-        // Usa el nombre del nodo como la clave en el objeto del grafo
-        const nombreNodo = nodo.properties.nombre;
+        mapaNodos[nodo.properties.nombre] = nodo;
+    }
 
-        // Crea una lista de adyacencia para este nodo
+    for (const nodo of nodos) {
+        const nombreNodo = nodo.properties.nombre;
         grafo[nombreNodo] = {};
 
-        // Comprueba si nodo.properties.conexiones es un array antes de intentar iterar sobre él
         if (Array.isArray(nodo.properties.conexiones)) {
-            // Para cada conexión de este nodo
             for (const conexion of nodo.properties.conexiones) {
-                // Busca el nodo al que esta conexión lleva
-                const nodoConectado = await nodoSchema.findOne({ 'properties.nombre': conexion.nodo });
-
-                // Añade el nombre del nodo conectado a la lista de adyacencia
+                /* Busca el nodo conectado en el mapa en lugar de hacer una consulta a la base
+                de datos esto es mas rapido y evita hacer muchas consultas a la base de datos */
+                const nodoConectado = mapaNodos[conexion.nodo];
                 grafo[nombreNodo][nodoConectado.properties.nombre] = conexion.distancia;
             }
         } else {
             console.error('nodo.properties.conexiones no es un array');
         }
     }
-
-    // Devuelve el grafo
     return grafo;
 }
 
-async function rutaMasCorta(inicio, fin) {
-    try {
-        // Crea el grafo
-        const grafo = await crearGrafo();
-        console.log('Grafo creado con éxito');
-
-        // Usa el algoritmo de Dijkstra para encontrar la ruta más corta
-        const ruta = dijkstra(grafo, inicio, fin);
-        console.log('Ruta calculada con éxito: ', ruta);
-
-        // Convierte los nombres de los nodos en la ruta a sus correspondientes coordenadas y tipo
-        const rutaCoordenadas = [];
-        for (const nombreNodo of ruta) {
-            const nodo = await nodoSchema.findOne({ 'properties.nombre': nombreNodo });
-            rutaCoordenadas.push({ nombre: nombreNodo, coordenadas: nodo.geometry.coordinates, tipo: nodo.properties.tipo });
-        }
-
-        return rutaCoordenadas;
-    } catch (error) {
-        console.error('Error al calcular la ruta más corta: ', error);
-        throw error;
-    }
-}
-
-exports.crearGrafo = crearGrafo;
-exports.rutaMasCorta = rutaMasCorta;
+exports.obtenerGrafo = obtenerGrafo;

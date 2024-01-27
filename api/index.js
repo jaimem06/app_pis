@@ -17,6 +17,21 @@ const requireToken = require('./Middlewares/AuthTokenRequired');
 const usuario_crud = require('./routes/usuario_crud'); // Ruta para el registro WEB
 const planemergencia_crud = require('./routes/planemergencia_crud'); // Ruta para el CRUD de planes de emergencia
 const brigadista_crud = require('./routes/brigadista_crud'); // Ruta para el CRUD de brigadistas
+
+// Crea el grafo al iniciar el api
+const { obtenerGrafo } = require('./utils/crear_grafo');
+async function iniciar() {
+    try {
+        console.log('Creando grafo...');
+        await obtenerGrafo();
+        console.log('Grafo creado con éxito');
+    } catch (error) {
+        console.error('Error al crear el grafo: ', error);
+        throw error;
+    }
+}
+iniciar();
+
 app.use(cors({
     // Páginas que pueden acceder al API
     origin: ['https://fredunl.unlmaps.com', 'http://localhost:5173']

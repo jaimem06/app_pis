@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { rutaMasCorta } = require('../utils/crear_grafo');
+const { rutaMasCorta } = require('../utils/calcular_ruta.js');
 const buscarNodoMasCercano = require('../utils/nodo_cercano.js');
 const buscarNodoPDEMasCercano = require('../utils/nodoPDE.js');
 const Nodo = require('../models/nodo');
