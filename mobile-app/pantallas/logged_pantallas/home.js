@@ -19,7 +19,7 @@ import * as Location from 'expo-location';
     coords: [location.coords.latitude, location.coords.longitude]
   };
 
-  fetch('http://192.168.1.3:3000/camino_minimo', {
+  fetch('http://192.168.1.2:3000/camino_minimo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -63,6 +63,10 @@ import * as Location from 'expo-location';
 const Home = () => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
+
+  useEffect(() => {
+    calcularRuta(setMarkers);
+  }, []);
 
   calcularRuta(setMarkers);
 

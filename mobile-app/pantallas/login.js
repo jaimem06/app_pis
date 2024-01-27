@@ -11,7 +11,7 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://192.168.1.3:3000/login_mobile', {
+    fetch('http://10.20.139.173:3000/login_mobile', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

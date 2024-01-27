@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
 const mejorRuta = require('./routes/mejor_ruta');
 const sismoRouter = require('./routes/simularSismo');
-const notification = require('./routes/notificaction');
-const axios = require('axios');
 
 const cors = require('cors');
 // 
@@ -34,9 +32,7 @@ app.use(mejorRuta); //Version 2
 app.use('/planemergencia',planemergencia_crud);
 app.use(sismoRouter); // Simular sismo
 app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
-//
-app.use('/notification', notification);
-app
+
 
 app.get('/', requireToken, (req, res) => {
     console.log(req.user);
