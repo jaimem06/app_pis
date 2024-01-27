@@ -16,10 +16,10 @@ import * as Location from 'expo-location';
   let location = await Location.getCurrentPositionAsync({});
   console.log(location.coords);
   let inicio = {
-    coords: [location.coords.latitude, location.coords.longitude]
+    coords: [-4.031149438771467, -79.19918125317055]
   };
 
-  fetch('http://192.168.1.2:3000/camino_minimo', {
+  fetch('http://192.168.1.3:3000/camino_minimo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

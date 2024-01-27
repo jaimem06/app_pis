@@ -1,52 +1,36 @@
-const ColaPrioridad = require('./cola_prioridad.js');
+const PriorityQueue = require('js-priority-queue');
+function dijkstra(grafo, inicio, fin) {
+    const distancias = {};
+    const previos = {};
+    const cola = new PriorityQueue({ comparator: (a, b) => distancias[a] - distancias[b] });
 
-function dijkstra(graph, startNode, endNode) {
-    let distances = {};
-    let previous = {};
-    let visited = {};
-    let queue = new ColaPrioridad((a, b) => distances[a] - distances[b]);
+    distancias[inicio] = 0;
+    cola.queue(inicio);
 
-    if (!graph[startNode]) {
-        throw new Error('El nodo de inicio no existe en el grafo');
-    }
+    while (cola.length > 0) {
+        const nodo = cola.dequeue();
 
-    for (let node in graph) {
-        distances[node] = Infinity;
-        previous[node] = null;
-    }
+        if (nodo === fin) {
+            let ruta = [fin];
+            let nodoActual = nodo;
+            while (previos[nodoActual]) {
+                ruta.unshift(previos[nodoActual]);
+                nodoActual = previos[nodoActual];
+            }
+            return ruta;
+        }
 
-    distances[startNode] = 0;
-    queue.push(startNode);
+        for (const vecino in grafo[nodo]) {
+            const nuevaDistancia = distancias[nodo] + grafo[nodo][vecino];
 
-    console.log('Nodo de inicio:', startNode);
-
-    while (!queue.isEmpty()) {
-        let currentNode = queue.pop();
-        visited[currentNode] = true;
-
-        console.log('Nodo actual:', currentNode);
-
-        for (let neighbor in graph[currentNode]) {
-            let newDistance = distances[currentNode] + graph[currentNode][neighbor];
-            if (newDistance < distances[neighbor]) {
-                distances[neighbor] = newDistance;
-                previous[neighbor] = currentNode;
-                queue.push(neighbor);
-                console.log(`Actualizando distancia del vecino ${neighbor} a ${newDistance}`);
+            if (!(vecino in distancias) || nuevaDistancia < distancias[vecino]) {
+                distancias[vecino] = nuevaDistancia;
+                previos[vecino] = nodo;
+                cola.queue(vecino);
             }
         }
     }
 
-    let path = [endNode];
-    let currentNode = endNode;
-    while (previous[currentNode] != null) {
-        currentNode = previous[currentNode];
-        path.unshift(currentNode);
-    }
-
-    console.log('Ruta encontrada:', path);
-
-    return path;
+    return null; // Devuelve null si no hay ruta desde el inicio hasta el fin
 }
-
 module.exports = dijkstra;

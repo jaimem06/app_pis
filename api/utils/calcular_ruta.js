@@ -5,9 +5,10 @@ const { obtenerGrafo } = require('./crear_grafo.js');
 async function rutaMasCorta(inicio, fin) {
     try {
         // Obtiene el grafo
+        console.time('Obtener grafo');
         const grafo = await obtenerGrafo(); // Cambia esto
         console.log('Grafo obtenido con éxito');
-
+console.timeEnd('Obtener grafo');
         // Usa el algoritmo de Dijkstra para encontrar la ruta más corta
         const ruta = dijkstra(grafo, inicio, fin);
         console.log('Ruta calculada con éxito: ', ruta);
