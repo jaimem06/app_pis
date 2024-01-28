@@ -1,5 +1,5 @@
-import APILinks from '../../directionsAPI';
 import React, { useState, useRef, useEffect } from 'react';
+import APILinks from '../../directionsAPI';
 import { ScrollView, Image, TouchableOpacity, Text, View, Alert } from 'react-native';
 import styles from '../styles/styleshome';
 import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -7,7 +7,7 @@ import puntoEncuentro from '../../assets/pde.png';
 import user from '../../assets/user.png';
 import * as Location from 'expo-location';
 
-export const calcularRuta = async (setMarkers) => {
+ export const calcularRuta = async (setMarkers) => {
   let { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
     Alert.alert('Permiso de acceso a la ubicación denegado');
@@ -15,7 +15,7 @@ export const calcularRuta = async (setMarkers) => {
   }
 
   let location = await Location.getCurrentPositionAsync({});
-  //console.log(location.coords);
+  console.log(location.coords);
   let inicio = {
     coords: [location.coords.latitude, location.coords.longitude]
   };
@@ -44,7 +44,7 @@ export const calcularRuta = async (setMarkers) => {
       }
     })
     .then(data => {
-      //console.log(data);
+      console.log(data);
       let newMarkers = data.map(item => ({
         nombre: item.nombre,
         tipo: item.tipo,
@@ -57,7 +57,7 @@ export const calcularRuta = async (setMarkers) => {
       setMarkers(newMarkers);
     })
     .catch(error => {
-     // console.error(error);
+      console.error(error);
     });
 };
 
@@ -66,10 +66,17 @@ const Home = () => {
   const mapRef = useRef(null);
 
   useEffect(() => {
+    // Calcula la ruta inmediatamente al montar el componente
     calcularRuta(setMarkers);
-  }, []);
 
-  calcularRuta(setMarkers);
+    // Configura un temporizador para calcular la ruta cada minuto
+    const timerId = setInterval(() => {
+      calcularRuta(setMarkers);
+    }, 60000); // 60000 milisegundos = 1 minuto
+
+    // Limpia el temporizador cuando el componente se desmonta
+    return () => clearInterval(timerId);
+  }, []);
 
   useEffect(() => {
     if (mapRef.current && markers.length > 0) {
@@ -84,7 +91,7 @@ const Home = () => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         style={styles.buscarButton}
-        onPress={calcularRuta}
+        onPress={() => calcularRuta(setMarkers)}
       >
         <Text style={styles.buscarText}>Buscar Zona Segura Cercana</Text>
       </TouchableOpacity>
@@ -127,7 +134,7 @@ const Home = () => {
           />
         </MapView>
       </View>
-      <View style={{ width: '95%', marginTop: 15 }}>
+      <View style= {{width: '95%', marginTop: 15}}>
         <ScrollView style={{
           display: 'flex',
           alignContent: 'center',

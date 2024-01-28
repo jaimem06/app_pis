@@ -26,7 +26,7 @@ router.post('/enviar_notificacion', async (req, res) => {
                 badge: 3,
                 priority: 'high',
                 ios: {
-                    subtitle: 'Subtítulo de la notificación',
+                    subtitle: 'Alerta de sismo',
                 },
             });
         }

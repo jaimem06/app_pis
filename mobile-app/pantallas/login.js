@@ -1,11 +1,12 @@
 import APILinks from '../directionsAPI';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles/styleslogin';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import { handleNotificationResponse } from '../components/event_Notification';
 
 const Login = ({ navigation }) => { // Agregar navigation como parámetro
   const [username, setUsername] = useState('');
@@ -45,9 +46,11 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
             })
           })
             .then(response => response.json())
-            .then(data => {
+            .then(async data => {
               if (data.success) {
                 console.log('Token de notificación guardado exitosamente');
+                // Guardar el token en el almacenamiento seguro
+                await SecureStore.setItemAsync('token', pushToken);
               } else {
                 console.log('Error al guardar el token de notificación:', data.message);
               }
@@ -101,7 +104,14 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
       }
     });
   }, []);
+
+  const [markers, setMarkers] = useState([]);
+  useEffect(() => {
+    const subscription = handleNotificationResponse(navigation, setMarkers);
   
+    return () => subscription.remove();
+  }, []);
+
   return (
 
     <ImageBackground source={require('./fondo.png')} style={styles.backgroundImage}>

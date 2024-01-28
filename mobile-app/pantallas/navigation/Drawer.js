@@ -8,8 +8,6 @@ import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
 import Puntos_Map from '../logged_pantallas/puntos';
 import * as SecureStore from 'expo-secure-store';
-import { useNavigation } from '@react-navigation/native';
-
 
 const Drawer = createDrawerNavigator();
 

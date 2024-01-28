@@ -7,7 +7,6 @@ import info from "./pantallas/info";
 import brigadista from "./pantallas/brigadista";
 import Logged from './pantallas/logged';
 
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator(); // Crear StackNavigator
 
