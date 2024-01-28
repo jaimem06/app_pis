@@ -11,7 +11,7 @@ async function rutaMasCorta(inicio, fin) {
 console.timeEnd('Obtener grafo');
         // Usa el algoritmo de Dijkstra para encontrar la ruta más corta
         const ruta = dijkstra(grafo, inicio, fin);
-        console.log('Ruta calculada con éxito: ', ruta);
+        //console.log('Ruta calculada con éxito: ', ruta);
 
         // Convierte los nombres de los nodos en la ruta a sus correspondientes coordenadas y tipo
         const rutaCoordenadas = [];

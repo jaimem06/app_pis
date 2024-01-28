@@ -1,28 +1,54 @@
-let Expo = require('expo-server-sdk');
+const express = require('express');
+const router = express.Router();
+const { Expo } = require('expo-server-sdk');
+const PushTokenSchema = require('../models/notificacion_token');
 
-let expo = new Expo.default();
+// Crear una nueva instancia de Expo
+let expo = new Expo();
 
-let messages = [];
-let somePushTokens = ['ExponentPushToken[lJZT5_NlmMhqMRXBHKNASR]']; // Usa el token completo
-for (let pushToken of somePushTokens) {
-    // Construye el mensaje
-    messages.push({
-        to: pushToken,
-        sound: 'default',
-        title: '¡Alerta de sismo! 🚨',
-        body: 'Revisa la ruta de evacuación 📍',
-        data: { prueba: 'data' },
-        badge: 3,
-        priority: 'high',
-        ios: {
-            subtitle: 'Subtítulo de la notificación',
-        },
-    })
-}
+router.post('/enviar_notificacion', async (req, res) => {
+    try {
+        // Obténer los tokens de la base de datos
+        const tokens = await PushTokenSchema.find();
 
-// Ahora puedes usar expo.sendPushNotificationsAsync para enviar las notificaciones
-expo.sendPushNotificationsAsync(messages).then(receipts => {
-    console.log(receipts);
-}).catch(e => {
-    console.error(e);
+        let messages = [];
+        for (let token of tokens) {
+            let pushToken = token.token;
+            if (!Expo.isExpoPushToken(pushToken)) {
+                continue;
+            }
+            messages.push({
+                to: pushToken,
+                sound: 'default',
+                title: '¡Alerta de sismo! 🚨',
+                body: 'Revisa la ruta de evacuación 📍',
+                data: { prueba: 'data' },
+                badge: 3,
+                priority: 'high',
+                ios: {
+                    subtitle: 'Subtítulo de la notificación',
+                },
+            });
+        }
+
+        let chunks = expo.chunkItems(messages);
+
+        let tickets = [];
+        for (let chunk of chunks) {
+            try {
+                let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+                tickets.push(...ticketChunk);
+            } catch (error) {
+                res.status(500).send({ success: false, message: 'Error al enviar notificaciones' });
+                return;
+            }
+        }
+
+        console.log('Notificaciones enviadas con éxito');
+        res.status(200).send({ success: true, message: 'Notificaciones enviadas' });
+    } catch (e) {
+        res.status(500).send({ success: false, message: 'Error al enviar notificaciones' });
+    }
 });
+
+module.exports = router;

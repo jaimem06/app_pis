@@ -31,7 +31,7 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
           Alert.alert('Éxito', 'Inicio de sesión exitoso');
           // Registrar para notificaciones push después de iniciar sesión
           const pushToken = await registerForPushNotificationsAsync();
-          console.log(pushToken);
+          //console.log(pushToken);
 
           // Guardar el token de notificación en la base de datos
           fetch(APILinks.URL_SaveToken, {
@@ -40,7 +40,7 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              userId: data._id, // Usar '_id' en lugar de 'userId'
+              userId: data._id,
               token: pushToken
             })
           })

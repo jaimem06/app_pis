@@ -23,7 +23,8 @@ router.post('/login_mobile', async (req, res) => {
             if (result) {
                 console.log("Contraseña correcta");
                 const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
-                res.send({ token });
+                // Devolver el token, id y rol
+                res.send({ token, _id: savedUser._id, rol: savedUser.rol });
             }
             else {
                 console.log('La contraseña no coincide');

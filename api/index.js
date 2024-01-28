@@ -6,6 +6,7 @@ const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
 const mejorRuta = require('./routes/mejor_ruta');
 const sismoRouter = require('./routes/simularSismo');
 const token_notificacion = require('./routes/token_notificacion');
+const enviar_notificacion = require('./routes/notificacion');
 
 const cors = require('cors');
 // 
@@ -48,8 +49,8 @@ app.use(mejorRuta); //Version 2
 app.use('/planemergencia',planemergencia_crud);
 app.use(sismoRouter); // Simular sismo
 app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
-app.use(token_notificacion);
-
+app.use(token_notificacion); //Guardar token de notificaciones
+app.use(enviar_notificacion); // Enviar notificaciones
 
 app.get('/', requireToken, (req, res) => {
     console.log(req.user);

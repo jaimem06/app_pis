@@ -18,7 +18,7 @@ const buscarNodoMasCercano = async (inicio) => {
             throw new Error('No se encontró ningún nodo cercano');
         }
 
-        console.log('Nodo más cercano:', nodo);
+        //console.log('Nodo más cercano:', nodo);
 
         return nodo;
     } catch (error) {

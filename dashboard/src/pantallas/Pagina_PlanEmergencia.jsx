@@ -171,7 +171,6 @@ const styles = {
         borderRadius: 5,
         marginRight: '15%',
         marginLeft: '20%',
-        marginTop: '50%',
         contentAlign: 'center'
     }
 }

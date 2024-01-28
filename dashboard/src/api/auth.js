@@ -18,6 +18,8 @@ export const updateNodoRequest = (id, nodo) => axios.put(`/nodos/update_nodo/${i
 export const connectNodoRequest = (nombreNodoA, nombreNodoB) => axios.post(`/nodos/create_conexion`, { nombreNodoA, nombreNodoB });
 // Simular SISMO
 export const simularSismoRequest = () => axios.post(`/simular_sismo`);
+//Enviar notificaciones
+export const enviarNotificacionRequest = () => axios.post(`/enviar_notificacion`);
 
 // Direcciones CRUD PLAN DE EMERGENCIA
 export const createPlanEmergenciaRequest = plan => axios.post(`/planemergencia`, plan);

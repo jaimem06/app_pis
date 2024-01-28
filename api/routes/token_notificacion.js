@@ -1,8 +1,8 @@
 const express = require('express');
-const router = express.Router();
+const app = express();
 const PushToken = require('../models/notificacion_token');
 
-router.post('/guardar_tokenNotification', async (req, res) => {
+app.post('/guardar_tokenNotification', async (req, res) => {
     const { userId, token } = req.body;
 
     // Validar que el token y el userId no sean nulos o vacíos
@@ -21,5 +21,3 @@ router.post('/guardar_tokenNotification', async (req, res) => {
 
     res.send({ success: true });
 });
-
-module.exports = router;
