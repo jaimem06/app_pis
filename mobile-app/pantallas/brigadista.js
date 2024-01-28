@@ -5,10 +5,22 @@ import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Card } from 'react-native-elements';
 import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
+import { handleNotificationResponse } from '../components/event_Notification';
+
 
 const Brigadista = () => {
   const [selectedArea, setSelectedArea] = useState('');
   const [brigadista, setBrigadista] = useState([]);
+  const navigation = useNavigation();
+  const [markers, setMarkers] = useState([]);
+  useEffect(() => {
+    const subscription = handleNotificationResponse(navigation, setMarkers);
+  
+    return () => subscription.remove();
+  }, []);
+
+
   useEffect(() => {
     const fetchBrigadistas = async () => {
       try {

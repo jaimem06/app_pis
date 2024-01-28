@@ -4,8 +4,18 @@ import { Image } from 'react-native';
 import { styles } from './styles/styles_info';
 import { Text, View, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { handleNotificationResponse } from '../components/event_Notification';
 const Info = () => {
   const [plan, setPlan] = useState(null);
+  const navigation = useNavigation();
+  const [markers, setMarkers] = useState([]);
+  useEffect(() => {
+    const subscription = handleNotificationResponse(navigation, setMarkers);
+  
+    return () => subscription.remove();
+  }, []);
+
 
   useEffect(() => {
     fetch(APILinks.URL_PlanEmergencia)
