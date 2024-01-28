@@ -1,3 +1,4 @@
+import APILinks from '../../directionsAPI';
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
@@ -7,7 +8,7 @@ export default function Puntos_Map() {
   const [nodos, setNodos] = useState([]);
 
   useEffect(() => {
-    axios.get('http://192.168.1.3:3000/nodos/read_nodos')
+    axios.get(APILinks.URL_ReadNodos)
       .then(response => {
         setNodos(response.data);
       })

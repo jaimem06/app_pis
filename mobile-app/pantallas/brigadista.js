@@ -1,10 +1,10 @@
+import APILinks from '../directionsAPI';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { useEffect, useState } from 'react';
-import { FlatList, Button } from 'react-native';
+import { FlatList } from 'react-native';
 import { Card } from 'react-native-elements';
 import { Dropdown } from 'react-native-element-dropdown';
-
 
 const Brigadista = () => {
   const [selectedArea, setSelectedArea] = useState('');
@@ -12,10 +12,9 @@ const Brigadista = () => {
   useEffect(() => {
     const fetchBrigadistas = async () => {
       try {
-        const response = await fetch('http://192.168.1.3:3000/brigadista/read_brigadista');
+        const response = await fetch(APILinks.URL_Brigadista);
         const data = await response.json();
-        setBrigadista(data); // Aquí cambiamos data[0] por data
-        console.log(selectedArea);
+        setBrigadista(data); 
 
       } catch (error) {
         console.error(error);
@@ -27,14 +26,14 @@ const Brigadista = () => {
   useEffect(() => {
     const fetchBrigadistas = async () => {
       try {
-        const response = await fetch(`http://192.168.1.3:3000/brigadista/read_brigadista/area/${selectedArea}`);
+        const response = await fetch(`${APILinks.URL_Brigadista}/area/${selectedArea}`);
         const data = await response.json();
         setBrigadista(data);
       } catch (error) {
         console.error(error);
       }
     };
-  console.log(selectedArea);
+    console.log(selectedArea);
     if (selectedArea) {
       fetchBrigadistas();
     }
@@ -49,80 +48,80 @@ const Brigadista = () => {
     "Educación el Arte y la Comunicación",
     "Jurídica, Social y Administrativa",
     "Salud Humana"
-];
+  ];
 
   return (
     <>
-    <Text style={styles.title}>Brigadistas de rutas de evacuación</Text>
-    <Dropdown
-      style={{ width: 200 , marginLeft: '5%', marginTop: '10%',width:'90%',backgroundColor:'white',marginBottom:'2%'}}
-      data={facultades.map((facultad, index) => ({ label: facultad, value: index + 1 }))}
-      search
-      searchPlaceholder="Search"
-      labelField="label"
-      valueField="value"
-      placeholder="Select Area"
-      value={selectedArea}
-      onChange={(item) => setSelectedArea(item.label)}
-    />
-    {Array.isArray(brigadista) && (
-      <>
-        <FlatList
-          data={brigadista}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item: brigadista }) => (
-            <Card>
-              <>
-                <Card.Title>NOMBRES DE LOS
-                  MIEMBROS BRIGADA DE
-                  EVACUACIÓN</Card.Title>
-                <Card>
+      <Text style={styles.title}>Brigadistas de rutas de evacuación</Text>
+      <Dropdown
+        style={{ width: 200, marginLeft: '5%', marginTop: '10%', width: '90%', backgroundColor: 'white', marginBottom: '2%' }}
+        data={facultades.map((facultad, index) => ({ label: facultad, value: index + 1 }))}
+        search
+        searchPlaceholder="Search"
+        labelField="label"
+        valueField="value"
+        placeholder="Select Area"
+        value={selectedArea}
+        onChange={(item) => setSelectedArea(item.label)}
+      />
+      {Array.isArray(brigadista) && (
+        <>
+          <FlatList
+            data={brigadista}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item: brigadista }) => (
+              <Card>
+                <>
+                  <Card.Title>NOMBRES DE LOS
+                    MIEMBROS BRIGADA DE
+                    EVACUACIÓN</Card.Title>
+                  <Card>
 
-                  {brigadista.titular.map((titular, index) => (
+                    {brigadista.titular.map((titular, index) => (
 
-                    <Text key={`titular-${index}`}>
-                      Titular {titular.nroTitular} : {titular.nombresCompletos}
-                    </Text>
-                  ))}
-                  {brigadista.reemplazo.map((reemplazo, index) => (
-                    <Text key={`reemplazo-${index}`}>
-                      Reemplazo {reemplazo.nroReemplazo} : {reemplazo.nombresCompletos}
-                    </Text>
-                  ))}
-                  <Card.Divider />
-                  <Text>Áre/Piso donde se ubica: {brigadista.area}</Text>
-                </Card>
-                <Card.Title>RESPONSABILIDADES</Card.Title>
-                <Card>
+                      <Text key={`titular-${index}`}>
+                        Titular {titular.nroTitular} : {titular.nombresCompletos}
+                      </Text>
+                    ))}
+                    {brigadista.reemplazo.map((reemplazo, index) => (
+                      <Text key={`reemplazo-${index}`}>
+                        Reemplazo {reemplazo.nroReemplazo} : {reemplazo.nombresCompletos}
+                      </Text>
+                    ))}
+                    <Card.Divider />
+                    <Text>Áre/Piso donde se ubica: {brigadista.area}</Text>
+                  </Card>
+                  <Card.Title>RESPONSABILIDADES</Card.Title>
+                  <Card>
 
-                  <Card.Title>Antes de Evacuacion</Card.Title>
-                  <Text>Elaborar un croquis Interno</Text>
-                  <Text>Determinar las Rutas de Evacuación, Salidas de emergencia.</Text>
-                  <Text>Verificar que éstas no se encuentren bloqueadas, con llave ni obstaculizadas.</Text>
-                  <Text>Prácticas diversas formas de rescate.</Text>
-                </Card>
+                    <Card.Title>Antes de Evacuacion</Card.Title>
+                    <Text>Elaborar un croquis Interno</Text>
+                    <Text>Determinar las Rutas de Evacuación, Salidas de emergencia.</Text>
+                    <Text>Verificar que éstas no se encuentren bloqueadas, con llave ni obstaculizadas.</Text>
+                    <Text>Prácticas diversas formas de rescate.</Text>
+                  </Card>
 
-                <Card>
-                  <Card.Title>Durante Evacuacion</Card.Title>
-                  <Text>Cerrar las Llaves de agua, gas, cortar la energía eléctrica.</Text>
-                  <Text>Alejar a los compañeros del área siniestrada</Text>
-                  <Text>Conducir al Personal por la ruta de evacuación</Text>
-                  <Text>Revisar que nadie quede en el área siniestrada.</Text>
-                </Card>
+                  <Card>
+                    <Card.Title>Durante Evacuacion</Card.Title>
+                    <Text>Cerrar las Llaves de agua, gas, cortar la energía eléctrica.</Text>
+                    <Text>Alejar a los compañeros del área siniestrada</Text>
+                    <Text>Conducir al Personal por la ruta de evacuación</Text>
+                    <Text>Revisar que nadie quede en el área siniestrada.</Text>
+                  </Card>
 
-                <Card>
-                  <Card.Title>Después de Evacuacion</Card.Title>
-                  <Text>Pasar lista de asistencia y comprobar que no falte nadie o identificar su paradero</Text>
-                  <Text>Recorrer el inmueble ara establecer su estado y recomendar o no su utilización</Text>
-                </Card>
-              </>
+                  <Card>
+                    <Card.Title>Después de Evacuacion</Card.Title>
+                    <Text>Pasar lista de asistencia y comprobar que no falte nadie o identificar su paradero</Text>
+                    <Text>Recorrer el inmueble ara establecer su estado y recomendar o no su utilización</Text>
+                  </Card>
+                </>
 
-            </Card>
-          )}
-        />
-      </>
+              </Card>
+            )}
+          />
+        </>
 
-    )}
+      )}
     </>
   );
 };

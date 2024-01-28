@@ -2,8 +2,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-
 import login from "./pantallas/login";
 import info from "./pantallas/info";
 import brigadista from "./pantallas/brigadista";

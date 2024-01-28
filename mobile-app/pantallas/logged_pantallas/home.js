@@ -1,3 +1,4 @@
+import APILinks from '../../directionsAPI';
 import React, { useState, useRef, useEffect } from 'react';
 import { ScrollView, Image, TouchableOpacity, Text, View, Alert } from 'react-native';
 import styles from '../styles/styleshome';
@@ -6,7 +7,7 @@ import puntoEncuentro from '../../assets/pde.png';
 import user from '../../assets/user.png';
 import * as Location from 'expo-location';
 
- export const calcularRuta = async (setMarkers) => {
+export const calcularRuta = async (setMarkers) => {
   let { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
     Alert.alert('Permiso de acceso a la ubicación denegado');
@@ -14,12 +15,12 @@ import * as Location from 'expo-location';
   }
 
   let location = await Location.getCurrentPositionAsync({});
-  console.log(location.coords);
+  //console.log(location.coords);
   let inicio = {
-    coords: [-4.031149438771467, -79.19918125317055]
+    coords: [location.coords.latitude, location.coords.longitude]
   };
 
-  fetch('http://192.168.1.3:3000/camino_minimo', {
+  fetch(APILinks.URL_CaminoMinimo, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ import * as Location from 'expo-location';
       }
     })
     .then(data => {
-      console.log(data);
+      //console.log(data);
       let newMarkers = data.map(item => ({
         nombre: item.nombre,
         tipo: item.tipo,
@@ -56,7 +57,7 @@ import * as Location from 'expo-location';
       setMarkers(newMarkers);
     })
     .catch(error => {
-      console.error(error);
+     // console.error(error);
     });
 };
 
@@ -126,7 +127,7 @@ const Home = () => {
           />
         </MapView>
       </View>
-      <View style= {{width: '95%', marginTop: 15}}>
+      <View style={{ width: '95%', marginTop: 15 }}>
         <ScrollView style={{
           display: 'flex',
           alignContent: 'center',

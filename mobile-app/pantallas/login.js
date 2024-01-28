@@ -1,9 +1,11 @@
+import APILinks from '../directionsAPI';
 import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles/styleslogin';
 import * as SecureStore from 'expo-secure-store';
-
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 
 const Login = ({ navigation }) => { // Agregar navigation como parámetro
   const [username, setUsername] = useState('');
@@ -11,7 +13,7 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    fetch('http://10.20.139.173:3000/login_mobile', {
+    fetch(APILinks.URL_Login, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -27,20 +29,66 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
           Alert.alert('Error', data.error);
         } else {
           Alert.alert('Éxito', 'Inicio de sesión exitoso');
-          try {
-            await SecureStore.setItemAsync('token', data.token); // Guardar el token en SecureStore
+          // Registrar para notificaciones push después de iniciar sesión
+          const pushToken = await registerForPushNotificationsAsync();
+          console.log(pushToken);
 
-          } catch (e) {
-            console.error('Error al guardar el token:', e);
-          }
-          navigation.navigate('logged'); // Navegar a la pantalla si el inicio de sesión es exitoso
+          // Guardar el token de notificación en la base de datos
+          fetch(APILinks.URL_SaveToken, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userId: data._id, // Usar '_id' en lugar de 'userId'
+              token: pushToken
+            })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                console.log('Token de notificación guardado exitosamente');
+              } else {
+                console.log('Error al guardar el token de notificación:', data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+
+          navigation.navigate('logged');
         }
       })
+
       .catch(error => {
         Alert.alert('Error', 'Ocurrió un error al iniciar sesión');
         console.error('Error:', error);
       });
   };
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    let experienceId = undefined;
+    if (!Constants.expoConfig) {
+      // Absence of the expoConfig means we're in bare workflow
+      experienceId = `@${Constants.expoConfig.owner}/${Constants.expoConfig.slug}`;
+    }
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('No se ha podido obtener el token para la notificación push.');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync({ 
+      experienceId, 
+      projectId: Constants.expoConfig.extra.eas.projectId 
+    })).data;
+    return token;
+  }
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -53,7 +101,6 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
       }
     });
   }, []);
-
   
   return (
 

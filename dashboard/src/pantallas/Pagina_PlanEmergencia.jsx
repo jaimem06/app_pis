@@ -4,11 +4,9 @@ import { readallPlanEmergenciaRequest } from '../api/auth';
 import { deletePlanEmergenciaRequest } from '../api/auth';
 import { updatePlanEmergenciaRequest } from '../api/auth';
 import { readPlanEmergenciaRequest } from '../api/auth';
-import { formPlanE, inputStyle, buttonADD, titulosStyle, buttonsForm, cancelbutton, inputRStyle ,deletebutton} from '../styles/styles_pagePlanEmergency';
-
+import { formPlanE, inputStyle, buttonADD, titulosStyle, buttonsForm, cancelbutton, inputRStyle, deletebutton } from '../styles/styles_pagePlanEmergency';
 
 const Pagina_PlanEmergencia = () => {
-    const [showEditForm, setShowEditForm] = useState(false);
 
     const [plan, setPlan] = useState({ titulo: '', resumen: '', imagen: '', link: '' });
     const obtenerPlan = async () => {
@@ -46,15 +44,6 @@ const Pagina_PlanEmergencia = () => {
             console.error(error);
         }
     }
-
-    const handleCancel = () => {
-        setShowForm(false);
-    }
-    const handleEdit = (index) => {
-        const planToEdit = plans[index];
-        setPlan(planToEdit);
-        setShowEditForm(true);
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -96,24 +85,22 @@ const Pagina_PlanEmergencia = () => {
         }
     };
 
-  
-
     const handleDelete = async () => {
         try {
             // Obtener todos los planes
             const response = await readallPlanEmergenciaRequest();
-    
+
             // Comprobar si hay al menos un plan
             if (response.data.length > 0) {
                 // Obtener el _id del primer plan
                 const planToDelete = response.data[0];
                 const confirmDelete = window.confirm(`¿Estás seguro de que quieres eliminar el plan ${planToDelete.titulo}?`);
-    
+
                 if (confirmDelete) {
                     // Eliminar el primer plan
                     await deletePlanEmergenciaRequest(planToDelete._id);
                     console.log('Plan eliminado:', planToDelete._id);
-    
+
                     // Actualizar el estado de los planes después de eliminar el plan
                     const nuevosPlanes = response.data.slice(1);
                     setPlan(nuevosPlanes);
@@ -126,11 +113,10 @@ const Pagina_PlanEmergencia = () => {
         }
     };
 
-
     return (
         <div style={{ display: 'flex', margin: '1px' }}>
-            <div style={{backgroundColor:'oceanblue',width:'40%',height:'auto',marginLeft:'12px'}}> 
-                
+            <div style={{ backgroundColor: 'oceanblue', width: '40%', height: 'auto', marginLeft: '12px' }}>
+
                 <form onSubmit={handleSubmit} style={formPlanE} >
                     <p style={{ textAlign: "center" }}>
                         <span style={{ color: 'black' }}>CREAR PLAN DE EMERGENCIA</span>
@@ -142,29 +128,29 @@ const Pagina_PlanEmergencia = () => {
                     <textarea style={inputRStyle} name="resumen" value={plan.resumen} onChange={handleChange} placeholder="Resumen del Plan" required />
 
                     <label style={titulosStyle}>Imagen del Plan:</label>
-                    <input style={inputStyle} type="text" name="imagen"value={plan.imagen}  onChange={handleChange} placeholder="URL de la imagen del Plan" required />
+                    <input style={inputStyle} type="text" name="imagen" value={plan.imagen} onChange={handleChange} placeholder="URL de la imagen del Plan" required />
 
                     <label style={titulosStyle}>Link del Plan:</label>
-                    <input style={inputStyle} type="text" name="link"value={plan.link}  onChange={handleChange} placeholder="Link del Plan" required />
+                    <input style={inputStyle} type="text" name="link" value={plan.link} onChange={handleChange} placeholder="Link del Plan" required />
 
                     <div style={buttonsForm}>
                         <button style={cancelbutton} type="button" onClick={handleUpdate}>Modificar</button>
                         <button style={buttonADD} type="submit">Agregar Plan</button>
-                        
+
                     </div>
                     <button style={deletebutton} type="button" onClick={handleDelete}>Eliminar</button>
                 </form>
             </div>
 
-            <div style={{ display: 'flex-end', justifyContent: 'space-between', marginLeft: '50%',borderRadius:'30px', border: ' 2px solid black', position: 'absolute' ,marginTop:'2%' ,background:'white'}}>
+            <div style={{ display: 'flex-end', justifyContent: 'space-between', marginLeft: '50%', borderRadius: '30px', border: ' 2px solid black', position: 'absolute', marginTop: '2%', background: 'white' }}>
                 {plan && (
-                    <div style={{ width: '380px',margin:'30px' ,overflow:'auto', maxHeight:'750px'}}>
+                    <div style={{ width: '380px', margin: '30px', overflow: 'auto', maxHeight: '750px' }}>
                         <h2 style={{ color: 'black' }}>{plan.titulo}</h2>
                         <img src={plan.imagen} />
-                        <p style={{ color: 'black',textAlign:'justify',marginBottom:'10%' }}>{plan.resumen}</p>
+                        <p style={{ color: 'black', textAlign: 'justify', marginBottom: '10%' }}>{plan.resumen}</p>
                         <a href={plan.link} style={styles.link}>Link del Plan de Emergencia</a>                    </div>
                 )}
-                    <img src='https://lh3.googleusercontent.com/u/0/drive-viewer/AEYmBYSoi11WvvATFfxN436yTkaVKlWsRQYUpAP9Op_gtkWNi00AtKbpsaX8TA9S0bV_hubTYutOTXBfj0xrJqbgRwDQ19Lwvw=w1920-h979' style={{width:'440px',height:'90px',borderBottomLeftRadius:'30px',borderBottomRightRadius:'30px'}}/>
+                <img src='https://lh3.googleusercontent.com/u/0/drive-viewer/AEYmBYSoi11WvvATFfxN436yTkaVKlWsRQYUpAP9Op_gtkWNi00AtKbpsaX8TA9S0bV_hubTYutOTXBfj0xrJqbgRwDQ19Lwvw=w1920-h979' style={{ width: '440px', height: '90px', borderBottomLeftRadius: '30px', borderBottomRightRadius: '30px' }} />
 
             </div>
         </div>
@@ -175,19 +161,18 @@ const Pagina_PlanEmergencia = () => {
 const styles = {
     link: {
         color: 'black',
-         textDecoration: 'none',
-        textAlign:'center',
+        textDecoration: 'none',
+        textAlign: 'center',
         backgroundColor: 'skyblue',
         marginHorizontal: '7%',
         marginTop: "10%",
         marginBottom: 10,
         padding: 10,
-        borderRadius: 5, 
+        borderRadius: 5,
         marginRight: '15%',
         marginLeft: '20%',
-        marginTop:'50%',
-        contentAlign:'center',
-
-      },
+        marginTop: '50%',
+        contentAlign: 'center'
     }
+}
 export default Pagina_PlanEmergencia;
