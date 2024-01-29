@@ -60,7 +60,7 @@ export default function MapaFlotante({nodos}) {
 
             // Llama a tu API y añade marcadores al mapa
             readallNodoRequest().then(response => {
-                console.log(response.data); // Para ver qué estás recibiendo
+                //console.log(response.data); // Para ver qué estás recibiendo
                 response.data.forEach(item => {
                     let icon;
                     switch (item.properties.tipo) {

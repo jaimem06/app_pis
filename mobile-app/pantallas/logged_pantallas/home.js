@@ -17,7 +17,7 @@ import * as Location from 'expo-location';
   let location = await Location.getCurrentPositionAsync({});
   console.log(location.coords);
   let inicio = {
-    coords: [-4.0335039397289, -79.20028632328469]
+    coords: [location.coords.latitude, location.coords.longitude]
   };
 
   fetch(APILinks.URL_CaminoMinimo, {

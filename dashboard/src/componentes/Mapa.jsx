@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { readallNodoRequest } from '../api/auth'
 import PinVerde from '../assets/meeting_point.svg';
 import PinAzul from '../assets/location.svg';
-import PinRojo from '../assets/red_pin.svg';
+import PinRojo from '../assets/ruta.svg';
 
 function Mapa({ nodos }) {
 
@@ -12,17 +12,20 @@ function Mapa({ nodos }) {
 
     const iconVerde = L.icon({
         iconUrl: PinVerde,
-        iconSize: [30], // Tamaño del icono
+        iconSize: [30, 30], // Tamaño del icono
+        iconAnchor: [15, 15], // Punto de anclaje del icono
     });
 
     const iconRojo = L.icon({
         iconUrl: PinRojo,
-        iconSize: [10], // Tamaño del icono
+        iconSize: [14, 14], // Tamaño del icono
+        iconAnchor: [7, 7], // Punto de anclaje del icono
     });
 
     const iconAzul = L.icon({
         iconUrl: PinAzul,
-        iconSize: [30], // Tamaño del icono
+        iconSize: [30, 30], // Tamaño del icono
+        iconAnchor: [15, 15], // Punto de anclaje del icono
     });
     useEffect(() => {
         if (!mapRef.current) {
@@ -59,7 +62,7 @@ function Mapa({ nodos }) {
 
             // Llama a tu API y añade marcadores al mapa
             readallNodoRequest().then(response => {
-                console.log(response.data); // Para ver qué estás recibiendo
+                //console.log(response.data); // Para ver qué estás recibiendo
                 response.data.forEach(item => {
                     let icon;
                     switch (item.properties.tipo) {
@@ -76,10 +79,10 @@ function Mapa({ nodos }) {
                             icon = iconVerde; // Puedes cambiar esto al icono que quieras usar por defecto
                     }
                     L.marker(item.geometry.coordinates, { icon: icon }).addTo(mapRef.current).bindPopup(`
-            <strong>${item.properties.nombre}</strong><br/>
-            ${item.properties.facultad}<br/>
-            ${item.properties.tipo}
-        `);
+                        <strong>${item.properties.nombre}</strong><br/>
+                        ${item.properties.facultad}<br/>
+                        ${item.properties.tipo}
+                    `);
                 });
             });
         }

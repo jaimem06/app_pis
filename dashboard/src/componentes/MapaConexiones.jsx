@@ -54,7 +54,7 @@ function Mapa_Conexiones({ nodesConnected }) { // Cambia nodos a nodesConnected
         if (mapRef.current) {
             // Llama al API y añade marcadores al mapa
             readallNodoRequest().then(response => {
-                console.log(response.data); // Para ver qué estás recibiendo
+                //console.log(response.data); // Para ver qué estás recibiendo
                 const markers = {};
                 response.data.forEach(item => {
                     let icon;
@@ -71,10 +71,13 @@ function Mapa_Conexiones({ nodesConnected }) { // Cambia nodos a nodesConnected
                         default:
                             icon = iconVerde;
                     }
+                    const conexiones = item.properties.conexiones.map(conexion => `${conexion.nodo} (${conexion.distancia} metros)`).join('<br/>');
                     markers[item.properties.nombre] = L.marker(item.geometry.coordinates, { icon: icon }).addTo(mapRef.current).bindPopup(`
                         <strong>${item.properties.nombre}</strong><br/>
                         ${item.properties.facultad}<br/>
-                        ${item.properties.tipo}
+                        ${item.properties.tipo}<br/>
+                        Conexiones:<br/>
+                        ${conexiones}
                     `);
                 });
 
