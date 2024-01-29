@@ -80,8 +80,7 @@ function Pagina_crudUser() {
                 dob: user.dob
             };
             await updateUserRequest(user._id, updatedUser);
-            // Actualiza el estado de los usuarios después de actualizar el usuario
-            fetchUsers();
+
             setShowEditForm(false);
         } catch (error) {
             console.error(error);
@@ -174,7 +173,7 @@ function Pagina_crudUser() {
                                         <button style={editbutton} onClick={() => handleEdit(index)}>
                                             <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
                                         </button>
-                                      
+
                                         <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
                                             style={{ color: "white", fontSize: "24px" }} />
                                         </button>
@@ -185,14 +184,14 @@ function Pagina_crudUser() {
                     </table>
                 </div>
                 {showEditForm && (
-                                            <FormEditarUser
-                                                user={user}
-                                                setUser={setUser}
-                                                handleChange={handleChange}
-                                                handleSubmit={handleUpdate}
-                                                handleCancel={() => setShowEditForm(false)}
-                                            />
-                                        )}
+                    <FormEditarUser
+                        user={user}
+                        setUser={setUser}
+                        handleChange={handleChange}
+                        handleSubmit={handleUpdate}
+                        handleCancel={() => setShowEditForm(false)}
+                    />
+                )}
             </div>
         </div>
     )
