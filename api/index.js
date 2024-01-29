@@ -7,7 +7,7 @@ const mejorRuta = require('./routes/mejor_ruta');
 const sismoRouter = require('./routes/simularSismo');
 const token_notificacion = require('./routes/token_notificacion');
 const enviar_notificacion = require('./routes/notificacion');
-
+const comRouter = require('./routes/purtocom');
 const cors = require('cors');
 // 
 require('./db');
@@ -51,7 +51,7 @@ app.use(sismoRouter); // Simular sismo
 app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
 app.use(token_notificacion); //Guardar token de notificaciones
 app.use(enviar_notificacion); // Enviar notificaciones
-
+app.use(comRouter); // lectura para puertos COM
 app.get('/', requireToken, (req, res) => {
     console.log(req.user);
     res.send(req.user);
