@@ -18,7 +18,7 @@ function Mapa({ nodos }) {
 
     const iconRojo = L.icon({
         iconUrl: PinRojo,
-        iconSize: [14, 14], // Tamaño del icono
+        iconSize: [20, 20], // Tamaño del icono
         iconAnchor: [7, 7], // Punto de anclaje del icono
     });
 
