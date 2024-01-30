@@ -5,9 +5,10 @@ import styles from '../styles/styleshome';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
 import user from '../../assets/user.png';
+import route from '../../assets/route.png';
 import * as Location from 'expo-location';
 
- export const calcularRuta = async (setMarkers) => {
+export const calcularRuta = async (setMarkers) => {
   let { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
     Alert.alert('Permiso de acceso a la ubicación denegado');
@@ -17,7 +18,7 @@ import * as Location from 'expo-location';
   let location = await Location.getCurrentPositionAsync({});
   console.log(location.coords);
   let inicio = {
-    coords: [location.coords.latitude, location.coords.longitude]
+    coords: [-4.031301375131452, -79.19966608931804]
   };
 
   fetch(APILinks.URL_CaminoMinimo, {
@@ -87,13 +88,15 @@ const Home = () => {
     }
   }, [markers]);
 
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#2A364E"}}>
       <TouchableOpacity
         style={styles.buscarButton}
         onPress={() => calcularRuta(setMarkers)}
       >
-        <Text style={styles.buscarText}>Buscar Zona Segura Cercana</Text>
+        <Text style={styles.buscarText}>Buscar zona segura cercana </Text>
+        <Image source={puntoEncuentro} style={{ width: 25, height: 25 }} />
       </TouchableOpacity>
       <View style={styles.mapViewContainer}>
         <MapView
@@ -107,11 +110,29 @@ const Home = () => {
           }}
         >
           {markers.map((marker, index) => {
+            if (marker.tipo === 'Ruta') { // Renderiza primero los marcadores de tipo 'ruta'
+              return (
+                <Marker
+                  key={index}
+                  coordinate={marker.coordenadas}
+                  anchor={{ x: 0.5, y: 0.5 }} // Centra la imagen
+                  title={marker.nombre} // Muestra el nombre del nodo cuando se pulsa el marcador
+                >
+                  <View style={{ width: 25, height: 25, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={route} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                  </View>
+                </Marker>
+              );
+            }
+          })}
+          {markers.map((marker, index) => {
             if (index === 0 || index === markers.length - 1) {
               return (
                 <Marker
                   key={index}
                   coordinate={marker.coordenadas}
+                  anchor={{ x: 0.5, y: 0.5 }} // Centra la imagen
+                  title={marker.nombre} // Muestra el nombre del nodo cuando se pulsa el marcador
                 >
                   {index === 0 && (
                     <View style={{ width: 45, height: 45, overflow: 'hidden' }}>
@@ -134,15 +155,17 @@ const Home = () => {
           />
         </MapView>
       </View>
-      <View style= {{width: '95%', marginTop: 15}}>
-        <ScrollView style={{
-          display: 'flex',
-          alignContent: 'center',
-          borderColor: 'white',
-          borderRadius: 20,
-          backgroundColor: "#2A364E",
-        }}>
-          <Text style={{ padding: 10, textAlign: "justify", color: "white" }}>
+      <View style={{
+        width: '90%',
+        marginTop: 10,
+        height: "14%",
+        justifyContent: 'center',
+        borderRadius: 20,
+        borderColor: '#B3DFE8',
+        borderWidth: 2, 
+      }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <Text style={{ padding: 10, textAlign: "justify", color: 'white' }}>
             {'Debes pasar por los siguientes puntos:\n' + markers.map((marker, index) => `${index + 1}. ${marker.nombre}`).join('\n')}
           </Text>
         </ScrollView>

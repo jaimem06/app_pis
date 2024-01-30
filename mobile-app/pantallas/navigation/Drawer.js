@@ -16,11 +16,20 @@ export function DrawerNavigation() {
     <Drawer.Navigator
       drawerContent={(props) => <MenuItems {...props} />}
     >
-      <Drawer.Screen name="Mapa" component={Home} />
+      <Drawer.Screen 
+        name="Mapa" 
+        component={Home} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#2A364E',
+          },
+          headerTintColor: 'white', // reemplaza 'yourColor' con el color que desees
+        }}
+      />
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
-      <Drawer.Screen name = "Informacion" component={About_App} />
-      <Drawer.Screen name = "Puntos" component={Puntos_Map} />
+      <Drawer.Screen name="Informacion" component={About_App} />
+      <Drawer.Screen name="Puntos" component={Puntos_Map} />
     </Drawer.Navigator>
   );
 }
@@ -33,7 +42,7 @@ const MenuItems = ({ navigation }) => {
     navigation.navigate('login');
   }
   return (
-    
+
     <DrawerContentScrollView
       style={styles.container}
     >
@@ -47,7 +56,7 @@ const MenuItems = ({ navigation }) => {
         onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
       />
 
-      
+
 
       <MenuButtonItem
         text="Brigadista"
@@ -63,7 +72,7 @@ const MenuItems = ({ navigation }) => {
         text="Puntos"
         onPress={() => navigation.navigate('Puntos')} iconName="chart-bubble"
       />
-       <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}}>BOTONES:</Text>
+      <Text style={{ marginTop: 25, marginBottom: 10, fontWeight: 'bold' }}>BOTONES:</Text>
       <MenuButtonItem
         text="Cerrar sesión"
         onPress={handlelogoutPress} // Asume que 'Login' es el nombre de la ruta de la pantalla de inicio de sesión
@@ -87,5 +96,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
- 
+
 })

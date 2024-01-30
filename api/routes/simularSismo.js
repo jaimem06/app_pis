@@ -12,7 +12,7 @@ router.post('/simular_sismo', async (req, res) => {
     const magnitud = (Math.random() * 9 + 1).toFixed(2); 
 
     // Si la magnitud es mayor a 3, enviar notificación
-    if (magnitud > 3) {
+    if (magnitud > 5) {
         try {
             // Obténer los tokens de la base de datos
             const tokens = await PushTokenSchema.find();
