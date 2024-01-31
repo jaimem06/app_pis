@@ -1,0 +1,61 @@
+import React, { useState, useMemo } from 'react';
+import { Modal, Button, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
+
+const Item = React.memo(({ item, onPress }) => (
+    <TouchableOpacity 
+        onPress={onPress}
+        style={{ borderBottomWidth: 1, borderBottomColor: 'white' }}
+    >
+        <Text style={{ fontSize: 15, color: 'white', padding: 11 }} numberOfLines={1}>{item}</Text>
+    </TouchableOpacity>
+));
+
+const CustomPicker = ({ data, selectedValue, onValueChange }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [search, setSearch] = useState('');
+
+    const handlePress = (value) => {
+        onValueChange(value);
+        setModalVisible(false);
+    };
+
+    const renderItem = ({ item }) => (
+        <Item item={item} onPress={() => handlePress(item)} />
+    );
+
+    const filteredData = useMemo(() => 
+        data.filter(item => item.toLowerCase().includes(search.toLowerCase())),
+        [data, search]
+    );
+
+    return (
+        <View>
+            <Button title={selectedValue || "Select an item"} onPress={() => setModalVisible(true)} />
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} onPress={() => setModalVisible(false)}>
+                    <View style={{ backgroundColor: '#2A364E', height: "50%", width: '80%', alignItems: 'center', justifyContent: 'center', borderRadius: 20, padding: 10 }}>
+                        <TextInput
+                            style={{ height: 40, color: "white", borderRadius: 20, borderColor: '#B3DFE8', borderWidth: 3, width: '100%', marginBottom: 10, paddingLeft: 10 }}
+                            onChangeText={text => setSearch(text)}
+                            value={search}
+                            placeholder="Search"
+                            placeholderTextColor="#ccc"
+                        />
+                        <FlatList
+                            data={filteredData}
+                            renderItem={renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </View>
+                </TouchableOpacity>
+            </Modal>
+        </View>
+    );
+};
+
+export default CustomPicker;

@@ -7,6 +7,7 @@ import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
 import Puntos_Map from '../logged_pantallas/puntos';
+import Buscar_Ruta from '../logged_pantallas/busqueda_ruta';
 import * as SecureStore from 'expo-secure-store';
 
 const Drawer = createDrawerNavigator();
@@ -21,15 +22,16 @@ export function DrawerNavigation() {
         component={Home} 
         options={{
           headerStyle: {
-            backgroundColor: '#2A364E',
+            backgroundColor: '#2A364E', //Color del header
           },
-          headerTintColor: 'white', // reemplaza 'yourColor' con el color que desees
+          headerTintColor: 'white',//Colot texto del header
         }}
       />
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
       <Drawer.Screen name="Informacion" component={About_App} />
       <Drawer.Screen name="Puntos" component={Puntos_Map} />
+      <Drawer.Screen name="Buscar Ruta" component={Buscar_Ruta} />
     </Drawer.Navigator>
   );
 }
@@ -49,15 +51,12 @@ const MenuItems = ({ navigation }) => {
       <Text style={styles.title}>MENU FREDUNL</Text>
       <MenuButtonItem
         text="Ruta de Evacuación"
-        onPress={() => navigation.navigate('Mapa')} iconName="map-marker"
+        onPress={() => navigation.navigate('Mapa')} iconName="map-marker-minus"
       />
       <MenuButtonItem
-        text="Acerca de"
-        onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
+        text="Busqueda de Ruta"
+        onPress={() => navigation.navigate('Buscar Ruta')} iconName="map-marker-radius"
       />
-
-
-
       <MenuButtonItem
         text="Brigadista"
         onPress={() => navigation.navigate('Brigadista')} iconName={"account-hard-hat"}
@@ -73,6 +72,10 @@ const MenuItems = ({ navigation }) => {
         onPress={() => navigation.navigate('Puntos')} iconName="chart-bubble"
       />
       <Text style={{ marginTop: 25, marginBottom: 10, fontWeight: 'bold' }}>BOTONES:</Text>
+      <MenuButtonItem
+        text="Acerca de"
+        onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
+      />
       <MenuButtonItem
         text="Cerrar sesión"
         onPress={handlelogoutPress} // Asume que 'Login' es el nombre de la ruta de la pantalla de inicio de sesión
