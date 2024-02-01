@@ -35,12 +35,13 @@ async function buscarNodoPDEMasCercano(nombreInicio) {
             visitados[nodoActual] = true;
 
             // Si el nodo es de tipo PDE, hemos encontrado el nodo PDE más cercano
-            if (nodos.find(nodo => nodo._id.toString() === nodoActual).properties.tipo === 'PDE') {
-                return nodos.find(nodo => nodo._id.toString() === nodoActual).properties.nombre;
+            let nodoActualObj = nodos.find(nodo => nodo._id.toString() === nodoActual);
+            if (nodoActualObj.properties.tipo === 'PDE') {
+                return nodoActualObj.properties.nombre;
             }
 
             // Actualizar las distancias a los nodos vecinos
-            for (let conexion of nodos.find(nodo => nodo._id.toString() === nodoActual).properties.conexiones) {
+            for (let conexion of nodoActualObj.properties.conexiones) {
                 let nodoVecino = await Nodo.findOne({ 'properties.nombre': conexion.nodo });
                 let distancia = distancias[nodoActual] + conexion.distancia;
 

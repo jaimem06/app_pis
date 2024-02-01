@@ -24,7 +24,7 @@ const onSubmit = handleSubmit((data) => {
     return (
         <div className= 'divGeneral' style={{background: '#2a2e30'}}>
         <div className='flex h-screen items-center justify-center'>
-        <img src = '../../public/fred.png' style={{marginRight: '10%'}} />
+        <img src = {fredUnlogo} style={{marginRight: '10%'}} />
             <div className = 'bg-white max-w-md w-full p-10 rounded-md'>
             {
             signinErrors.map((error,i) => (
