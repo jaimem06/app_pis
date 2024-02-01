@@ -18,7 +18,7 @@ export const calcularRuta = async (setMarkers) => {
   let location = await Location.getCurrentPositionAsync({});
   console.log(location.coords);
   let inicio = {
-    coords: [-4.036638763138385, -79.20491397028887]
+    coords: [location.coords.latitude, location.coords.longitude]
   };
 
   fetch(APILinks.URL_CaminoMinimo, {
