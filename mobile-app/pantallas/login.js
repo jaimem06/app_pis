@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import APILinks from '../directionsAPI';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { styles } from './styleslogin';
+import { styles } from './styles/styleslogin';
+import * as SecureStore from 'expo-secure-store';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import { handleNotificationResponse } from '../components/event_Notification';
 
-const Login = ({ navigation }) => { // Agregar navigation aquí
+const Login = ({ navigation }) => { // Agregar navigation como parámetro
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    //https://api-fredunl.onrender.com/login_mobile
-    fetch('https://api-fredunl.onrender.com/login_mobile', {
-    //fetch('http://10.20.137.216:3000/login_mobile', { // ip Universidad
-    //fetch('http://192.168.1.9:3000/login_mobile', { // ip Jaime
-     //fetch('http://192.168.1.13:3000/login_mobile', { // ip Wilson
-
+    fetch(APILinks.URL_Login, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -25,23 +25,92 @@ const Login = ({ navigation }) => { // Agregar navigation aquí
       })
     })
       .then(response => response.json())
-      .then(data => {
+      .then(async data => {
         if (data.error) {
           Alert.alert('Error', data.error);
         } else {
           Alert.alert('Éxito', 'Inicio de sesión exitoso');
-          navigation.navigate('logged'); //Pantalla si el inicio de sesión es exitoso
+          // Registrar para notificaciones push después de iniciar sesión
+          const pushToken = await registerForPushNotificationsAsync();
+          //console.log(pushToken);
+
+          // Guardar el token de notificación en la base de datos
+          fetch(APILinks.URL_SaveToken, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userId: data._id,
+              token: pushToken
+            })
+          })
+            .then(response => response.json())
+            .then(async data => {
+              if (data.success) {
+                console.log('Token de notificación guardado exitosamente');
+                // Guardar el token en el almacenamiento seguro
+                await SecureStore.setItemAsync('token', pushToken);
+              } else {
+                console.log('Error al guardar el token de notificación:', data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+
+          navigation.navigate('logged');
         }
       })
+
       .catch(error => {
         Alert.alert('Error', 'Ocurrió un error al iniciar sesión');
         console.error('Error:', error);
       });
   };
 
+  async function registerForPushNotificationsAsync() {
+    let token;
+    let experienceId = undefined;
+    if (!Constants.expoConfig) {
+      // Absence of the expoConfig means we're in bare workflow
+      experienceId = `@${Constants.expoConfig.owner}/${Constants.expoConfig.slug}`;
+    }
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('No se ha podido obtener el token para la notificación push.');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync({ 
+      experienceId, 
+      projectId: Constants.expoConfig.extra.eas.projectId 
+    })).data;
+    return token;
+  }
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  React.useEffect(() => {
+    SecureStore.getItemAsync('token').then(token => {
+      if (token) {
+        navigation.navigate('logged');
+      }
+    });
+  }, []);
+
+  const [markers, setMarkers] = useState([]);
+  useEffect(() => {
+    const subscription = handleNotificationResponse(navigation, setMarkers);
+  
+    return () => subscription.remove();
+  }, []);
 
   return (
 

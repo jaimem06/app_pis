@@ -80,8 +80,7 @@ function Pagina_crudUser() {
                 dob: user.dob
             };
             await updateUserRequest(user._id, updatedUser);
-            // Actualiza el estado de los usuarios después de actualizar el usuario
-            fetchUsers();
+
             setShowEditForm(false);
         } catch (error) {
             console.error(error);
@@ -129,7 +128,7 @@ function Pagina_crudUser() {
 
     return (
         <div>
-            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Nodos</h1>
+            <h1 style={{ textAlign: 'center', fontSize: '25px', backgroundColor: "#2A364E", color: 'white', marginBottom: "10px" }}>Gestión de Usuario</h1>
             <div>
                 <div style={{ display: 'flex', marginLeft: "50px", marginBottom: "5px" }}>
                     <form onSubmit={handleSearch}>
@@ -174,14 +173,7 @@ function Pagina_crudUser() {
                                         <button style={editbutton} onClick={() => handleEdit(index)}>
                                             <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
                                         </button>
-                                        {showEditForm && (
-                                            <FormEditarUser
-                                                user={user}
-                                                handleChange={handleChange}
-                                                handleSubmit={handleUpdate}
-                                                handleCancel={() => setShowEditForm(false)}
-                                            />
-                                        )}
+
                                         <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
                                             style={{ color: "white", fontSize: "24px" }} />
                                         </button>
@@ -191,6 +183,15 @@ function Pagina_crudUser() {
                         </tbody>
                     </table>
                 </div>
+                {showEditForm && (
+                    <FormEditarUser
+                        user={user}
+                        setUser={setUser}
+                        handleChange={handleChange}
+                        handleSubmit={handleUpdate}
+                        handleCancel={() => setShowEditForm(false)}
+                    />
+                )}
             </div>
         </div>
     )

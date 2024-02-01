@@ -2,10 +2,12 @@ const express = require('express');
 const port = 3000;
 const app = express();
 const bodyParser = require('body-parser');
-const nodoCrud = require('./routes/nodo_crud'); // CRUD para nodos
+const nodoCrud = require('./routes/nodo_crud');
 const mejorRuta = require('./routes/mejor_ruta');
 const sismoRouter = require('./routes/simularSismo');
-
+const token_notificacion = require('./routes/token_notificacion');
+const enviar_notificacion = require('./routes/notificacion');
+const comRouter = require('./routes/purtocom');
 const cors = require('cors');
 // 
 require('./db');
@@ -16,6 +18,22 @@ const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login 
 const requireToken = require('./Middlewares/AuthTokenRequired');
 const usuario_crud = require('./routes/usuario_crud'); // Ruta para el registro WEB
 const planemergencia_crud = require('./routes/planemergencia_crud'); // Ruta para el CRUD de planes de emergencia
+const brigadista_crud = require('./routes/brigadista_crud'); // Ruta para el CRUD de brigadistas
+
+// Crea el grafo al iniciar el api
+const { obtenerGrafo } = require('./utils/crear_grafo');
+async function iniciar() {
+    try {
+        console.log('Creando grafo...');
+        await obtenerGrafo();
+        console.log('Grafo creado con éxito');
+    } catch (error) {
+        console.error('Error al crear el grafo: ', error);
+        throw error;
+    }
+}
+iniciar();
+
 app.use(cors({
     // Páginas que pueden acceder al API
     origin: ['https://fredunl.unlmaps.com', 'http://localhost:5173']
@@ -30,8 +48,10 @@ app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2
 app.use('/planemergencia',planemergencia_crud);
 app.use(sismoRouter); // Simular sismo
-//
-
+app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
+app.use(token_notificacion); //Guardar token de notificaciones
+app.use(enviar_notificacion); // Enviar notificaciones
+app.use(comRouter); // lectura para puertos COM
 app.get('/', requireToken, (req, res) => {
     console.log(req.user);
     res.send(req.user);

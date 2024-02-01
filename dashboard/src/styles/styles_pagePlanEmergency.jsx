@@ -62,19 +62,6 @@ export const titulosStyle = {
 
 
 
-export const filaStyle = {
-    border: '1px solid #001933',
-    textAlign: 'center',
-};
-
-export const celdaStyle = {
-    border: '1px solid #001933',
-};
-
-export const celdaButtons = {
-    display: 'flex',
-    justifyContent: 'center',   
-};
 
 
 export const deletebutton = {
@@ -84,7 +71,7 @@ export const deletebutton = {
     padding: '6px',
     marginTop: '6px',
     marginBottom: '6px',
-    marginRight: '2px',
+    marginRight: '25px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -122,14 +109,7 @@ export const buttonBuscar = {
     marginRight: '10px',
 };
 
-export const buttonCrearNodo = {
-    width: '15%',
-    backgroundColor: '#2A364E',
-    borderRadius: '8px',
-    border: '1px solid #3E91E5',
-    color: 'white',
-    marginRight: '10px',
-};
+
 export const cancelbutton = {
     backgroundColor: '#FFD43B',
     borderRadius: '4px',

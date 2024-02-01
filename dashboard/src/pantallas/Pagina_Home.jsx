@@ -3,7 +3,7 @@ import Mapa from '../componentes/Mapa';
 import { readallNodoRequest } from '../api/auth';
 import edificioIcon from '../assets/location.svg';
 import meetingPoint from "../assets/meeting_point.svg";
-import rutaIcon from "../assets/red_pin.svg";
+import rutaIcon from "../assets/ruta.svg";
 
 
 function PaginaHome() {

@@ -22,7 +22,7 @@ export const formCrearNodo = {
 
 export const formEditarNodo = {
     //Estilos flotantes
-    position: 'absolute',
+    position: 'fixed',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -86,7 +86,6 @@ export const celdaButtons = {
 export const deletebutton = {
     backgroundColor: '#CE0000',
     borderRadius: '0px 6px 6px 0px', //Derecha
-    width: '95%',
     padding: '6px',
     marginTop: '6px',
     marginBottom: '6px',
@@ -99,7 +98,6 @@ export const deletebutton = {
 export const  editbutton = {
     backgroundColor: '#0D8419',
     borderRadius: '6px 0px 0px 6px',//Izquierda
-    width: '95%',
     padding: '6px',
     marginTop: '6px',
     marginBottom: '6px',

@@ -60,7 +60,7 @@ export default function MapaFlotante({nodos}) {
 
             // Llama a tu API y añade marcadores al mapa
             readallNodoRequest().then(response => {
-                console.log(response.data); // Para ver qué estás recibiendo
+                //console.log(response.data); // Para ver qué estás recibiendo
                 response.data.forEach(item => {
                     let icon;
                     switch (item.properties.tipo) {
@@ -108,7 +108,7 @@ export default function MapaFlotante({nodos}) {
             top: '50%', // Centra el mapa verticalmente
             left: '50%', // Centra el mapa horizontalmente
             transform: 'translate(-50%, -50%)', // Asegura que el mapa esté centrado
-            zIndex: 1000, // Asegura que el mapa esté por encima de otros elementos
+            zIndex: 2000, // Asegura que el mapa esté por encima de otros elementos
         }}>
             <div id="map-container" style={{
                 height: "440px",

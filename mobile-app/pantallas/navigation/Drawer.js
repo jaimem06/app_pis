@@ -7,7 +7,8 @@ import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
 import Puntos_Map from '../logged_pantallas/puntos';
-
+import Buscar_Ruta from '../logged_pantallas/busqueda_ruta';
+import * as SecureStore from 'expo-secure-store';
 
 const Drawer = createDrawerNavigator();
 
@@ -16,33 +17,46 @@ export function DrawerNavigation() {
     <Drawer.Navigator
       drawerContent={(props) => <MenuItems {...props} />}
     >
-      <Drawer.Screen name="Mapa" component={Home} />
+      <Drawer.Screen
+        name="Mapa"
+        component={Home}
+        options={{
+          headerStyle: {
+            backgroundColor: '#2A364E', //Color del header
+          },
+          headerTintColor: 'white',//Colot texto del header
+        }}
+      />
       <Drawer.Screen name="Brigadista" component={Info_Brigadista} />
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
-      <Drawer.Screen name = "Informacion" component={About_App} />
-      <Drawer.Screen name = "Puntos" component={Puntos_Map} />
+      <Drawer.Screen name="Informacion" component={About_App} />
+      <Drawer.Screen name="Puntos" component={Puntos_Map} />
+      <Drawer.Screen name="Buscar Ruta" component={Buscar_Ruta} />
     </Drawer.Navigator>
   );
 }
 
+
 const MenuItems = ({ navigation }) => {
+  const handlelogoutPress = async () => {
+    await SecureStore.deleteItemAsync('token');
+    console.log('Sesión cerrada');
+    navigation.navigate('login');
+  }
   return (
-    
+
     <DrawerContentScrollView
       style={styles.container}
     >
       <Text style={styles.title}>MENU FREDUNL</Text>
       <MenuButtonItem
         text="Ruta de Evacuación"
-        onPress={() => navigation.navigate('Mapa')} iconName="map-marker"
+        onPress={() => navigation.navigate('Mapa')} iconName="map-marker-minus"
       />
       <MenuButtonItem
-        text="Acerca de"
-        onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
+        text="Busqueda de Ruta"
+        onPress={() => navigation.navigate('Buscar Ruta')} iconName="map-marker-radius"
       />
-
-      
-
       <MenuButtonItem
         text="Brigadista"
         onPress={() => navigation.navigate('Brigadista')} iconName={"account-hard-hat"}
@@ -57,10 +71,14 @@ const MenuItems = ({ navigation }) => {
         text="Puntos"
         onPress={() => navigation.navigate('Puntos')} iconName="chart-bubble"
       />
-       <Text style={{marginTop: 25, marginBottom: 10, fontWeight: 'bold'}}>BOTONES:</Text>
+      <Text style={{ marginTop: 25, marginBottom: 10, fontWeight: 'bold' }}>BOTONES:</Text>
+      <MenuButtonItem
+        text="Acerca de"
+        onPress={() => navigation.navigate('Informacion')} iconName="information-outline"
+      />
       <MenuButtonItem
         text="Cerrar sesión"
-        onPress={() => navigation.navigate('login')} // Asume que 'Login' es el nombre de la ruta de la pantalla de inicio de sesión
+        onPress={handlelogoutPress} // Asume que 'Login' es el nombre de la ruta de la pantalla de inicio de sesión
         iconName="logout"
         buttonColor="#3C89C8"
       />
@@ -81,5 +99,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
- 
+
 })

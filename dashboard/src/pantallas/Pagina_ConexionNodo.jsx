@@ -112,7 +112,6 @@ function ConexionNodos() {
             }}>
                 <Mapa_Conexiones nodesConnected={nodesConnected} />
             </div>
-            {sismoData && <p>Magnitud del sismo simulado: {sismoData.magnitud}</p>}
         </div>
     );
 }
