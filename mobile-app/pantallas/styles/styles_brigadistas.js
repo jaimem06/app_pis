@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 export const facultades = [
     "Administración Central",
-    "Bienestar Universitario",
     "Educación a Distancia",
     "Agropecuaria y de Recursos Nat Renovables",
     "Energía, las Ind y los Recursos Nat No Renovables",
