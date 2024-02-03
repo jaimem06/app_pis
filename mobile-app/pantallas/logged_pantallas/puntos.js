@@ -1,5 +1,5 @@
 import APILinks from '../../directionsAPI';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
@@ -19,12 +19,36 @@ export default function Puntos_Map() {
         console.error(error);
       });
   }, []);
+  const mapRef = useRef(null);
+  useEffect(() => {
+    if (selectedValue !== "Seleccione una Facultad") {
+      axios.get(`${APILinks.URL_BuscarNodos}/${selectedValue}`)
+        .then(response => {
+          setNodos(response.data);
+
+          // Calcular la latitud y longitud promedio de los nodos
+          const averageLatitude = response.data.reduce((sum, nodo) => sum + nodo.geometry.coordinates[0], 0) / response.data.length;
+          const averageLongitude = response.data.reduce((sum, nodo) => sum + nodo.geometry.coordinates[1], 0) / response.data.length;
+
+          // Mover el mapa a la región promedio
+          mapRef.current.animateToRegion({
+            latitude: averageLatitude,
+            longitude: averageLongitude,
+            latitudeDelta: 0.005, // Valor más pequeño para un mayor zoom
+            longitudeDelta: 0.005,
+          }, 2000); // 3000 ms = 3 segundos
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  }, [selectedValue]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text style={{ paddingLeft: "12%", paddingRight: "12%", paddingTop: 4, borderRadius: 10, color: "#2A364E", fontSize: 18, fontWeight: "bold", borderColor: "#B3DFE8", borderWidth: 3 }}>Visualizar puntos registrados de:</Text>
       <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(true)}>
-        <Text style= {{color: "white", fontSize: 15}}>{selectedValue}</Text>
+        <Text style={{ color: "white", fontSize: 15 }}>{selectedValue}</Text>
       </TouchableOpacity>
 
       <Modal
@@ -35,9 +59,9 @@ export default function Puntos_Map() {
           setModalVisible(!modalVisible);
         }}
       >
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.centeredView}
-          activeOpacity={1} 
+          activeOpacity={1}
           onPressOut={() => setModalVisible(false)}
         >
           <View style={styles.modalView}>
@@ -53,7 +77,7 @@ export default function Puntos_Map() {
         </TouchableOpacity>
       </Modal>
 
-      <MapView
+      <MapView ref={mapRef}
         style={{ width: "90%", height: "80%" }}
         initialRegion={{
           latitude: -4.030385714368893,

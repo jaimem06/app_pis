@@ -8,5 +8,6 @@ const APILinks = {
     URL_Brigadista: `${BASE_URL}/brigadista/read_brigadista`,
     URL_ReadNodos: `${BASE_URL}/nodos/read_nodos`,
     URL_SaveToken: `${BASE_URL}/guardar_tokenNotification`,
+    URL_BuscarNodos: `${BASE_URL}/nodos/buscar_nodos`,
 };
   export default APILinks;
