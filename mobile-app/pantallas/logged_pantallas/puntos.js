@@ -1,9 +1,13 @@
 import APILinks from '../../directionsAPI';
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { options, styles } from '../styles/styles_selectFac';
+import { stylesVista } from '../styles/styles_puntos';
+import edificacionIcon from '../../assets/location.png';
+import pdeIcon from '../../assets/pde.png';
+import rutaIcon from '../../assets/route.png';
 
 export default function Puntos_Map() {
   const [nodos, setNodos] = useState([]);
@@ -34,9 +38,9 @@ export default function Puntos_Map() {
           mapRef.current.animateToRegion({
             latitude: averageLatitude,
             longitude: averageLongitude,
-            latitudeDelta: 0.005, // Valor más pequeño para un mayor zoom
-            longitudeDelta: 0.005,
-          }, 2000); // 3000 ms = 3 segundos
+            latitudeDelta: 0.004, // Valor más pequeño para un mayor zoom
+            longitudeDelta: 0.004,
+          }, 1200); // = 1.2 segundos
         })
         .catch(error => {
           console.error(error);
@@ -45,8 +49,8 @@ export default function Puntos_Map() {
   }, [selectedValue]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ paddingLeft: "12%", paddingRight: "12%", paddingTop: 4, borderRadius: 10, color: "#2A364E", fontSize: 18, fontWeight: "bold", borderColor: "#B3DFE8", borderWidth: 3 }}>Visualizar puntos registrados de:</Text>
+    <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <Text style={stylesVista.title_puntos}>Visualizar puntos registrados de:</Text>
       <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(true)}>
         <Text style={{ color: "white", fontSize: 15 }}>{selectedValue}</Text>
       </TouchableOpacity>
@@ -77,27 +81,47 @@ export default function Puntos_Map() {
         </TouchableOpacity>
       </Modal>
 
-      <MapView ref={mapRef}
-        style={{ width: "90%", height: "80%" }}
-        initialRegion={{
-          latitude: -4.030385714368893,
-          longitude: -79.19963418131871,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-        {nodos.map((nodo, index) => (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: nodo.geometry.coordinates[0],
-              longitude: nodo.geometry.coordinates[1],
-            }}
-            title={nodo.properties.nombre}
-            description={`ID: ${nodo._id}`}
-          />
-        ))}
-      </MapView>
+      <View style={{ width: "90%", height: "86%", borderRadius: 10, borderColor: '#B3DFE8', borderWidth: 5 }}>
+        <MapView ref={mapRef}
+          style={{ flex: 1 }}
+          initialRegion={{
+            latitude: -4.030385714368893,
+            longitude: -79.19963418131871,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          {nodos.map((nodo, index) => {
+            let icon;
+            switch (nodo.properties.tipo) {
+              case 'Edificacion':
+                icon = edificacionIcon;
+                break;
+              case 'PDE':
+                icon = pdeIcon;
+                break;
+              case 'Ruta':
+                icon = rutaIcon;
+                break;
+              default:
+                icon = null;
+            }
+
+            return (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: nodo.geometry.coordinates[0],
+                  longitude: nodo.geometry.coordinates[1],
+                }}
+                title={nodo.properties.nombre}
+                description={`Facultad: ${nodo.properties.facultad}`}
+                image={icon}
+              />
+            );
+          })}
+        </MapView>
+      </View>
     </View>
   );
 }
