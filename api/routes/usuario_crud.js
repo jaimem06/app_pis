@@ -44,11 +44,23 @@ router.get('/user/:id', async (req, res) => {
     res.json(user);
 })
 
-router.get('/read_users', async (req, res) => {
-    const user = await User.find();
-    res.send(user);
-  });
 
+
+router.get('/read_users', async (req, res) => {
+    const { nombre, email, rol } = req.query;
+    let query = {};
+    if (nombre) {
+        query.nombre = nombre;
+    }
+    if (email) {
+        query.email = email;
+    }
+    if (rol) {
+        query.rol = rol;
+    }
+    const users = await User.find(query);
+    res.json(users);
+});
 // Actualizar usuario
 router.put('/user/:id', async (req, res) => {
     const { id } = req.params;
