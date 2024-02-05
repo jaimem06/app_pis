@@ -5,9 +5,6 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { options, styles } from '../styles/styles_selectFac';
 import { stylesVista } from '../styles/styles_puntos';
-import edificacionIcon from '../../assets/location.png';
-import pdeIcon from '../../assets/pde.png';
-import rutaIcon from '../../assets/route.png';
 
 export default function Puntos_Map() {
   const [nodos, setNodos] = useState([]);
@@ -23,24 +20,24 @@ export default function Puntos_Map() {
         console.error(error);
       });
   }, []);
+
   const mapRef = useRef(null);
+
   useEffect(() => {
     if (selectedValue !== "Seleccione una Facultad") {
       axios.get(`${APILinks.URL_BuscarNodos}/${selectedValue}`)
         .then(response => {
           setNodos(response.data);
 
-          // Calcular la latitud y longitud promedio de los nodos
           const averageLatitude = response.data.reduce((sum, nodo) => sum + nodo.geometry.coordinates[0], 0) / response.data.length;
           const averageLongitude = response.data.reduce((sum, nodo) => sum + nodo.geometry.coordinates[1], 0) / response.data.length;
 
-          // Mover el mapa a la región promedio
           mapRef.current.animateToRegion({
             latitude: averageLatitude,
             longitude: averageLongitude,
-            latitudeDelta: 0.004, // Valor más pequeño para un mayor zoom
-            longitudeDelta: 0.004,
-          }, 1200); // = 1.2 segundos
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.001,
+          }, 1200);
         })
         .catch(error => {
           console.error(error);
@@ -91,35 +88,18 @@ export default function Puntos_Map() {
             longitudeDelta: 0.0421,
           }}
         >
-          {nodos.map((nodo, index) => {
-            let icon;
-            switch (nodo.properties.tipo) {
-              case 'Edificacion':
-                icon = edificacionIcon;
-                break;
-              case 'PDE':
-                icon = pdeIcon;
-                break;
-              case 'Ruta':
-                icon = rutaIcon;
-                break;
-              default:
-                icon = null;
-            }
-
-            return (
-              <Marker
-                key={index}
-                coordinate={{
-                  latitude: nodo.geometry.coordinates[0],
-                  longitude: nodo.geometry.coordinates[1],
-                }}
-                title={nodo.properties.nombre}
-                description={`Facultad: ${nodo.properties.facultad}`}
-                image={icon}
-              />
-            );
-          })}
+          { nodos.map((nodo, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: nodo.geometry.coordinates[0],
+                longitude: nodo.geometry.coordinates[1],
+              }}
+              title={nodo.properties.nombre}
+              description={`Facultad: ${nodo.properties.facultad}`}
+              pinColor="#B3DFE8" // Cambia esto al color que prefieras
+            />
+          ))}
         </MapView>
       </View>
     </View>
