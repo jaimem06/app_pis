@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const nodoCrud = require('./routes/nodo_crud');
 const mejorRuta = require('./routes/mejor_ruta');
-const sismoRouter = require('./routes/simularSismo');
+const { simularSismo } = require('./routes/simularSismo');
 const token_notificacion = require('./routes/token_notificacion');
 const enviar_notificacion = require('./routes/notificacion');
 const openPort = require('./routes/purtocom').openPort;
@@ -35,7 +35,11 @@ async function iniciar() {
 iniciar();
 
 // Llama a la función openPort cada 10 segundos
-setInterval(() => openPort(), 10000);
+setInterval(async () => {
+    openPort();
+    const sismo = await simularSismo();
+    console.log(sismo);
+}, 10000);
 
 app.use(cors({
     // Páginas que pueden acceder al API
@@ -50,7 +54,6 @@ app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2
 app.use('/planemergencia',planemergencia_crud);
-app.use(sismoRouter); // Simular sismo
 app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
 app.use(token_notificacion); //Guardar token de notificaciones
 app.use(enviar_notificacion); // Enviar notificaciones

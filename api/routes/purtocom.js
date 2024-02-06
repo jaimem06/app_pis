@@ -1,3 +1,5 @@
+let receiveDato = null; // Variable para guardar los datos recibidos
+
 const SerialPort = require('serialport').SerialPort;
 const Readline = require('@serialport/parser-readline').ReadlineParser;
 
@@ -12,7 +14,8 @@ port.pipe(parser);
 
 // Agrega un manejador de eventos para el evento 'data'
 parser.on('data', data => {
-    console.log('Datos recibidos:', data);
+    console.log('Magnitud:', data);
+    receiveDato = data; // Guarda los datos recibidos en la variable
 });
 
 // Función para abrir el puerto
@@ -29,5 +32,7 @@ function openPort() {
 }
 
 module.exports = {
-    openPort: openPort
+    openPort: openPort,
+    // Exporta la variable como una función para obtener los datos recibidos
+    receiveDato: () => receiveDato 
 };
