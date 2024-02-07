@@ -4,7 +4,7 @@ const SerialPort = require('serialport').SerialPort;
 const Readline = require('@serialport/parser-readline').ReadlineParser;
 
 const port = new SerialPort({
-    path: 'COM2',
+    path: 'COM6',
     baudRate: 9600,
     autoOpen: false // No abrir puerto automáticamente al crear la instancia de SerialPort
 });
@@ -14,7 +14,7 @@ port.pipe(parser);
 
 // Agrega un manejador de eventos para el evento 'data'
 parser.on('data', data => {
-    console.log('Magnitud:', data);
+    //console.log('Magnitud:', data);
     receiveDato = data; // Guarda los datos recibidos en la variable
 });
 

@@ -12,7 +12,6 @@ export const formCrearNodo = {
     alignItems: 'left',
     border: '1px solid white',
     padding: '20px',
-    marginTop: '20px',
     backgroundColor: '#2A364E',
     width: '30%',
     margin: '0 auto',
@@ -22,7 +21,7 @@ export const formCrearNodo = {
 
 export const formEditarNodo = {
     //Estilos flotantes
-    position: 'fixed',
+    position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -33,10 +32,8 @@ export const formEditarNodo = {
     alignItems: 'left',
     border: '1px solid white',
     padding: '20px',
-    marginTop: '20px',
     backgroundColor: '#38576e',
     width: '30%',
-    margin: '0 auto',
     borderRadius: '10px',
     fontSize: '15px'
 };
@@ -63,7 +60,6 @@ export const titulosStyle = {
 
 export const tablaStyle = {
     backgroundColor: '#8BB6E2',
-    margin: '0 auto',
     fontSize: '15px',
     color: 'black',
 };

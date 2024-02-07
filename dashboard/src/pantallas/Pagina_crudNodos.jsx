@@ -1,6 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { readallNodoRequest } from '../api/auth';
 import { AiFillDelete, AiFillEdit, AiOutlineSearch, AiTwotoneEnvironment } from "react-icons/ai";
 import MapaFlotante from '../componentes/MapaFlotante';
 import {
@@ -9,7 +7,6 @@ import {
 } from '../styles/styles_pageNodo';
 import FormAddNodo from '../pantallas/forms/Form_CrearNodo';
 import FormEditarNodo from '../pantallas/forms/Form_EditNodo'
-import { formEditarBrigadista } from '../styles/styles_brigadista';
 import { useNodos } from '../contexto/nodoContext';
 
 const Pagina_crudNodos = () => {
@@ -65,7 +62,7 @@ const Pagina_crudNodos = () => {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{ overflow: 'auto', height: '500px' }}> {/* Ajusta la altura según tus necesidades */}
+                <div style={{ overflow: 'auto', height: '550px' }}> {/* Ajusta la altura según tus necesidades */}
                     <table style={tablaStyle}>
                         <thead>
                             <tr style={filaStyle}>
@@ -100,7 +97,6 @@ const Pagina_crudNodos = () => {
                     </table>
                 </div>
                 {showEditForm && (
-                    <div style={formEditarNodo}>
                         <FormEditarNodo
                             nodo={nodo}
                             setNodo={setNodo}
@@ -108,7 +104,6 @@ const Pagina_crudNodos = () => {
                             handleSubmit={handleUpdate}
                             handleCancel={() => setShowEditForm(false)}
                         />
-                    </div>
                 )}
             </div>
         </div>

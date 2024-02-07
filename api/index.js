@@ -34,12 +34,13 @@ async function iniciar() {
 }
 iniciar();
 
-// Llama a la función openPort cada 10 segundos
+// Llama a la función openPort cada 1 segundos
 setInterval(async () => {
     openPort();
     const sismo = await simularSismo();
     console.log(sismo);
-}, 10000);
+//Pa que no este jodiendo
+}, 1000000); // Cada mil segundos = 16.6 minutos
 
 app.use(cors({
     // Páginas que pueden acceder al API
@@ -53,8 +54,8 @@ app.use(usuario_crud);
 app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
 app.use(mejorRuta); //Version 2
-app.use('/planemergencia',planemergencia_crud);
-app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
+app.use('/planemergencia', planemergencia_crud);
+app.use('/brigadista', brigadista_crud); // CRUD para brigadistas
 app.use(token_notificacion); //Guardar token de notificaciones
 app.use(enviar_notificacion); // Enviar notificaciones
 app.get('/', requireToken, (req, res) => {

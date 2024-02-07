@@ -34,7 +34,7 @@ const FormRegisterUser = ({ handleChange, handleSubmit, handleCancel }) => {
                 ))}
             </select>
             <label style={titulosStyle}>Date of Birth:</label>
-            <input style={inputStyle} type="text" name="dob" onChange={handleChange} placeholder="Date of Birth" required />
+            <input style={inputStyle} type="date" name="dob" onChange={handleChange} placeholder="Date of Birth" required />
             
             <div style={buttonsForm}>
                 <button style={cancelbutton} type="button" onClick={handleCancel}>Cancelar</button>

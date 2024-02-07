@@ -5,11 +5,17 @@ const { receiveDato } = require('./purtocom');
 // Crear una nueva instancia de Expo
 let expo = new Expo();
 let notificationSent = false;
+let lastMagnitude = null;
 
 async function simularSismo() {
     const magnitud = parseFloat(receiveDato());
 
-    // Si la magnitud es mayor a 5, enviar notificación
+    // Si la magnitud es la misma que la última vez, no hacer nada
+    if (magnitud === lastMagnitude) {
+        return { magnitud };
+    }
+
+    // Si la magnitud es mayor a 5 y la notificación aún no se ha enviado, enviar notificación
     if (magnitud >= 5 && !notificationSent) {
         try {
             // Obténer los tokens de la base de datos
@@ -37,11 +43,10 @@ async function simularSismo() {
 
             let chunks = expo.chunkPushNotifications(messages);
 
-            let tickets = [];
             for (let chunk of chunks) {
                 try {
                     let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                    tickets.push(...ticketChunk);
+                    console.log(ticketChunk);
                 } catch (error) {
                     console.error('Error al enviar notificaciones', error);
                     return;
@@ -49,7 +54,7 @@ async function simularSismo() {
             }
 
             console.log('Notificaciones enviadas con éxito');
-            notificationSent = true;
+            notificationSent = true; // Marca que la notificación ya se envió
         } catch (e) {
             console.error('Error al enviar notificaciones', e);
             return;
@@ -60,6 +65,9 @@ async function simularSismo() {
     if (magnitud <= 5) {
         notificationSent = false;
     }
+
+    // Guardar la magnitud para la próxima vez
+    lastMagnitude = magnitud;
 
     return { magnitud };
 }
