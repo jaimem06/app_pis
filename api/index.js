@@ -13,6 +13,7 @@ const cors = require('cors');
 require('./db');
 require('./models/user');
 //
+const recuperarCuenta = require('./routes/recuperar_cuenta');
 const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el login MOBILE
 const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
 const requireToken = require('./Middlewares/AuthTokenRequired');
@@ -58,6 +59,7 @@ app.use('/planemergencia', planemergencia_crud);
 app.use('/brigadista', brigadista_crud); // CRUD para brigadistas
 app.use(token_notificacion); //Guardar token de notificaciones
 app.use(enviar_notificacion); // Enviar notificaciones
+app.use(recuperarCuenta); // Recuperar cuenta
 app.get('/', requireToken, (req, res) => {
     console.log(req.user);
     res.send(req.user);

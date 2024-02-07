@@ -62,48 +62,50 @@ const Pagina_crudNodos = () => {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{ overflow: 'auto', height: '550px' }}> {/* Ajusta la altura según tus necesidades */}
-                    <table style={tablaStyle}>
-                        <thead>
-                            <tr style={filaStyle}>
-                                <th>Nombre</th>
-                                <th>Facultad</th>
-                                <th>Coordenadas</th>
-                                <th>Tipo</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {nodos.map((nodo, index) => (
-                                <tr style={filaStyle} key={index}>
-                                    <td style={celdaStyle}>{nodo.properties.nombre}</td>
-                                    <td style={celdaStyle}>{nodo.properties.facultad}</td>
-                                    <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
-                                    <td style={celdaStyle}>{nodo.properties.tipo}</td>
-                                    <td style={celdaButtons}>
-                                        <button style={editbutton} onClick={() => handleEdit(index)}>
-                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
-                                        </button>
-
-                                        <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                            style={{ color: "white", fontSize: "24px" }} />
-                                        </button>
-                                    </td>
+                <div style={{ display: 'flex', justifyContent: 'center', height: '85vh' }}>
+                    <div style={{ overflow: 'auto', height: 'auto' }}>
+                        <table style={tablaStyle}>
+                            <thead>
+                                <tr style={filaStyle}>
+                                    <th>Nombre</th>
+                                    <th>Facultad</th>
+                                    <th>Coordenadas</th>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {nodos.map((nodo, index) => (
+                                    <tr style={filaStyle} key={index}>
+                                        <td style={celdaStyle}>{nodo.properties.nombre}</td>
+                                        <td style={celdaStyle}>{nodo.properties.facultad}</td>
+                                        <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
+                                        <td style={celdaStyle}>{nodo.properties.tipo}</td>
+                                        <td style={celdaButtons}>
+                                            <button style={editbutton} onClick={() => handleEdit(index)}>
+                                                <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
+                                            </button>
 
-                            ))}
+                                            <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                                style={{ color: "white", fontSize: "24px" }} />
+                                            </button>
+                                        </td>
+                                    </tr>
 
-                        </tbody>
-                    </table>
+                                ))}
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {showEditForm && (
-                        <FormEditarNodo
-                            nodo={nodo}
-                            setNodo={setNodo}
-                            handleChange={handleChange}
-                            handleSubmit={handleUpdate}
-                            handleCancel={() => setShowEditForm(false)}
-                        />
+                    <FormEditarNodo
+                        nodo={nodo}
+                        setNodo={setNodo}
+                        handleChange={handleChange}
+                        handleSubmit={handleUpdate}
+                        handleCancel={() => setShowEditForm(false)}
+                    />
                 )}
             </div>
         </div>
