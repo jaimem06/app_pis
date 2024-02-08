@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
@@ -53,7 +52,7 @@ router.post('/recuperar_cuenta', async (req, res) => {
         res.send({ message: 'Se ha enviado un correo electrónico con más instrucciones.' });
     });
 });
-
+// Para restablecer la contraseña del usuario con el token
 router.post('/reset/:token', async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
@@ -64,9 +63,8 @@ router.post('/reset/:token', async (req, res) => {
         return res.status(400).send('El token de restablecimiento de contraseña es inválido o ha vencido');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    user.password = hashedPassword;
+    // Asigna la nueva contraseña, el middleware se encargará de hashearla
+    user.password = password;
     user.TokenrecuperarCuenta = undefined;
     user.TokenVencimiento = undefined;
 

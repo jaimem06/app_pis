@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const nodoCrud = require('./routes/nodo_crud');
 const mejorRuta = require('./routes/mejor_ruta');
 const { simularSismo } = require('./routes/simularSismo');
+const buscar_nodoCercano = require('./routes/buscar_ncercano');
 const token_notificacion = require('./routes/token_notificacion');
 const enviar_notificacion = require('./routes/notificacion');
 const openPort = require('./routes/purtocom').openPort;
@@ -54,6 +55,7 @@ app.use(auth_login_web);
 app.use(usuario_crud);
 app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
+app.use(buscar_nodoCercano); // Buscar nodo más cercano
 app.use(mejorRuta); //Version 2
 app.use('/planemergencia', planemergencia_crud);
 app.use('/brigadista', brigadista_crud); // CRUD para brigadistas
