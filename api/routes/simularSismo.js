@@ -16,7 +16,7 @@ async function simularSismo() {
     }
 
     // Si la magnitud es mayor a 5 y la notificación aún no se ha enviado, enviar notificación
-    if (magnitud >= 5 && !notificationSent) {
+    if (magnitud >= 5&& !notificationSent) {
         try {
             // Obténer los tokens de la base de datos
             const tokens = await PushTokenSchema.find();
@@ -62,7 +62,7 @@ async function simularSismo() {
     }
 
     // Si la magnitud es menor o igual a 5, reinicia la variable de control
-    if (magnitud <= 5) {
+    if (magnitud < 5 ) {
         notificationSent = false;
     }
 
