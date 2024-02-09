@@ -1,16 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ScrollView, Image, TouchableOpacity, Text, View} from 'react-native';
+import { ScrollView, Image, TouchableOpacity, Text, View } from 'react-native';
 import styles from '../styles/styleshome';
 import MapView, { Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
 import { calcularRuta } from '../../components/calcularRuta';
 import MarkerRuta from '../../components/markerRuta';
+import CustomPicker from '../../components/select_nodos';
+import APILinks from '../../directionsAPI';
 
 const Home = () => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
+  const [selectedNodo, setSelectedNodo] = useState(null); // Estado para el nodo seleccionado
+  const [nodos, setNodos] = useState([]); // Estado para todos los nodos
 
   useEffect(() => {
+    // Obtiene todos los nodos disponibles de la base de datos
+    fetch(APILinks.URL_ReadNodos)
+      .then(response => response.json())
+      .then(data => setNodos(data.map(nodo => nodo.properties.nombre))) // Accede a la propiedad properties.nombre
+      .catch(error => console.error(error));
+
     // Calcula la ruta inmediatamente al montar el componente
     calcularRuta(setMarkers);
 
@@ -33,6 +43,12 @@ const Home = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#2A364E" }}>
+      <CustomPicker
+        style={{ margin: 40 }}
+        data={nodos.filter(Boolean)} // Filtra los nodos para eliminar los valores undefined
+        selectedValue={selectedNodo || ''} // Usa una cadena vacía como valor predeterminado si selectedNodo es undefined
+        onValueChange={(itemValue) => setSelectedNodo(itemValue)}
+      />
       <TouchableOpacity
         style={styles.buscarButton}
         onPress={() => calcularRuta(setMarkers)}
