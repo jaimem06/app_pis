@@ -15,10 +15,15 @@ const Home = () => {
   const [nodos, setNodos] = useState([]); // Estado para todos los nodos
 
   useEffect(() => {
-    // Obtiene todos los nodos disponibles de la base de datos
     fetch(APILinks.URL_ReadNodos)
       .then(response => response.json())
-      .then(data => setNodos(data.map(nodo => nodo.properties.nombre))) // Accede a la propiedad properties.nombre
+      .then(data => {
+        const nodosEdificacion = data
+          // Filtra los nodos para incluir solo los de tipo 'Edificacion'
+          .filter(nodo => nodo.properties.tipo === 'Edificacion')
+          .map(nodo => nodo.properties.nombre);
+        setNodos(nodosEdificacion);
+      })
       .catch(error => console.error(error));
 
     // Calcula la ruta inmediatamente al montar el componente
@@ -42,20 +47,33 @@ const Home = () => {
   }, [markers]);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#2A364E" }}>
-      <CustomPicker
-        style={{ margin: 40 }}
-        data={nodos.filter(Boolean)} // Filtra los nodos para eliminar los valores undefined
-        selectedValue={selectedNodo || ''} // Usa una cadena vacía como valor predeterminado si selectedNodo es undefined
-        onValueChange={(itemValue) => setSelectedNodo(itemValue)}
-      />
-      <TouchableOpacity
-        style={styles.buscarButton}
-        onPress={() => calcularRuta(setMarkers)}
-      >
-        <Text style={styles.buscarText}>Buscar zona segura cercana </Text>
-        <Image source={puntoEncuentro} style={{ width: 25, height: 25 }} />
-      </TouchableOpacity>
+    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: "#2A364E" }}>
+      <View style={{ alignItems: 'center' }}>
+        <TouchableOpacity
+          style={styles.buscarButton}
+          onPress={() => calcularRuta(setMarkers)}
+        >
+          <Text style={styles.buscarText}>Buscar zona segura cercana </Text>
+          <Image source={puntoEncuentro} style={{ width: 25, height: 25 }} />
+        </TouchableOpacity>
+        <Text style={{ color: "white", margin: "1%", fontSize: 13}}>TAMBIÉN PUEDES BUSCAR DESDE UN PUNTO ESPECÍFICO</Text>
+      </View>
+      <View style={{ flexDirection: 'row', margin: "1%", alignItems: "center", justifyContent: 'center' }}>
+        <CustomPicker
+          data={nodos.filter(Boolean)} // Filtra los nodos para eliminar los valores undefined
+          selectedValue={selectedNodo || ''} // Usa una cadena vacía como valor predeterminado si selectedNodo es undefined
+          onValueChange={(itemValue) => setSelectedNodo(itemValue)}
+        />
+        <View style={{ alignItems: 'center', margin: 4 }}>
+          <Text style={{ color: 'white', fontSize: 10 }}>¿No conoces tu ubicación?</Text>
+          <TouchableOpacity
+            style={{ width: "100%", height: 22, backgroundColor: 'blue', borderRadius: 10, justifyContent: 'center' }}
+            onPress={() => console.log('Botón presionado')}
+          >
+            <Text style={{ color: 'white', textAlign: 'center', fontSize: 12 }}>Buscar mi ubicación</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <View style={styles.mapViewContainer}>
         <MapView
           ref={mapRef}
@@ -77,12 +95,15 @@ const Home = () => {
           />
         </MapView>
       </View>
-      <View style={styles.infoRuta}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <Text style={{ padding: 10, textAlign: "justify", color: 'white' }}>
-            {'Debes pasar por los siguientes puntos:\n' + markers.map((marker, index) => `${index + 1}. ${marker.nombre}`).join('\n')}
-          </Text>
-        </ScrollView>
+      <View style={{ alignItems: 'center', height: "15%" }}>
+        <View style={styles.infoRuta}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <Text style={{ padding: 10, textAlign: "justify", color: 'white' }}>
+              {'Debes pasar por los siguientes puntos:\n' + markers.map((marker, index) => `${index + 1}. ${marker.nombre}`).join('\n')}
+              {'\nDistancia total: ' + markers.reduce((total, marker) => total + marker.distancia, 0) + ' metros'}
+            </Text>
+          </ScrollView>
+        </View>
       </View>
     </View>
   );
