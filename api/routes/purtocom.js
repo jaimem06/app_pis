@@ -1,26 +1,41 @@
-const express = require('express');
-const router = express.Router();
-const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline');
+let receiveDato = null; // Variable para guardar los datos recibidos
 
-router.get('/com', (req, res) => {
-    const port = new SerialPort('COM3', {
-        baudRate: 9600
-    });
+const SerialPort = require('serialport').SerialPort;
+const Readline = require('@serialport/parser-readline').ReadlineParser;
 
-    const parser = port.pipe(new Readline({ delimiter: '\r\n' }));
-
-    parser.on('data', data => {
-        console.log(data);
-        // Aquí puedes manipular los datos recibidos
-    });
-
-    port.write('Hola, mundo!\n', error => {
-        if (error) {
-            return res.status(500).send({ error: error.message });
-        }
-        res.send({ message: 'Mensaje enviado' });
-    });
+const port = new SerialPort({
+    path: 'COM11',
+    baudRate: 9600,
+    autoOpen: false // No abrir puerto automáticamente al crear la instancia de SerialPort
 });
 
-module.exports = router;
+const parser = new Readline();
+port.pipe(parser);
+
+// Agrega un manejador de eventos para el evento 'data'
+parser.on('data', data => {
+    //console.log('Magnitud:', data);
+    receiveDato = data; // Guarda los datos recibidos en la variable
+    
+}
+
+);
+
+// Función para abrir el puerto
+function openPort() {
+    if (!port.isOpen) {
+        port.open(error => {
+            if (error) {
+                console.error(error.message);
+                return;
+            }
+            console.log('Puerto listo...');
+        });
+    }
+}
+
+module.exports = {
+    openPort: openPort,
+    // Exporta la variable como una función para obtener los datos recibidos
+    receiveDato: () => receiveDato 
+};

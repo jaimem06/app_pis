@@ -1,18 +1,22 @@
-// sismo.js
-const express = require('express');
-const router = express.Router();
 const { Expo } = require('expo-server-sdk');
 const PushTokenSchema = require('../models/notificacion_token');
+const { receiveDato } = require('./purtocom');
 
 // Crear una nueva instancia de Expo
 let expo = new Expo();
+let notificationSent = false;
+let lastMagnitude = null;
 
-router.post('/simular_sismo', async (req, res) => {
-    // Número aleatorio entre 1 y 10 con dos decimales
-    const magnitud = (Math.random() * 9 + 1).toFixed(2); 
+async function simularSismo() {
+    const magnitud = parseFloat(receiveDato());
 
-    // Si la magnitud es mayor a 3, enviar notificación
-    if (magnitud > 5) {
+    // Si la magnitud es la misma que la última vez, no hacer nada
+    if (magnitud === lastMagnitude) {
+        return { magnitud };
+    }
+
+    // Si la magnitud es mayor a 5 y la notificación aún no se ha enviado, enviar notificación
+    if (magnitud >= 5&& !notificationSent) {
         try {
             // Obténer los tokens de la base de datos
             const tokens = await PushTokenSchema.find();
@@ -37,29 +41,37 @@ router.post('/simular_sismo', async (req, res) => {
                 });
             }
 
-            let chunks = expo.chunkItems(messages);
+            let chunks = expo.chunkPushNotifications(messages);
 
-            let tickets = [];
             for (let chunk of chunks) {
                 try {
                     let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                    tickets.push(...ticketChunk);
+                    console.log(ticketChunk);
                 } catch (error) {
                     console.error('Error al enviar notificaciones', error);
-                    res.status(500).send({ success: false, message: 'Error al enviar notificaciones' });
                     return;
                 }
             }
 
             console.log('Notificaciones enviadas con éxito');
+            notificationSent = true; // Marca que la notificación ya se envió
         } catch (e) {
             console.error('Error al enviar notificaciones', e);
-            res.status(500).send({ success: false, message: 'Error al enviar notificaciones' });
             return;
         }
     }
 
-    res.json({ magnitud });
-});
+    // Si la magnitud es menor o igual a 5, reinicia la variable de control
+    if (magnitud < 5 ) {
+        notificationSent = false;
+    }
 
-module.exports = router;
+    // Guardar la magnitud para la próxima vez
+    lastMagnitude = magnitud;
+
+    return { magnitud };
+}
+
+module.exports = {
+    simularSismo
+};

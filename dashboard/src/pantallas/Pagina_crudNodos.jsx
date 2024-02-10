@@ -1,6 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { readallNodoRequest } from '../api/auth';
 import { AiFillDelete, AiFillEdit, AiOutlineSearch, AiTwotoneEnvironment } from "react-icons/ai";
 import MapaFlotante from '../componentes/MapaFlotante';
 import {
@@ -9,7 +7,6 @@ import {
 } from '../styles/styles_pageNodo';
 import FormAddNodo from '../pantallas/forms/Form_CrearNodo';
 import FormEditarNodo from '../pantallas/forms/Form_EditNodo'
-import { formEditarBrigadista } from '../styles/styles_brigadista';
 import { useNodos } from '../contexto/nodoContext';
 
 const Pagina_crudNodos = () => {
@@ -65,50 +62,50 @@ const Pagina_crudNodos = () => {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{ overflow: 'auto', height: '500px' }}> {/* Ajusta la altura según tus necesidades */}
-                    <table style={tablaStyle}>
-                        <thead>
-                            <tr style={filaStyle}>
-                                <th>Nombre</th>
-                                <th>Facultad</th>
-                                <th>Coordenadas</th>
-                                <th>Tipo</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {nodos.map((nodo, index) => (
-                                <tr style={filaStyle} key={index}>
-                                    <td style={celdaStyle}>{nodo.properties.nombre}</td>
-                                    <td style={celdaStyle}>{nodo.properties.facultad}</td>
-                                    <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
-                                    <td style={celdaStyle}>{nodo.properties.tipo}</td>
-                                    <td style={celdaButtons}>
-                                        <button style={editbutton} onClick={() => handleEdit(index)}>
-                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
-                                        </button>
-
-                                        <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                            style={{ color: "white", fontSize: "24px" }} />
-                                        </button>
-                                    </td>
+                <div style={{ display: 'flex', justifyContent: 'center', height: '85vh' }}>
+                    <div style={{ overflow: 'auto', height: 'auto' }}>
+                        <table style={tablaStyle}>
+                            <thead>
+                                <tr style={filaStyle}>
+                                    <th>Nombre</th>
+                                    <th>Facultad</th>
+                                    <th>Coordenadas</th>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {nodos.map((nodo, index) => (
+                                    <tr style={filaStyle} key={index}>
+                                        <td style={celdaStyle}>{nodo.properties.nombre}</td>
+                                        <td style={celdaStyle}>{nodo.properties.facultad}</td>
+                                        <td style={celdaStyle}>{nodo.geometry.coordinates.join(', ')}</td>
+                                        <td style={celdaStyle}>{nodo.properties.tipo}</td>
+                                        <td style={celdaButtons}>
+                                            <button style={editbutton} onClick={() => handleEdit(index)}>
+                                                <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
+                                            </button>
 
-                            ))}
+                                            <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                                style={{ color: "white", fontSize: "24px" }} />
+                                            </button>
+                                        </td>
+                                    </tr>
 
-                        </tbody>
-                    </table>
+                                ))}
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {showEditForm && (
-                    <div style={formEditarNodo}>
-                        <FormEditarNodo
-                            nodo={nodo}
-                            setNodo={setNodo}
-                            handleChange={handleChange}
-                            handleSubmit={handleUpdate}
-                            handleCancel={() => setShowEditForm(false)}
-                        />
-                    </div>
+                    <FormEditarNodo
+                        nodo={nodo}
+                        setNodo={setNodo}
+                        handleChange={handleChange}
+                        handleSubmit={handleUpdate}
+                        handleCancel={() => setShowEditForm(false)}
+                    />
                 )}
             </div>
         </div>

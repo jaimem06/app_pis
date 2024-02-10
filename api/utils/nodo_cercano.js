@@ -9,17 +9,17 @@ const buscarNodoMasCercano = async (inicio) => {
                     $geometry: {
                         type: "Point",
                         coordinates: coords
-                    }
+                    },
+                    //Valida que el nodo esté a menos de 100 metros de distancia
+                    $maxDistance: 50
                 }
             }
         });
 
         if (!nodo) {
-            throw new Error('No se encontró ningún nodo cercano');
+            throw new Error('Estás fuera del campus');
         }
-
         //console.log('Nodo más cercano:', nodo);
-
         return nodo;
     } catch (error) {
         console.error(error);

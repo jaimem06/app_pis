@@ -4,15 +4,17 @@ const app = express();
 const bodyParser = require('body-parser');
 const nodoCrud = require('./routes/nodo_crud');
 const mejorRuta = require('./routes/mejor_ruta');
-const sismoRouter = require('./routes/simularSismo');
+const { simularSismo } = require('./routes/simularSismo');
+const buscar_nodoCercano = require('./routes/buscar_ncercano');
 const token_notificacion = require('./routes/token_notificacion');
 const enviar_notificacion = require('./routes/notificacion');
-const comRouter = require('./routes/purtocom');
+const openPort = require('./routes/purtocom').openPort;
 const cors = require('cors');
 // 
 require('./db');
 require('./models/user');
 //
+const recuperarCuenta = require('./routes/recuperar_cuenta');
 const auth_login_mobile = require('./routes/authlogin_mobile'); // Ruta para el login MOBILE
 const auth_login_web = require('./routes/authlogin_web'); // Ruta para el login WEB
 const requireToken = require('./Middlewares/AuthTokenRequired');
@@ -34,6 +36,14 @@ async function iniciar() {
 }
 iniciar();
 
+// Llama a la función openPort cada 1 segundos
+setInterval(async () => {
+    openPort();
+    const sismo = await simularSismo();
+    console.log(sismo);
+//Pa que no este jodiendo
+}, 1000); // Cada mil segundos = 16.6 minutos
+
 app.use(cors({
     // Páginas que pueden acceder al API
     origin: ['https://fredunl.unlmaps.com', 'http://localhost:5173']
@@ -45,13 +55,13 @@ app.use(auth_login_web);
 app.use(usuario_crud);
 app.use(express.json());
 app.use('/nodos', nodoCrud); // Dirección para CRUD de nodos
+app.use(buscar_nodoCercano); // Buscar nodo más cercano
 app.use(mejorRuta); //Version 2
-app.use('/planemergencia',planemergencia_crud);
-app.use(sismoRouter); // Simular sismo
-app.use('/brigadista',brigadista_crud); // CRUD para brigadistas
+app.use('/planemergencia', planemergencia_crud);
+app.use('/brigadista', brigadista_crud); // CRUD para brigadistas
 app.use(token_notificacion); //Guardar token de notificaciones
 app.use(enviar_notificacion); // Enviar notificaciones
-app.use(comRouter); // lectura para puertos COM
+app.use(recuperarCuenta); // Recuperar cuenta
 app.get('/', requireToken, (req, res) => {
     console.log(req.user);
     res.send(req.user);

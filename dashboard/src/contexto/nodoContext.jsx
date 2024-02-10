@@ -179,8 +179,8 @@ export const useNodos = () => {
         handleSearch,
         handleEdit,
         handleUpdate,
-        showEditForm, 
-        setShowEditForm, 
+        showEditForm,
+        setShowEditForm,
         nodo,
         setNodo
     };

@@ -49,7 +49,7 @@ function Pagina_crudUser() {
             setShowForm(false);
             alert('Usuario creado exitosamente!');
         } catch (error) {
-            console.error(error);
+            alert("El correo ya existe ");
         }
     }
 
@@ -96,12 +96,18 @@ function Pagina_crudUser() {
             if (response.data.length === 0) {
                 setErrorMessage('Los datos no existen en la base');
             } else {
-                setErrorMessage('');
-                setUsers(response.data.filter(user =>
+                const filteredUsers = response.data.filter(user =>
                     user.name.toLowerCase().includes(searchQueryLower) ||
                     user.email.toLowerCase().includes(searchQueryLower) ||
                     user.rol.toLowerCase().includes(searchQueryLower)
-                ));
+                );
+
+                if (filteredUsers.length === 0) {
+                    setErrorMessage('No se encontró al usuario');
+                } else {
+                    setErrorMessage('');
+                    setUsers(filteredUsers);
+                }
             }
         } catch (error) {
             console.error(error);
@@ -152,36 +158,38 @@ function Pagina_crudUser() {
                         handleCancel={handleCancel}
                     />
                 )}
-                <div style={{ overflow: 'auto', height: '525px' }}> {/* Ajusta la altura según tus necesidades */}
-                    <table style={tablaStyle}>
-                        <thead>
-                            <tr style={filaStyle}>
-                                <th>Nombre</th>
-                                <th>Email</th>
-                                <th>Rol</th>
-                                <th>Date of Birth</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.map((user, index) => (
-                                <tr style={filaStyle} key={index}>
-                                    <td style={celdaStyle}>{user.name}</td>
-                                    <td style={celdaStyle}>{user.email}</td>
-                                    <td style={celdaStyle}>{user.rol}</td>
-                                    <td style={celdaStyle}>{user.dob}</td>
-                                    <td style={celdaButtons}>
-                                        <button style={editbutton} onClick={() => handleEdit(index)}>
-                                            <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
-                                        </button>
-
-                                        <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
-                                            style={{ color: "white", fontSize: "24px" }} />
-                                        </button>
-                                    </td>
+                <div style={{ display: 'flex', justifyContent: 'center', height: '85vh' }}>
+                    <div style={{ overflow: 'auto', height: 'auto' }}>
+                        <table style={tablaStyle}>
+                            <thead>
+                                <tr style={filaStyle}>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Date of Birth</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {users.map((user, index) => (
+                                    <tr style={filaStyle} key={index}>
+                                        <td style={celdaStyle}>{user.name}</td>
+                                        <td style={celdaStyle}>{user.email}</td>
+                                        <td style={celdaStyle}>{user.rol}</td>
+                                        <td style={celdaStyle}>{user.dob}</td>
+                                        <td style={celdaButtons}>
+                                            <button style={editbutton} onClick={() => handleEdit(index)}>
+                                                <AiFillEdit style={{ color: "white", fontSize: "24px" }} />
+                                            </button>
+
+                                            <button style={deletebutton} onClick={() => handleDelete(index)}> <AiFillDelete
+                                                style={{ color: "white", fontSize: "24px" }} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {showEditForm && (
                     <FormEditarUser

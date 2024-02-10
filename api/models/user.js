@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-
     },
     rol: {
         type: String,
@@ -22,7 +21,9 @@ const userSchema = new mongoose.Schema({
     dob: {
         type: String,
         required: true
-    }
+    },
+    TokenrecuperarCuenta: String,
+    TokenVencimiento: Date
 })
 
 userSchema.pre('save', async function (next) {

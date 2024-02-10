@@ -15,7 +15,7 @@ export default StyleSheet.create({
         borderWidth: 8,
         borderColor: 'white',
         borderRadius: 10,
-        height: '75%',
+        height: '72%',
         width: '90%',
         marginTop: 10,
         alignSelf: 'center',
@@ -23,5 +23,13 @@ export default StyleSheet.create({
     buscarText: {
         color: '#2A364E',
         fontSize: 20
-    }
+    },
+    infoRuta: {
+        width: '90%',
+        marginTop: 10,
+        justifyContent: 'center',
+        borderRadius: 20,
+        borderColor: '#B3DFE8',
+        borderWidth: 2, 
+      }
 });

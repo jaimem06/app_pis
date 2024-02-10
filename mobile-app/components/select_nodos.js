@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Modal, Button, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
 
 const Item = React.memo(({ item, onPress }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
         onPress={onPress}
         style={{ borderBottomWidth: 1, borderBottomColor: 'white' }}
     >
@@ -34,15 +34,19 @@ const CustomPicker = ({ data, selectedValue, onValueChange }) => {
         <Item item={item} onPress={() => handlePress(item)} />
     );
 
-    const filteredData = useMemo(() => 
+    const filteredData = useMemo(() =>
         data.filter(item => item.toLowerCase().includes(debouncedSearch.toLowerCase())),
         [data, debouncedSearch]
     );
 
     return (
         <View>
-            <View style={{width: 175, alignSelf: 'center', margin: 5 }}>
-                <Button title={selectedValue || "Selecciona los puntos:"} onPress={() => setModalVisible(true)} />
+            <View style={{ width: "99%", alignSelf: 'center', margin: 2 }}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} style={{ backgroundColor: '#B3DFE8', padding: 6, borderRadius: 10 }}>
+                    <Text style={{ color: '#2A364E', textAlign: 'center' }}>
+                        {selectedValue ? `${selectedValue.substring(0, 30)}` : "Selecciona los puntos:"}
+                    </Text>
+                </TouchableOpacity>
             </View>
             <Modal
                 animationType="slide"
