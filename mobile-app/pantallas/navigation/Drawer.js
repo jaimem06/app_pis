@@ -7,6 +7,7 @@ import { StyleSheet, Text } from 'react-native';
 import MenuButtonItem from '../../components/MenuButtonItem';
 import About_App from '../logged_pantallas/about_app';
 import Puntos_Map from '../logged_pantallas/puntos';
+import Buscar_Ruta from '../logged_pantallas/busqueda_ruta';
 import * as SecureStore from 'expo-secure-store';
 
 const Drawer = createDrawerNavigator();
@@ -30,6 +31,7 @@ export function DrawerNavigation() {
       <Drawer.Screen name="Plan Contingencia" component={Info_Contingencia} />
       <Drawer.Screen name="Informacion" component={About_App} />
       <Drawer.Screen name="Puntos" component={Puntos_Map} />
+      <Drawer.Screen name="Buscar Ruta" component={Buscar_Ruta} />
     </Drawer.Navigator>
   );
 }
@@ -50,6 +52,10 @@ const MenuItems = ({ navigation }) => {
       <MenuButtonItem
         text="Ruta de Evacuación"
         onPress={() => navigation.navigate('Mapa')} iconName="map-marker-minus"
+      />
+      <MenuButtonItem
+        text="Busqueda de Ruta"
+        onPress={() => navigation.navigate('Buscar Ruta')} iconName="map-marker-radius"
       />
       <MenuButtonItem
         text="Brigadista"

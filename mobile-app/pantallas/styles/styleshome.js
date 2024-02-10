@@ -15,7 +15,7 @@ export default StyleSheet.create({
         borderWidth: 8,
         borderColor: 'white',
         borderRadius: 10,
-        height: '65%',
+        height: '72%',
         width: '90%',
         marginTop: 10,
         alignSelf: 'center',
