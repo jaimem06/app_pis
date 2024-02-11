@@ -29,7 +29,6 @@ export const calculateRegion = (data) => {
 
 export const Logica_BuscarRoute = () => {
     const [inicio, setInicio] = useState('');
-    const [fin, setFin] = useState('');
     const [markers, setMarkers] = useState([]);
     const [nodos, setNodos] = useState([]);
     const mapRef = useRef(null);
@@ -61,14 +60,16 @@ export const Logica_BuscarRoute = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    inicio: inicio,
-                    fin: fin
+                    inicio: inicio
                 })
             });
             const data = await response.json();
             setMarkers(data);
             const region = calculateRegion(data);
             mapRef.current.animateToRegion(region, 1000);
+
+            // Restablecer los valores de inicio a su valor predeterminado
+            setInicio('');
         } catch (error) {
             Alert.alert('Error', `Hubo un error al buscar la ruta: ${error.message}`);
         }
@@ -78,12 +79,9 @@ export const Logica_BuscarRoute = () => {
         nodos.filter(nodo => nodo.properties.tipo !== 'Ruta').map(nodo => nodo.properties.nombre),
         [nodos]
     );
-
     return {
         inicio,
         setInicio,
-        fin,
-        setFin,
         markers,
         buscar,
         filteredNodos,

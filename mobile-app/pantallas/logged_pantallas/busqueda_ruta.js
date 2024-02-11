@@ -24,27 +24,17 @@ const CustomMarker = ({ marker: { coordenadas, nombre }, index }) => {
 };
 
 const Home = () => {
-    const { inicio, setInicio, fin, setFin, markers, buscar, filteredNodos, mapRef } = Logica_BuscarRoute();
+    const { inicio, setInicio, markers, buscar, filteredNodos, mapRef } = Logica_BuscarRoute();
 
     return (
         <View style={{ flex: 1 }}>
             <View>
-                <View style={{ flexDirection: 'row', justifyContent: "space-around" }}>
-                    <Text style={{ fontSize: 15 }}>Escoje tu nodo inicio</Text>
-                    <Text style={{ fontSize: 15 }}>Escoje tu nodo final</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ margin: 5 }}>
                     <CustomPicker
                         style={{ margin: 40 }}
                         data={filteredNodos}
                         selectedValue={inicio}
                         onValueChange={(itemValue) => setInicio(itemValue)}
-                    />
-                    <CustomPicker
-                        style={{ margin: 40 }}
-                        data={filteredNodos}
-                        selectedValue={fin}
-                        onValueChange={(itemValue) => setFin(itemValue)}
                     />
                 </View>
             </View>

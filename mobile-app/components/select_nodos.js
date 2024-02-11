@@ -44,7 +44,7 @@ const CustomPicker = ({ data, selectedValue, onValueChange }) => {
             <View style={{ width: "99%", alignSelf: 'center', margin: 2 }}>
                 <TouchableOpacity onPress={() => setModalVisible(true)} style={{ backgroundColor: '#B3DFE8', padding: 6, borderRadius: 10 }}>
                     <Text style={{ color: '#2A364E', textAlign: 'center' }}>
-                        {selectedValue ? `${selectedValue.substring(0, 30)}` : "Selecciona los puntos:"}
+                        {selectedValue ? `${selectedValue.substring(0, 30)}` : "Pulsa aqui para seleccionar el punto de inicio:"}
                     </Text>
                 </TouchableOpacity>
             </View>
