@@ -2,19 +2,19 @@ import * as Location from 'expo-location';
 import APILinks from '../directionsAPI';
 import { Alert } from 'react-native';
 
-export const calcularRuta = async (setMarkers) => {
+export const calcularRuta = async (setMarkers, setTotalDistance) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permiso de acceso a la ubicación denegado');
       return;
     }
-  
+
     let location = await Location.getCurrentPositionAsync({});
     console.log(location.coords);
     let inicio = {
       coords: [location.coords.latitude, location.coords.longitude]
     };
-  
+
     fetch(APILinks.URL_CaminoMinimo, {
       method: 'POST',
       headers: {
@@ -25,12 +25,10 @@ export const calcularRuta = async (setMarkers) => {
       })
     })
       .then(response => {
-        // Comprueba si el servidor ha devuelto un código de estado HTTP exitoso
         if (!response.ok) {
           throw new Error(`El servidor devolvió un error: ${response.status}`);
         }
-  
-        // Comprueba si la respuesta es un JSON válido
+
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.indexOf('application/json') !== -1) {
           return response.json();
@@ -40,7 +38,7 @@ export const calcularRuta = async (setMarkers) => {
       })
       .then(data => {
         console.log(data);
-        let newMarkers = data.map(item => ({
+        let newMarkers = data.ruta.map(item => ({
           nombre: item.nombre,
           tipo: item.tipo,
           coordenadas: {
@@ -48,10 +46,11 @@ export const calcularRuta = async (setMarkers) => {
             latitude: item.coordenadas[0]
           }
         }));
-  
+
         setMarkers(newMarkers);
+        setTotalDistance(data.totalDistancia);
       })
       .catch(error => {
         console.error(error);
       });
-  };
+};

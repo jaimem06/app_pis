@@ -5,14 +5,13 @@ import MapView, { Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
 import { calcularRuta } from '../../components/calcularRuta';
 import MarkerRuta from '../../components/markerRuta';
-import CustomPicker from '../../components/select_nodos';
 import APILinks from '../../directionsAPI';
 
 const Home = () => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
-  const [selectedNodo, setSelectedNodo] = useState(null); // Estado para el nodo seleccionado
   const [nodos, setNodos] = useState([]); // Estado para todos los nodos
+  const [totalDistancia, setTotalDistancia] = useState(0); // Nuevo estado para la distancia total
 
   useEffect(() => {
     fetch(APILinks.URL_ReadNodos)
@@ -21,11 +20,11 @@ const Home = () => {
       .catch(error => console.error(error));
 
     // Calcula la ruta inmediatamente al montar el componente
-    calcularRuta(setMarkers);
+    calcularRuta(setMarkers, setTotalDistancia);
 
     // Configura un temporizador para calcular la ruta cada minuto
     const timerId = setInterval(() => {
-      calcularRuta(setMarkers);
+      calcularRuta(setMarkers, setTotalDistancia);
     }, 60000); // 60000 milisegundos = 1 minuto
 
     return () => clearInterval(timerId);
@@ -77,7 +76,7 @@ const Home = () => {
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <Text style={{ padding: 10, textAlign: "justify", color: 'white' }}>
               {'Debes pasar por los siguientes puntos:\n' + markers.map((marker, index) => `${index + 1}. ${marker.nombre}`).join('\n')}
-              {'\nDistancia total: ' + markers.reduce((total, marker) => total + marker.distancia, 0) + ' metros'}
+              {'\nDistancia total: ' + totalDistancia.toFixed(2) + ' metros'}
             </Text>
           </ScrollView>
         </View>

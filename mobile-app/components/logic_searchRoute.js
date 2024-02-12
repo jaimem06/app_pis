@@ -53,6 +53,10 @@ export const Logica_BuscarRoute = () => {
     }, []);
 
     const buscar = async () => {
+        if (!inicio) {
+            Alert.alert('Nodo inicio no seleccionado', 'Por favor seleccione un punto de inicio para buscar la Ruta.');
+            return;
+        }
         try {
             const response = await fetch(APILinks.URL_CaminoMinimo, {
                 method: 'POST',
@@ -63,13 +67,14 @@ export const Logica_BuscarRoute = () => {
                     inicio: inicio
                 })
             });
-            const data = await response.json();
-            setMarkers(data);
-            const region = calculateRegion(data);
+            const { ruta, totalDistancia } = await response.json();
+            setMarkers(ruta);
+            const region = calculateRegion(ruta);
             mapRef.current.animateToRegion(region, 1000);
 
             // Restablecer los valores de inicio a su valor predeterminado
             setInicio('');
+
         } catch (error) {
             Alert.alert('Error', `Hubo un error al buscar la ruta: ${error.message}`);
         }
