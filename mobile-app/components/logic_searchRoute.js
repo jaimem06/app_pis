@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import APILinks from '../directionsAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
+import * as Location from 'expo-location';
 
 const calculateMinMaxLatLong = (data) => {
     return data.reduce((acc, { coordenadas }) => {
@@ -27,15 +28,11 @@ export const calculateRegion = (data) => {
     };
 };
 
-export const Logica_BuscarRoute = () => {
+export const Logica_BuscarRoute = (setNodoCercano) => {
     const [inicio, setInicio] = useState('');
     const [markers, setMarkers] = useState([]);
     const [nodos, setNodos] = useState([]);
     const mapRef = useRef(null);
-
-    const resetInicio = () => {
-        setInicio(null);
-    };
 
     useEffect(() => {
         const fetchNodos = async () => {
@@ -81,8 +78,35 @@ export const Logica_BuscarRoute = () => {
         }
     };
 
+    const buscarNodoCercano = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso de acceso a la ubicación denegado');
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        let coords = [location.coords.latitude, location.coords.longitude];
+
+        fetch(APILinks.URL_BuscarNodoCercano, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ coords })
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNodoCercano(data.nombreNodoMasCercano);
+                setInicio(data.nombreNodoMasCercano);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
+
     const filteredNodos = useMemo(() =>
-        nodos.filter(nodo => nodo.properties.tipo !== 'Ruta').map(nodo => nodo.properties.nombre),
+        nodos.filter(nodo => nodo.properties.tipo === 'Edificacion').map(nodo => nodo.properties.nombre),
         [nodos]
     );
     return {
@@ -91,6 +115,7 @@ export const Logica_BuscarRoute = () => {
         markers,
         buscar,
         filteredNodos,
-        mapRef
+        mapRef,
+        buscarNodoCercano
     };
 };
