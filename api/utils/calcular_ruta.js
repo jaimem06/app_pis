@@ -15,13 +15,18 @@ async function rutaMasCorta(inicio, fin) {
         // Convierte los nombres de los nodos en la ruta a sus correspondientes coordenadas y tipo
         const rutaCoordenadas = [];
         let totalDistancia = 0;
-        for (const nombreNodo of ruta) {
+        for (let i = 0; i < ruta.length; i++) {
+            const nombreNodo = ruta[i];
             const nodo = await nodoSchema.findOne({ 'properties.nombre': nombreNodo });
             rutaCoordenadas.push({ nombre: nombreNodo, coordenadas: nodo.geometry.coordinates, tipo: nodo.properties.tipo });
 
-            // Suma las distancias de las conexiones del nodo
-            for (const conexion of nodo.properties.conexiones) {
-                totalDistancia += conexion.distancia;
+            // Suma las distancias de las conexiones del nodo que están en la ruta
+            if (i < ruta.length - 1) {
+                const nombreSiguienteNodo = ruta[i + 1];
+                const conexion = nodo.properties.conexiones.find(con => con.nodo === nombreSiguienteNodo);
+                if (conexion) {
+                    totalDistancia += conexion.distancia;
+                }
             }
         }
 

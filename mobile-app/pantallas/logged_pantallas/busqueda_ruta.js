@@ -1,24 +1,26 @@
-import React from 'react';
-import { Image, View, TouchableOpacity, Text } from 'react-native';
+import React, { useState } from 'react';
+import { Image, View, TouchableOpacity, Text, Alert } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
+import * as Location from 'expo-location';
 import user from '../../assets/user.png'
 import route from '../../assets/route.png';
 import puntoEncuentro from '../../assets/pde.png';
 import CustomPicker from '../../components/select_nodos';
 import { Logica_BuscarRoute } from '../../components/logic_searchRoute';
+import APILinks from '../../directionsAPI';
 
 const CustomMarker = ({ marker: { coordenadas, nombre }, index, totalMarkers }) => {
     let imageSource;
     let imageSize;
     if (index === 0) {
         imageSource = user;
-        imageSize = 45;
+        imageSize = 40;
     } else if (index === totalMarkers - 1) {
         imageSource = puntoEncuentro;
-        imageSize = 40;
+        imageSize = 35;
     } else {
         imageSource = route;
-        imageSize = 25;
+        imageSize = 20;
     }
 
     return (
@@ -36,21 +38,60 @@ const CustomMarker = ({ marker: { coordenadas, nombre }, index, totalMarkers }) 
 
 const Home = () => {
     const { inicio, setInicio, markers, buscar, filteredNodos, mapRef } = Logica_BuscarRoute();
+    const [nodoCercano, setNodoCercano] = useState(null);
+
+    const buscarNodoCercano = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso de acceso a la ubicación denegado');
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        let coords = [location.coords.latitude, location.coords.longitude];
+
+        fetch(APILinks.URL_BuscarNodoCercano, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ coords })
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNodoCercano(data.nombreNodoMasCercano);
+                setInicio(data.nombreNodoMasCercano);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
 
     return (
         <View style={{ flex: 1 }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={buscarNodoCercano} style={{ backgroundColor: '#2A364E', padding: 8, borderRadius: 14, margin: 8, width: "35%" }}>
+                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>Buscar Nodo Cercano</Text>
+                </TouchableOpacity>
+            </View>
             <View>
                 <View style={{ margin: 5 }}>
                     <CustomPicker
                         style={{ margin: 40 }}
                         data={filteredNodos}
-                        selectedValue={inicio}
-                        onValueChange={(itemValue) => setInicio(itemValue)}
+                        selectedValue={nodoCercano || inicio}
+                        onValueChange={(itemValue) => {
+                            setInicio(itemValue);
+                            setNodoCercano(itemValue);
+                        }}
                     />
                 </View>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity onPress={buscar} style={{ backgroundColor: '#2A364E', padding: 8, borderRadius: 14, margin: 8, width: "35%" }}>
+                <TouchableOpacity onPress={() => {
+                    buscar();
+                    setNodoCercano(null);
+                }} style={{ backgroundColor: '#2A364E', padding: 8, borderRadius: 14, margin: 8, width: "35%" }}>
                     <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>Buscar Ruta</Text>
                 </TouchableOpacity>
             </View>

@@ -33,6 +33,10 @@ export const Logica_BuscarRoute = () => {
     const [nodos, setNodos] = useState([]);
     const mapRef = useRef(null);
 
+    const resetInicio = () => {
+        setInicio(null);
+    };
+
     useEffect(() => {
         const fetchNodos = async () => {
             try {
@@ -51,7 +55,7 @@ export const Logica_BuscarRoute = () => {
         };
         fetchNodos();
     }, []);
-
+    
     const buscar = async () => {
         if (!inicio) {
             Alert.alert('Nodo inicio no seleccionado', 'Por favor seleccione un punto de inicio para buscar la Ruta.');
@@ -67,14 +71,11 @@ export const Logica_BuscarRoute = () => {
                     inicio: inicio
                 })
             });
-            const { ruta, totalDistancia } = await response.json();
+            const { ruta, totalDistance } = await response.json();
             setMarkers(ruta);
             const region = calculateRegion(ruta);
             mapRef.current.animateToRegion(region, 1000);
-
-            // Restablecer los valores de inicio a su valor predeterminado
-            setInicio('');
-
+            setInicio(null);
         } catch (error) {
             Alert.alert('Error', `Hubo un error al buscar la ruta: ${error.message}`);
         }

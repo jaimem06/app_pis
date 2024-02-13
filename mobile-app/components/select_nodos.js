@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Modal, Button, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
 
 const Item = React.memo(({ item, onPress }) => (
     <TouchableOpacity
@@ -67,6 +67,10 @@ const CustomPicker = ({ data, selectedValue, onValueChange }) => {
                             data={filteredData}
                             renderItem={renderItem}
                             keyExtractor={(item, index) => index.toString()}
+                            //Limita el número de elementos que se renderizan en la lista
+                            initialNumToRender={10}  
+                            maxToRenderPerBatch={10}  
+                            removeClippedSubviews={true} 
                         />
                     </View>
                 </TouchableOpacity>

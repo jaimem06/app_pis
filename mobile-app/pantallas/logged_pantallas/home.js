@@ -11,7 +11,7 @@ const Home = () => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
   const [nodos, setNodos] = useState([]); // Estado para todos los nodos
-  const [totalDistancia, setTotalDistancia] = useState(0); // Nuevo estado para la distancia total
+  const [totalDistance, setTotalDistance] = useState(0); // Nuevo estado para la distancia total
 
   useEffect(() => {
     fetch(APILinks.URL_ReadNodos)
@@ -20,11 +20,11 @@ const Home = () => {
       .catch(error => console.error(error));
 
     // Calcula la ruta inmediatamente al montar el componente
-    calcularRuta(setMarkers, setTotalDistancia);
+    calcularRuta(setMarkers, setTotalDistance);
 
     // Configura un temporizador para calcular la ruta cada minuto
     const timerId = setInterval(() => {
-      calcularRuta(setMarkers, setTotalDistancia);
+      calcularRuta(setMarkers, setTotalDistance);
     }, 60000); // 60000 milisegundos = 1 minuto
 
     return () => clearInterval(timerId);
@@ -76,7 +76,7 @@ const Home = () => {
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <Text style={{ padding: 10, textAlign: "justify", color: 'white' }}>
               {'Debes pasar por los siguientes puntos:\n' + markers.map((marker, index) => `${index + 1}. ${marker.nombre}`).join('\n')}
-              {'\nDistancia total: ' + totalDistancia.toFixed(2) + ' metros'}
+              {'\nDistancia total: ' + totalDistance.toFixed(2) + ' metros'}
             </Text>
           </ScrollView>
         </View>
