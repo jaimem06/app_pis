@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import APILinks from '../directionsAPI';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 export const calcularRuta = async (setMarkers, setTotalDistance) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -8,8 +8,10 @@ export const calcularRuta = async (setMarkers, setTotalDistance) => {
       Alert.alert('Permiso de acceso a la ubicación denegado');
       return;
     }
-
-    let location = await Location.getCurrentPositionAsync({});
+    // En caso de ser IOS se utiliza mejor precisión
+    let location = await Location.getCurrentPositionAsync({
+        accuracy: Platform.OS === 'ios' ? Location.Accuracy.BestForNavigation : Location.Accuracy.High,
+    });
     console.log(location.coords);
     let inicio = {
       coords: [location.coords.latitude, location.coords.longitude]
