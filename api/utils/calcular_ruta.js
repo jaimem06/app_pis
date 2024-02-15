@@ -11,16 +11,26 @@ async function rutaMasCorta(inicio, fin) {
         console.timeEnd('Obtener grafo');
         // Usa el algoritmo de Dijkstra para encontrar la ruta más corta
         const ruta = dijkstra(grafo, inicio, fin);
-        //console.log('Ruta calculada con éxito: ', ruta);
 
         // Convierte los nombres de los nodos en la ruta a sus correspondientes coordenadas y tipo
         const rutaCoordenadas = [];
-        for (const nombreNodo of ruta) {
+        let totalDistancia = 0;
+        for (let i = 0; i < ruta.length; i++) {
+            const nombreNodo = ruta[i];
             const nodo = await nodoSchema.findOne({ 'properties.nombre': nombreNodo });
             rutaCoordenadas.push({ nombre: nombreNodo, coordenadas: nodo.geometry.coordinates, tipo: nodo.properties.tipo });
+
+            // Suma las distancias de las conexiones del nodo que están en la ruta
+            if (i < ruta.length - 1) {
+                const nombreSiguienteNodo = ruta[i + 1];
+                const conexion = nodo.properties.conexiones.find(con => con.nodo === nombreSiguienteNodo);
+                if (conexion) {
+                    totalDistancia += conexion.distancia;
+                }
+            }
         }
 
-        return rutaCoordenadas;
+        return { ruta: rutaCoordenadas, totalDistancia };
     } catch (error) {
         console.error('Error al calcular la ruta más corta: ', error);
         throw error;

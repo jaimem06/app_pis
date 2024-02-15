@@ -11,5 +11,7 @@ const APILinks = {
     URL_BuscarNodos: `${BASE_URL}/nodos/buscar_nodos`,
     URL_RecuperarCuenta: `${BASE_URL}/recuperar_cuenta`,
     URL_BuscarNodoCercano: `${BASE_URL}/buscar_nodoCercano`,
+    URL_RecuperarCuenta: `${BASE_URL}/recuperar_cuenta`,
+    URL_ResetPass: `${BASE_URL}/reset`,
 };
   export default APILinks;

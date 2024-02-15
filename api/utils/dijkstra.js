@@ -24,7 +24,7 @@ function dijkstra(graph, startNode, endNode) {
         let currentNode = queue.pop();
         visited[currentNode] = true;
 
-        console.log('Nodo actual:', currentNode);
+        //console.log('Nodo actual:', currentNode);
 
         for (let neighbor in graph[currentNode]) {
             let newDistance = distances[currentNode] + graph[currentNode][neighbor];
@@ -32,7 +32,7 @@ function dijkstra(graph, startNode, endNode) {
                 distances[neighbor] = newDistance;
                 previous[neighbor] = currentNode;
                 queue.push(neighbor);
-                console.log(`Actualizando distancia del vecino ${neighbor} a ${newDistance}`);
+                //console.log(`Actualizando distancia del vecino ${neighbor} a ${newDistance}`);
             }
         }
     }

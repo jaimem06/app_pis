@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import APILinks from '../directionsAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
+import * as Location from 'expo-location';
 
 const calculateMinMaxLatLong = (data) => {
     return data.reduce((acc, { coordenadas }) => {
@@ -27,9 +28,8 @@ export const calculateRegion = (data) => {
     };
 };
 
-export const Logica_BuscarRoute = () => {
+export const Logica_BuscarRoute = (setNodoCercano) => {
     const [inicio, setInicio] = useState('');
-    const [fin, setFin] = useState('');
     const [markers, setMarkers] = useState([]);
     const [nodos, setNodos] = useState([]);
     const mapRef = useRef(null);
@@ -52,8 +52,12 @@ export const Logica_BuscarRoute = () => {
         };
         fetchNodos();
     }, []);
-
+    
     const buscar = async () => {
+        if (!inicio) {
+            Alert.alert('Nodo inicio no seleccionado', 'Por favor seleccione un punto de inicio para buscar la Ruta.');
+            return;
+        }
         try {
             const response = await fetch(APILinks.URL_CaminoMinimo, {
                 method: 'POST',
@@ -61,32 +65,62 @@ export const Logica_BuscarRoute = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    inicio: inicio,
-                    fin: fin
+                    inicio: inicio
                 })
             });
-            const data = await response.json();
-            setMarkers(data);
-            const region = calculateRegion(data);
+            const { ruta, totalDistance } = await response.json();
+            setMarkers(ruta);
+            const region = calculateRegion(ruta);
             mapRef.current.animateToRegion(region, 1000);
+            setInicio(null);
         } catch (error) {
             Alert.alert('Error', `Hubo un error al buscar la ruta: ${error.message}`);
         }
     };
 
+    const buscarNodoCercano = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso de acceso a la ubicación denegado');
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        let coords = [location.coords.latitude, location.coords.longitude];
+
+        fetch(APILinks.URL_BuscarNodoCercano, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ coords })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    // Si la respuesta contiene un mensaje de error, muestra un mensaje de alerta
+                    Alert.alert('No se encontro el nodo:', data.error);
+                    return;
+                }
+                setNodoCercano(data.nombreNodoMasCercano);
+                setInicio(data.nombreNodoMasCercano);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
+
     const filteredNodos = useMemo(() =>
-        nodos.filter(nodo => nodo.properties.tipo !== 'Ruta').map(nodo => nodo.properties.nombre),
+        nodos.filter(nodo => nodo.properties.tipo === 'Edificacion').map(nodo => nodo.properties.nombre),
         [nodos]
     );
-
     return {
         inicio,
         setInicio,
-        fin,
-        setFin,
         markers,
         buscar,
         filteredNodos,
-        mapRef
+        mapRef,
+        buscarNodoCercano
     };
 };

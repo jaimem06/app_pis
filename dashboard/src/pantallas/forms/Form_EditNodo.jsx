@@ -59,7 +59,7 @@ const FormEditarNodo = ({ nodo, handleSubmit, handleCancel, handleChange }) => {
             </select>
             <div style={buttonsForm}>
                 <button style={cancelbutton} type="button" onClick={handleCancel}>Cancelar</button>
-                <button style={buttonADD} type="submit">Agregar Nodo</button>
+                <button style={buttonADD} type="submit">Editar Nodo</button>
             </div>
         </form>
     );

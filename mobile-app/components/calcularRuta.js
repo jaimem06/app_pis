@@ -1,20 +1,22 @@
 import * as Location from 'expo-location';
 import APILinks from '../directionsAPI';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
-export const calcularRuta = async (setMarkers) => {
+export const calcularRuta = async (setMarkers, setTotalDistance) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permiso de acceso a la ubicación denegado');
       return;
     }
-  
-    let location = await Location.getCurrentPositionAsync({});
+    // En caso de ser IOS se utiliza mejor precisión
+    let location = await Location.getCurrentPositionAsync({
+        accuracy: Platform.OS === 'ios' ? Location.Accuracy.BestForNavigation : Location.Accuracy.High,
+    });
     console.log(location.coords);
     let inicio = {
       coords: [location.coords.latitude, location.coords.longitude]
     };
-  
+
     fetch(APILinks.URL_CaminoMinimo, {
       method: 'POST',
       headers: {
@@ -24,23 +26,15 @@ export const calcularRuta = async (setMarkers) => {
         inicio: inicio
       })
     })
-      .then(response => {
-        // Comprueba si el servidor ha devuelto un código de estado HTTP exitoso
-        if (!response.ok) {
-          throw new Error(`El servidor devolvió un error: ${response.status}`);
-        }
-  
-        // Comprueba si la respuesta es un JSON válido
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.indexOf('application/json') !== -1) {
-          return response.json();
-        } else {
-          throw new Error('La respuesta del servidor no es un JSON válido');
-        }
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log(data);
-        let newMarkers = data.map(item => ({
+        if (data.error) {
+          // Si la respuesta contiene un mensaje de error, muestra un mensaje de alerta
+          Alert.alert('No se puede calcular la ruta:', data.error);
+          return;
+        }
+
+        let newMarkers = data.ruta.map(item => ({
           nombre: item.nombre,
           tipo: item.tipo,
           coordenadas: {
@@ -48,10 +42,12 @@ export const calcularRuta = async (setMarkers) => {
             latitude: item.coordenadas[0]
           }
         }));
-  
+
         setMarkers(newMarkers);
+        setTotalDistance(data.totalDistancia);
       })
       .catch(error => {
+        Alert.alert('Error', 'Ocurrió un error al calcular la ruta.');
         console.error(error);
       });
-  };
+};

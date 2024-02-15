@@ -1,59 +1,78 @@
-import React from 'react';
-import { Image, View, TouchableOpacity, Text } from 'react-native';
+import React, { useState } from 'react';
+import { Image, View, TouchableOpacity, Text, Alert } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import user from '../../assets/user.png'
 import route from '../../assets/route.png';
+import puntoEncuentro from '../../assets/pde.png';
 import CustomPicker from '../../components/select_nodos';
 import { Logica_BuscarRoute } from '../../components/logic_searchRoute';
 
-//Personaliza el marcador de inicio y fin
-const CustomMarker = ({ marker: { coordenadas, nombre }, index }) => {
-    const imageSource = index === 0 ? user : route;
-    const imageSize = index === 0 ? 45 : 25;
+const markerConfig = {
+    user: {
+        imageSource: user,
+        imageSize: 40
+    },
+    puntoEncuentro: {
+        imageSource: puntoEncuentro,
+        imageSize: 35
+    },
+    route: {
+        imageSource: route,
+        imageSize: 20
+    }
+};
+
+const CustomMarker = ({ marker: { coordenadas, nombre }, index, totalMarkers }) => {
+    let config;
+    if (index === 0) {
+        config = markerConfig.user;
+    } else if (index === totalMarkers - 1) {
+        config = markerConfig.puntoEncuentro;
+    } else {
+        config = markerConfig.route;
+    }
+
     return (
         <Marker
             coordinate={{ latitude: coordenadas[0], longitude: coordenadas[1] }}
             anchor={{ x: 0.5, y: 0.5 }} // Centra la imagen
             title={nombre}
         >
-            <View style={{ width: imageSize, height: imageSize, justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={imageSource} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+            <View style={{ width: config.imageSize, height: config.imageSize, justifyContent: 'center', alignItems: 'center', aspectRatio: 1 }}>
+                <Image source={config.imageSource} style={{ width: '100%', height: '100%', aspectRatio: 1 }} resizeMode="center" />
             </View>
         </Marker>
     );
 };
 
 const Home = () => {
-    const { inicio, setInicio, fin, setFin, markers, buscar, filteredNodos, mapRef } = Logica_BuscarRoute();
+    const [nodoCercano, setNodoCercano] = useState(null);
+    const { inicio, setInicio, markers, buscar, buscarNodoCercano, filteredNodos, mapRef } = Logica_BuscarRoute(setNodoCercano);
 
     return (
-        <View style={{ flex: 1 }}>
-            <View>
-                <View style={{ flexDirection: 'row', justifyContent: "space-around" }}>
-                    <Text style={{ fontSize: 15 }}>Escoje tu nodo inicio</Text>
-                    <Text style={{ fontSize: 15 }}>Escoje tu nodo final</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <CustomPicker
-                        style={{ margin: 40 }}
-                        data={filteredNodos}
-                        selectedValue={inicio}
-                        onValueChange={(itemValue) => setInicio(itemValue)}
-                    />
-                    <CustomPicker
-                        style={{ margin: 40 }}
-                        data={filteredNodos}
-                        selectedValue={fin}
-                        onValueChange={(itemValue) => setFin(itemValue)}
-                    />
-                </View>
-            </View>
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity onPress={buscar} style={{ backgroundColor: '#2A364E', padding: 8, borderRadius: 14, margin: 8, width: "35%" }}>
-                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 16}}>Buscar Ruta</Text>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+            <CustomPicker
+                data={filteredNodos}
+                selectedValue={nodoCercano || inicio}
+                onValueChange={(itemValue) => {
+                    setInicio(itemValue);
+                    setNodoCercano(itemValue);
+                }}
+            />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: 'black', textAlign: 'center', fontSize: 13 }}>¿No conoces tu bloque? Nosotros lo buscamos:</Text>
+                <TouchableOpacity onPress={buscarNodoCercano} style={{ backgroundColor: '#B3DFE8', borderRadius: 12, margin: 2, width: "20%", padding: 2 }}>
+                    <Text style={{ color: '#2A364E', textAlign: 'center', fontSize: 13 }}>Pulsa aquí</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{ height: '82%', width: '95%', borderColor: '#2A364E', borderRadius: 10, borderWidth: 6, alignSelf: 'center' }}>
+
+            <TouchableOpacity onPress={() => {
+                buscar();
+                setNodoCercano(null);
+            }} style={{ backgroundColor: '#2A364E', padding: 8, borderRadius: 14, margin: 8, width: "95%" }}>
+                <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>Buscar Ruta</Text>
+            </TouchableOpacity>
+            <View style={{ height: '82%', width: '95%', borderColor: '#2A364E', borderRadius: 10, borderWidth: 6 }}>
                 <MapView
                     ref={mapRef}
                     style={{ flex: 1 }}

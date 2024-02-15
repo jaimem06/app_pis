@@ -18,6 +18,10 @@ router.post('/camino_minimo', async (req, res) => {
     try {
         if (inicio.coords && Array.isArray(inicio.coords) && inicio.coords.length === 2) {
             const nodoInicio = await buscarNodoMasCercano(inicio);
+            if (nodoInicio.error) {
+                // Si hay un error, envía el error en la respuesta
+                return res.status(400).json({ error: nodoInicio.error });
+            }
             inicio = nodoInicio.properties.nombre; // Usa el nombre del nodo de inicio
         } else if (typeof inicio === 'string') {
             // Comprueba si el nodo de inicio existe en la base de datos
