@@ -5,8 +5,15 @@ const buscarNodoMasCercano = require('../utils/nodo_cercano');
 router.post('/buscar_nodoCercano', async (req, res) => {
     try {
         const inicio = req.body.coords;
-        const nodo = await buscarNodoMasCercano({ coords: inicio });
-        res.json({ nombreNodoMasCercano: nodo.properties.nombre });
+        const resultado = await buscarNodoMasCercano({ coords: inicio });
+
+        // Si la respuesta contiene un mensaje de error, envía una respuesta con el mensaje de error
+        if (resultado.error) {
+            res.status(400).json({ error: resultado.error });
+            return;
+        }
+
+        res.json({ nombreNodoMasCercano: resultado.properties.nombre });
     } catch (error) {
         res.status(500).json({ error: error.toString() });
     }

@@ -6,14 +6,13 @@ const User = mongoose.model("User");
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
-
 router.post('/recuperar_cuenta', async (req, res) => {
     const { email } = req.body;
 
     const user = await User.findOne({ email });
 
     if (!user) {
-        return res.status(404).send('No se encontró ningún usuario con ese correo electrónico');
+        return res.status(400).json({ message: 'El token de restablecimiento de contraseña es inválido o ha vencido' });
     }
     // Genera un número aleatorio de 6 dígitos
     const token = Math.floor(100000 + Math.random() * 900000);

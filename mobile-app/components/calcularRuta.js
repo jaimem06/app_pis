@@ -26,20 +26,14 @@ export const calcularRuta = async (setMarkers, setTotalDistance) => {
         inicio: inicio
       })
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`El servidor devolvió un error: ${response.status}`);
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          // Si la respuesta contiene un mensaje de error, muestra un mensaje de alerta
+          Alert.alert('No se puede calcular la ruta:', data.error);
+          return;
         }
 
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.indexOf('application/json') !== -1) {
-          return response.json();
-        } else {
-          throw new Error('La respuesta del servidor no es un JSON válido');
-        }
-      })
-      .then(data => {
-        console.log(data);
         let newMarkers = data.ruta.map(item => ({
           nombre: item.nombre,
           tipo: item.tipo,
@@ -53,6 +47,7 @@ export const calcularRuta = async (setMarkers, setTotalDistance) => {
         setTotalDistance(data.totalDistancia);
       })
       .catch(error => {
+        Alert.alert('Error', 'Ocurrió un error al calcular la ruta.');
         console.error(error);
       });
 };

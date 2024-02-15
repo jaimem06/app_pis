@@ -97,6 +97,11 @@ export const Logica_BuscarRoute = (setNodoCercano) => {
         })
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    // Si la respuesta contiene un mensaje de error, muestra un mensaje de alerta
+                    Alert.alert('No se encontro el nodo:', data.error);
+                    return;
+                }
                 setNodoCercano(data.nombreNodoMasCercano);
                 setInicio(data.nombreNodoMasCercano);
             })

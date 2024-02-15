@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 10,
     paddingRight: 35, // Ajusta el margen derecho para el icono del ojo
-    borderRadius: 10,
+    borderRadius: 15,
   },
   eyeIcon: {
     position: 'absolute',
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
   button: {
     backgroundColor: '#2A364E',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 15,
     width: '80%',
   },
   buttonText: {
@@ -74,10 +74,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 4,
   },
+  forgotPasswordContainer: {
+    width: '75%', 
+    alignItems: 'flex-end',
+  },
+
   forgotPasswordText: {
     color: '#868686',
-    textAlign: 'center',
-    textDecorationLine: 'underline'
+    marginTop: -18,
+    marginBottom: 10,
   },
 
 });
