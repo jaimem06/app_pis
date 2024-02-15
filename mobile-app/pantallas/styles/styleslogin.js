@@ -73,7 +73,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 4,
-
+  },
+  forgotPasswordText: {
+    color: '#868686',
+    textAlign: 'center',
+    textDecorationLine: 'underline'
   },
 
 });

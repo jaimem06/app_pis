@@ -44,7 +44,7 @@ const Home = () => {
       <View style={{ alignItems: 'center' }}>
         <TouchableOpacity
           style={styles.buscarButton}
-          onPress={() => calcularRuta(setMarkers)}
+          onPress={() => calcularRuta(setMarkers, setTotalDistance)}
         >
           <Text style={styles.buscarText}>Buscar zona segura cercana </Text>
           <Image source={puntoEncuentro} style={{ width: 25, height: 25 }} />

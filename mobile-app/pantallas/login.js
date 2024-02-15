@@ -148,6 +148,15 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
           </TouchableWithoutFeedback>
         </View>
         <TouchableOpacity
+        onPress={() => {
+          // Aquí puedes manejar lo que sucede cuando el usuario olvida su contraseña
+          // Por ejemplo, puedes navegar a una nueva pantalla donde el usuario puede restablecer su contraseña
+          // navigation.navigate('ForgotPassword');
+        }}
+      >
+        <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+      </TouchableOpacity>
+        <TouchableOpacity
         style={styles.button}
         onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
@@ -165,7 +174,7 @@ const Login = ({ navigation }) => { // Agregar navigation como parámetro
         </TouchableOpacity>
 
         <TouchableOpacity
-          activeOpacity={1} // Agregado
+          activeOpacity={1}
           style={styles.bottomButton}
           onPress={() => {
             navigation.navigate('brigadista');
