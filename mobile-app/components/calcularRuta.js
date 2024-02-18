@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 import APILinks from '../directionsAPI';
 import { Alert, Platform } from 'react-native';
 
-export const calcularRuta = async (setMarkers, setTotalDistance) => {
+export const calcularRuta = async (setMarkers, setTotalDistance, isHomeActive) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permiso de acceso a la ubicación denegado');
@@ -28,8 +28,7 @@ export const calcularRuta = async (setMarkers, setTotalDistance) => {
     })
       .then(response => response.json())
       .then(data => {
-        if (data.error) {
-          // Si la respuesta contiene un mensaje de error, muestra un mensaje de alerta
+        if (data.error && isHomeActive) {
           Alert.alert('No se puede calcular la ruta:', data.error);
           return;
         }
@@ -47,7 +46,9 @@ export const calcularRuta = async (setMarkers, setTotalDistance) => {
         setTotalDistance(data.totalDistancia);
       })
       .catch(error => {
-        Alert.alert('Error', 'Ocurrió un error al calcular la ruta.');
+        if (isHomeActive) {
+          Alert.alert('Error', 'Ocurrió un error al calcular la ruta.');
+        }
         console.error(error);
       });
 };

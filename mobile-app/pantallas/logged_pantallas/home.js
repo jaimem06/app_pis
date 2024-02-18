@@ -12,6 +12,7 @@ const Home = () => {
   const mapRef = useRef(null);
   const [nodos, setNodos] = useState([]); // Estado para todos los nodos
   const [totalDistance, setTotalDistance] = useState(0); // Nuevo estado para la distancia total
+  const [isHomeActive, setIsHomeActive] = useState(true); // Estado para saber si la pantalla está activa
 
   useEffect(() => {
     fetch(APILinks.URL_ReadNodos)
@@ -24,7 +25,7 @@ const Home = () => {
 
     // Configura un temporizador para calcular la ruta cada minuto
     const timerId = setInterval(() => {
-      calcularRuta(setMarkers, setTotalDistance);
+      calcularRuta(setMarkers, setTotalDistance, isHomeActive);
     }, 60000); // 60000 milisegundos = 1 minuto
 
     return () => clearInterval(timerId);
@@ -44,7 +45,7 @@ const Home = () => {
       <View style={{ alignItems: 'center' }}>
         <TouchableOpacity
           style={styles.buscarButton}
-          onPress={() => calcularRuta(setMarkers, setTotalDistance)}
+          onPress={() => calcularRuta(setMarkers, setTotalDistance, isHomeActive)}
         >
           <Text style={styles.buscarText}>Buscar zona segura cercana </Text>
           <Image source={puntoEncuentro} style={{ width: 25, height: 25 }} />
