@@ -6,13 +6,14 @@ import puntoEncuentro from '../../assets/pde.png';
 import { calcularRuta } from '../../components/calcularRuta';
 import MarkerRuta from '../../components/markerRuta';
 import APILinks from '../../directionsAPI';
+import { handleNotificationResponse } from '../../components/event_Notification';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
-  const [nodos, setNodos] = useState([]); // Estado para todos los nodos
-  const [totalDistance, setTotalDistance] = useState(0); // Nuevo estado para la distancia total
-  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para la carga
+  const [nodos, setNodos] = useState([]);
+  const [totalDistance, setTotalDistance] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch(APILinks.URL_ReadNodos)
@@ -20,13 +21,11 @@ const Home = () => {
       .then(data => setNodos(data.map(nodo => nodo.properties.nombre)))
       .catch(error => console.error(error));
 
-    // Calcula la ruta inmediatamente al montar el componente
     calcularRuta(setMarkers, setTotalDistance, setIsLoading);
 
-    // Configura un temporizador para calcular la ruta cada minuto
     const timerId = setInterval(() => {
       calcularRuta(setMarkers, setTotalDistance, setIsLoading);
-    }, 60000); // 60000 milisegundos = 1 minuto
+    }, 1800000);
 
     return () => clearInterval(timerId);
   }, []);
@@ -39,6 +38,12 @@ const Home = () => {
       });
     }
   }, [markers]);
+
+  useEffect(() => {
+    const subscription = handleNotificationResponse(navigation, setMarkers, setTotalDistance, setIsLoading);
+
+    return () => subscription.remove();
+  }, []);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', backgroundColor: "#2A364E" }}>

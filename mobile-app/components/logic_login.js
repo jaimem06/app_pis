@@ -10,6 +10,8 @@ export const useLoginLogic = (navigation) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [totalDistance, setTotalDistance] = useState(0);
     const [markers, setMarkers] = useState([]);
 
     const handleLogin = () => {
@@ -97,7 +99,7 @@ export const useLoginLogic = (navigation) => {
     }, []);
 
     useEffect(() => {
-        const subscription = handleNotificationResponse(navigation, setMarkers);
+        const subscription = handleNotificationResponse(navigation, setMarkers, setTotalDistance, setIsLoading);
     
         return () => subscription.remove();
     }, []);

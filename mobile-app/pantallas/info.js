@@ -9,9 +9,11 @@ import { handleNotificationResponse } from '../components/event_Notification';
 const Info = () => {
   const [plan, setPlan] = useState(null);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalDistance, setTotalDistance] = useState(0);
   const [markers, setMarkers] = useState([]);
   useEffect(() => {
-    const subscription = handleNotificationResponse(navigation, setMarkers);
+    const subscription = handleNotificationResponse(navigation, setMarkers, setTotalDistance, setIsLoading);
   
     return () => subscription.remove();
   }, []);
