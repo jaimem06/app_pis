@@ -33,7 +33,7 @@ function dijkstra(graph, startNode, endNode) {                               // 
                 previous[neighbor] = currentNode;                                      // n * n
                 queue.push(neighbor);                                                  // n * n  
                 //console.log(`Actualizando distancia del vecino ${neighbor} a ${newDistance}`);
-                }                                                                      // = (n^2) + 1 + n^2 + n^2 + n^2 + n^2 + n^2
+                }                                                                      
                                                                                        // = 6n^2 + 1
         }
     }
