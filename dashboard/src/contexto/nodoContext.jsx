@@ -103,7 +103,13 @@ export const useNodos = () => {
     //Eliminar un nodo
     const handleDelete = (index) => {
         const nodoToDelete = nodos[index];
-        const confirmDelete = window.confirm(`¿Estás seguro de que quieres eliminar el nodo ${nodoToDelete.properties.nombre}?`);
+        let confirmDelete = false;
+        if (nodoToDelete.properties.tipo === 'PDE') {
+            const userInput = prompt('Advertencia: Este es un nodo Punto de Encuentro. Para confirmar la eliminación, por favor escribe el nombre del nodo:');
+            confirmDelete = userInput === nodoToDelete.properties.nombre;
+        } else {
+            confirmDelete = window.confirm(`¿Estás seguro de que quieres eliminar el nodo ${nodoToDelete.properties.nombre}?`);
+        }
         if (confirmDelete) {
             deleteNodoRequest(nodoToDelete.geometry.coordinates)
                 .then(response => {
@@ -115,6 +121,8 @@ export const useNodos = () => {
                 .catch(error => {
                     console.error(error);
                 });
+        } else {
+            alert('El nodo no ha sido eliminado.');
         }
     };
     const handleSearch = async (event) => {

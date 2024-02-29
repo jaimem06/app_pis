@@ -4,7 +4,7 @@ const SerialPort = require('serialport').SerialPort;
 const Readline = require('@serialport/parser-readline').ReadlineParser;
 
 const port = new SerialPort({
-    path: 'COM2',
+    path: 'COM6',
     baudRate: 9600,
     autoOpen: false // No abrir puerto automáticamente al crear la instancia de SerialPort
 });

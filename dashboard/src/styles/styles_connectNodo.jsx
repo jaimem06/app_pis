@@ -43,16 +43,6 @@ export const buttonConect = {
     fontWeight: 'bold',
 };
 
-export const buttonSismo = {
-    color: "white",
-    backgroundColor: "#FF2A24",
-    margin: "10px", 
-    borderRadius: "10px",
-    padding: "5px",
-    border: "2px solid #990000",
-    fontWeight: 'bold',
-};
-
 export const advertenciaStyle = {
     color: 'white',
     backgroundColor: '#2A364E',
