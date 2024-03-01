@@ -1,5 +1,6 @@
 // Archivo para guardar las URL del API
-const BASE_URL = 'http://192.168.1.2:3000';
+//Cambiar la IP de en base a la IP de la computadora que se esté utilizando
+const BASE_URL = 'http://192.168.1.6:3000';
 
 const APILinks = {
     URL_CaminoMinimo: `${BASE_URL}/camino_minimo`,

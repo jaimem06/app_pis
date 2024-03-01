@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, View, TouchableOpacity, Text, Alert } from 'react-native';
+import { Image, View, TouchableOpacity, Text, ActivityIndicator, Platform } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import user from '../../assets/user.png'
 import route from '../../assets/route.png';
@@ -47,7 +47,7 @@ const CustomMarker = ({ marker: { coordenadas, nombre }, index, totalMarkers }) 
 
 const Home = () => {
     const [nodoCercano, setNodoCercano] = useState(null);
-    const { inicio, setInicio, markers, buscar, buscarNodoCercano, filteredNodos, mapRef } = Logica_BuscarRoute(setNodoCercano);
+    const { inicio, setInicio, markers, buscar, buscarNodoCercano, filteredNodos, mapRef, isLoading } = Logica_BuscarRoute(setNodoCercano);
 
     return (
         <View style={{ flex: 1, alignItems: 'center' }}>
@@ -97,6 +97,20 @@ const Home = () => {
                         strokeWidth={6}
                     />
                 </MapView>
+                {isLoading && (
+                    <View style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(12,43,212,0.1)',
+                    }}>
+                        <ActivityIndicator size={Platform.OS === 'ios' ? 300 : 'large'} color="#2A364E" />
+                    </View>
+                )}
             </View>
         </View>
     );

@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ScrollView, Image, TouchableOpacity, Text, View } from 'react-native';
+import { ScrollView, Image, TouchableOpacity, Text, View, ActivityIndicator, Platform } from 'react-native';
 import styles from '../styles/styleshome';
 import MapView, { Polyline } from 'react-native-maps';
 import puntoEncuentro from '../../assets/pde.png';
 import { calcularRuta } from '../../components/calcularRuta';
 import MarkerRuta from '../../components/markerRuta';
 import APILinks from '../../directionsAPI';
+import { handleNotificationResponse } from '../../components/event_Notification';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
-  const [nodos, setNodos] = useState([]); // Estado para todos los nodos
-  const [totalDistance, setTotalDistance] = useState(0); // Nuevo estado para la distancia total
+  const [nodos, setNodos] = useState([]);
+  const [totalDistance, setTotalDistance] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch(APILinks.URL_ReadNodos)
@@ -19,13 +21,11 @@ const Home = () => {
       .then(data => setNodos(data.map(nodo => nodo.properties.nombre)))
       .catch(error => console.error(error));
 
-    // Calcula la ruta inmediatamente al montar el componente
-    calcularRuta(setMarkers, setTotalDistance);
+    calcularRuta(setMarkers, setTotalDistance, setIsLoading);
 
-    // Configura un temporizador para calcular la ruta cada minuto
     const timerId = setInterval(() => {
-      calcularRuta(setMarkers, setTotalDistance);
-    }, 60000); // 60000 milisegundos = 1 minuto
+      calcularRuta(setMarkers, setTotalDistance, setIsLoading);
+    }, 1800000);
 
     return () => clearInterval(timerId);
   }, []);
@@ -39,12 +39,18 @@ const Home = () => {
     }
   }, [markers]);
 
+  useEffect(() => {
+    const subscription = handleNotificationResponse(navigation, setMarkers, setTotalDistance, setIsLoading);
+
+    return () => subscription.remove();
+  }, []);
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', backgroundColor: "#2A364E" }}>
       <View style={{ alignItems: 'center' }}>
         <TouchableOpacity
           style={styles.buscarButton}
-          onPress={() => calcularRuta(setMarkers, setTotalDistance)}
+          onPress={() => calcularRuta(setMarkers, setTotalDistance, setIsLoading)}
         >
           <Text style={styles.buscarText}>Buscar zona segura cercana </Text>
           <Image source={puntoEncuentro} style={{ width: 25, height: 25 }} />
@@ -71,6 +77,20 @@ const Home = () => {
           />
         </MapView>
       </View>
+      {isLoading && (
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'rgba(12,43,212,0.1)',
+        }}>
+          <ActivityIndicator size={Platform.OS === 'ios' ? 300 : 'large'} color="#2A364E" />
+        </View>
+      )}
       <View style={{ alignItems: 'center', height: "15%" }}>
         <View style={styles.infoRuta}>
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

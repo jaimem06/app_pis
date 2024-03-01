@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { readallNodoRequest, connectNodoRequest, simularSismoRequest } from '../api/auth'; //CRUD NODES
-import { selectstyles, titulostyles, buttonConect, advertenciaStyle, buttonSismo } from '../styles/styles_connectNodo';
+import { readallNodoRequest, connectNodoRequest } from '../api/auth'; //CRUD NODES
+import { selectstyles, titulostyles, buttonConect, advertenciaStyle } from '../styles/styles_connectNodo';
 import Mapa_Conexiones from '../componentes/MapaConexiones';
 
 function ConexionNodos() {
@@ -25,24 +25,6 @@ function ConexionNodos() {
     }, []);
 
     const [sismoMessage, setSismoMessage] = useState(null); // Nuevo estado para el mensaje del sismo
-    const handleSismo = async () => {
-        try {
-            const response = await simularSismoRequest();
-            setSismoData(response.data);
-            setSismoMessage(`Simulación exitosa. Magnitud: ${response.data.magnitud}`);
-            setTimeout(() => {
-                setSismoMessage(null);
-                setDummyState(!dummyState); // Cambia el estado para forzar un nuevo renderizado
-            }, 3500);
-        } catch (error) {
-            console.error(error);
-            setSismoMessage('Error al simular el sismo.');
-            setTimeout(() => {
-                setSismoMessage(null);
-                setDummyState(!dummyState); // Cambia el estado para forzar un nuevo renderizado
-            }, 3500);
-        }
-    };
 
     const handleConnect = async () => {
         if (!selectedOptionA || !selectedOptionB) {
@@ -96,9 +78,6 @@ function ConexionNodos() {
                 />
                 <button style={buttonConect} onClick={handleConnect}>
                     Conectar
-                </button>
-                <button style={buttonSismo} onClick={handleSismo}>
-                    Simular Sismo
                 </button>
             </div>
             {errorMessage && <p style={advertenciaStyle}>{errorMessage}</p>}

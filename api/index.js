@@ -42,7 +42,7 @@ setInterval(async () => {
     const sismo = await simularSismo();
     console.log(sismo);
 //Pa que no este jodiendo
-}, 1000000); // Cada mil segundos = 16.6 minutos
+}, 1000); // Cada mil segundos = 16.6 minutos
 
 app.use(cors({
     // Páginas que pueden acceder al API

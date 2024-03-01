@@ -32,6 +32,7 @@ export const Logica_BuscarRoute = (setNodoCercano) => {
     const [inicio, setInicio] = useState('');
     const [markers, setMarkers] = useState([]);
     const [nodos, setNodos] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const mapRef = useRef(null);
 
     useEffect(() => {
@@ -58,6 +59,7 @@ export const Logica_BuscarRoute = (setNodoCercano) => {
             Alert.alert('Nodo inicio no seleccionado', 'Por favor seleccione un punto de inicio para buscar la Ruta.');
             return;
         }
+        setIsLoading(true);
         try {
             const response = await fetch(APILinks.URL_CaminoMinimo, {
                 method: 'POST',
@@ -76,6 +78,7 @@ export const Logica_BuscarRoute = (setNodoCercano) => {
         } catch (error) {
             Alert.alert('Error', `Hubo un error al buscar la ruta: ${error.message}`);
         }
+        setIsLoading(false);
     };
 
     const buscarNodoCercano = async () => {
@@ -121,6 +124,7 @@ export const Logica_BuscarRoute = (setNodoCercano) => {
         buscar,
         filteredNodos,
         mapRef,
-        buscarNodoCercano
+        buscarNodoCercano,
+        isLoading
     };
 };

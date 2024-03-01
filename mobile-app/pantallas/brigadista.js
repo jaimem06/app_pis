@@ -11,10 +11,12 @@ const Brigadista = () => {
   const [selectedArea, setSelectedArea] = useState('');
   const [brigadista, setBrigadista] = useState([]);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalDistance, setTotalDistance] = useState(0);
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-    const subscription = handleNotificationResponse(navigation, setMarkers);
+    const subscription = handleNotificationResponse(navigation, setMarkers, setTotalDistance, setIsLoading);
     return () => subscription.remove();
   }, []);
 
